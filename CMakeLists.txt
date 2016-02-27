@@ -16,7 +16,7 @@ include(KDECompilerSettings)
 
 set(krunner_translator_SRCS
     translator.cpp
-    translatorjob.cpp
+    glosbe.cpp
 )
 
 # Now make sure all files get to the right place

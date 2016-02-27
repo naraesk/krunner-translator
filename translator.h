@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2013 – 2015 by David Baum <david.baum@naraesk.eu>           *
+ *  Copyright (C) 2013 – 2016 by David Baum <david.baum@naraesk.eu>           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -21,12 +21,8 @@
 
 #include <KRunner/AbstractRunner>
 
-/**
- * Translate a word or sentence using google translate service http://translate.google.com/
- */
 class Translator : public Plasma::AbstractRunner
 {
-
     Q_OBJECT
 
 public:
@@ -35,11 +31,8 @@ public:
 
     void match(Plasma::RunnerContext &);
     void run(const Plasma::RunnerContext &, const Plasma::QueryMatch &);
-
 private:
-   bool parseTerm(const QString &, QString &, QPair<QString, QString> &);
-   void parseResult(const QString &, Plasma::RunnerContext &,const QString &);
-   static const QStringList supportedLanguages;
+    bool parseTerm(const QString &, QString &, QPair<QString, QString> &);
 };
 
 K_EXPORT_PLASMA_RUNNER(translator, Translator)

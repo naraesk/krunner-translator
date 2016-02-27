@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2013 – 2015 by David Baum <david.baum@naraesk.eu>           *
+ *  Copyright (C) 2013 – 2016 by David Baum <david.baum@naraesk.eu>           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -16,32 +16,35 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef TRANSLATORJOB_H
-#define TRANSLATORJOB_H
+#ifndef GLOSBE_H
+#define GLOSBE_H
 
+#include <KRunner/AbstractRunner>
 #include <QtNetwork/QNetworkReply>
 
-class QNetworkReply;
-class QNetworkAccessManager;
+/**
+ * API Implementation for Glosbe (https://glosbe.com/a-api)
+ */
 
-class TranslatorJob :  public QObject
+class Glosbe : public QObject
 {
-    Q_OBJECT
-public:
-	TranslatorJob(const QString &, const QPair<QString, QString> &);
-	QString result() const;
-	void start();
 
+    Q_OBJECT
+
+public:
+    Glosbe(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &);
+    ~Glosbe();
+    
 private Q_SLOTS:
-	void jobCompleted(QNetworkReply *);
-	void jobCompleted2(QNetworkReply *, const QList<QSslError> &);
+   void parseResult(QNetworkReply*);
 
 Q_SIGNALS:
 	void finished();
-
+   
 private:
-	QNetworkAccessManager *m_manager;
-	QString m_result;
+   Plasma::AbstractRunner * m_runner;
+   QNetworkAccessManager * m_manager;
+   Plasma::RunnerContext m_context;
 };
 
 #endif
