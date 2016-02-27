@@ -1,0 +1,24 @@
+This runner translates any text using google translate.
+It supports two different syntax:
+
+Syntax: <lang> <searchterm>
+
+→ This will translate <searchterm> into the specified language. 
+The source language will be automatically detected by google.
+When a word exists in different languages you can use the following syntax:
+
+Syntax: <sourcelang>-<targetlang> <searchterm>
+
+A list of all supported languages you can find here: 
+https://developers.google.com/translate/v2/using_rest?hl=de#language-params
+
+
+Example: de house
+
+this will translate "house" into german (de)
+
+Example: fr-en maison
+
+this will translate the french word "maison" into english
+
+Simple, isn't it? :-)
