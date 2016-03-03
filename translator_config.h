@@ -16,30 +16,36 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef TRANSLATOR_H
-#define TRANSLATOR_H
+#ifndef TRANSLATORCONFIG_H
+#define TRANSLATORCONFIG_H
 
-#include <KRunner/AbstractRunner>
+#include "ui_translator_config.h"
+#include <KCModule>
 
-class Translator : public Plasma::AbstractRunner
+static const char CONFIG_PRIMARY[] = "primaryLanguage";
+static const char CONFIG_SECONDARY[] = "secondaryLanguage";
+static const char CONFIG_YANDEX_KEY[] = "yandexKey";
+
+class TranslatorConfigForm : public QWidget, public Ui::TranslatorConfigUi
 {
     Q_OBJECT
 
 public:
-    Translator(QObject *parent, const QVariantList &args);
-    ~Translator();
-
-    void match(Plasma::RunnerContext &);
-    void run(const Plasma::RunnerContext &, const Plasma::QueryMatch &);
-    void reloadConfiguration();
-
-private:
-    bool parseTerm(const QString &, QString &, QPair<QString, QString> &);
-    QString m_primary;
-    QString m_secondary;
-    QString m_yandexKey;
+    explicit TranslatorConfigForm(QWidget* parent);
 };
 
-K_EXPORT_PLASMA_RUNNER(translator, Translator)
+class TranslatorConfig : public KCModule
+{
+    Q_OBJECT
 
+public:
+    explicit TranslatorConfig(QWidget* parent = 0, const QVariantList& args = QVariantList());
+    
+public Q_SLOTS:
+    void save();
+    void load();
+
+private:
+    TranslatorConfigForm* m_ui;
+};
 #endif

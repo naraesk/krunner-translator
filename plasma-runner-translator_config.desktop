@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=KCModule
+X-KDE-Library=kcm_krunner_translator
+X-KDE-ParentComponents=Translator
+X-KDE-PluginKeyword=kcm_krunner_translator
+
+Name=Translator

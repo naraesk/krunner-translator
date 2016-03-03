@@ -17,7 +17,9 @@
  *****************************************************************************/
 
 #include "translator.h"
+#include "translator_config.h"
 #include "glosbe.h"
+#include "yandex.h"
 
 #include <KLocalizedString>
 #include <QApplication>
@@ -29,13 +31,14 @@ Translator::Translator(QObject *parent, const QVariantList &args)
     Q_UNUSED(args);
     
     setObjectName(QLatin1String("Translator"));
-    setHasRunOptions(false);
+    reloadConfiguration();
+    setHasRunOptions(true);
     setIgnoredTypes(Plasma::RunnerContext::Directory |
                     Plasma::RunnerContext::File |
                     Plasma::RunnerContext::NetworkLocation);
     setSpeed(AbstractRunner::SlowSpeed);
     setPriority(HighestPriority);
-//     setDefaultSyntax(Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<language code>")),i18n("Translates the word(s) :q: into target language")));
+    setDefaultSyntax(Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<language code>")),i18n("Translates the word(s) :q: into target language")));
     setDefaultSyntax(Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<source languagce>-<target languagce>")), i18n("Translates the word(s) :q: from the source into target language")));
 }
 
@@ -50,12 +53,19 @@ bool Translator::parseTerm(const QString& term, QString& text, QPair<QString, QS
     text = term.mid(index + 1);
     QString languageTerm = term.left(index);
 
-    if (!languageTerm.contains("-")) return false;
-    
-    int index2 = languageTerm.indexOf("-");
-    language.first = languageTerm.left(index2);
-    language.second = languageTerm.mid(index2 + 1);
+    if (languageTerm.contains("-")) {
+        int index = languageTerm.indexOf("-");
+        language.first = languageTerm.left(index);
+        language.second = languageTerm.mid(index + 1);
 
+    } else {
+        if (m_primary == languageTerm) {
+            language.first = m_secondary;
+        } else {
+            language.first = m_primary;
+        }   
+        language.second = languageTerm;
+    }
     return true;
 }
 
@@ -64,20 +74,37 @@ void Translator::match(Plasma::RunnerContext &context)
     const QString term = context.query();
     QString text;
     QPair<QString, QString> language;
-
+    
     
     if (!parseTerm(term, text, language)) return;
     if (!context.isValid()) return;
-    QEventLoop loop;
-    Glosbe glosbe(this, context, text, language);
-    connect(&glosbe, SIGNAL(finished()), &loop, SLOT(quit()));
-    loop.exec();
+    
+    if (text.contains(" ")) {
+        QEventLoop loop;
+        Yandex yandex(this, context, text, language, m_yandexKey);
+        connect(&yandex, SIGNAL(finished()), &loop, SLOT(quit()));
+        loop.exec();
+    } else {
+        QEventLoop loop;
+        Glosbe glosbe(this, context, text, language);
+        connect(&glosbe, SIGNAL(finished()), &loop, SLOT(quit()));
+        loop.exec();
+    }
 }
 
 void Translator::run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match)
 {
     Q_UNUSED(context);
     QApplication::clipboard()->setText(match.text());
+}
+
+void Translator::reloadConfiguration()
+{
+    KConfigGroup grp = config();
+
+    m_primary = grp.readEntry(CONFIG_PRIMARY);
+    m_secondary = grp.readEntry(CONFIG_SECONDARY);
+    m_yandexKey = grp.readEntry(CONFIG_YANDEX_KEY);
 }
 
 #include "moc_translator.cpp"

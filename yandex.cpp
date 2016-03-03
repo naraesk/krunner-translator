@@ -16,26 +16,23 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#include "glosbe.h"
+#include "yandex.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QUrlQuery>
 
-Glosbe::Glosbe(Plasma::AbstractRunner * runner, Plasma::RunnerContext& context, const QString &text, const QPair<QString, QString> &language)
+Yandex::Yandex(Plasma::AbstractRunner * runner, Plasma::RunnerContext& context, const QString &text, const QPair<QString, QString> &language, const QString &key)
 : m_runner (runner), m_context (context)
 {
     m_manager = new QNetworkAccessManager(this);
 
     QUrlQuery query;
-    query.addQueryItem("from", language.first);
-    query.addQueryItem("dest",language.second);
-    query.addQueryItem("format","json");
-    query.addQueryItem("phrase", text);
-    query.addQueryItem("tm", "false");
-    query.addQueryItem("pretty", "true");
+    query.addQueryItem("key", key);
+    query.addQueryItem("text", text);
+    query.addQueryItem("lang", language.first + "-" + language.second);
         
-    QNetworkRequest request(QUrl("https://glosbe.com/gapi/translate?" + QUrl(query.query(QUrl::FullyEncoded).toUtf8()).toEncoded()));
+    QNetworkRequest request(QUrl("https://translate.yandex.net/api/v1.5/tr.json/translate?" + QUrl(query.query(QUrl::FullyEncoded).toUtf8()).toEncoded()));
     request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
@@ -43,37 +40,34 @@ Glosbe::Glosbe(Plasma::AbstractRunner * runner, Plasma::RunnerContext& context, 
     connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(parseResult(QNetworkReply*)));
 }
 
-Glosbe::~Glosbe()
+Yandex::~Yandex()
 {
 }
 
-void Glosbe::parseResult(QNetworkReply* reply)
+void Yandex::parseResult(QNetworkReply* reply)
 {
-    QJsonObject jsonObject = QJsonDocument::fromJson(QString::fromUtf8(reply->readAll()).toUtf8()).object();
-
-    if (jsonObject.value("result").toString() != "ok") {
+    if (reply -> attribute(QNetworkRequest::HttpStatusCodeAttribute) != 200) {
         emit(finished());
         return;
     }
+
+    QString s = QString::fromUtf8(reply->readAll());
+    QJsonObject jsonObject = QJsonDocument::fromJson(s.toUtf8()).object();
     
     QList<Plasma::QueryMatch> matches;
-    QJsonArray tuc = jsonObject.find("tuc").value().toArray();
-    QVariantList v = tuc.toVariantList();
+    QJsonArray texts = jsonObject.find("text").value().toArray();
     float relevance = 1;
-    foreach(QJsonValue a, tuc) {
-        QString s = a.toObject().value("phrase").toObject().value("text").toString();
-        if (s.size() > 0) {
-            relevance -= 0.01;
-            Plasma::QueryMatch match(m_runner);
+    foreach(QJsonValue text, texts) {
+        Plasma::QueryMatch match(m_runner);
             match.setType(Plasma::QueryMatch::InformationalMatch);
             match.setIcon(QIcon::fromTheme("applications-education-language"));
-            match.setText(s);
+            match.setText(text.toString());
             match.setRelevance(relevance);
             matches.append(match);
-        }
-    }   
+            relevance -= 0.01;
+    }
     m_context.addMatches(matches);
     emit(finished());
 }
 
-#include "moc_glosbe.cpp"
+#include "moc_yandex.cpp"

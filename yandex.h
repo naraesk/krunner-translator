@@ -16,30 +16,35 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef TRANSLATOR_H
-#define TRANSLATOR_H
+#ifndef YANDEX_H
+#define YANDEX_H
 
 #include <KRunner/AbstractRunner>
+#include <QtNetwork/QNetworkReply>
 
-class Translator : public Plasma::AbstractRunner
+/**
+ * API Implementation for Yandex https://tech.yandex.com/translate/doc/dg/concepts/api-overview-docpage/)
+ */
+
+class Yandex : public QObject
 {
+
     Q_OBJECT
 
 public:
-    Translator(QObject *parent, const QVariantList &args);
-    ~Translator();
+    Yandex(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, const QString &);
+    ~Yandex();
+    
+private Q_SLOTS:
+   void parseResult(QNetworkReply*);
 
-    void match(Plasma::RunnerContext &);
-    void run(const Plasma::RunnerContext &, const Plasma::QueryMatch &);
-    void reloadConfiguration();
-
+Q_SIGNALS:
+	void finished();
+   
 private:
-    bool parseTerm(const QString &, QString &, QPair<QString, QString> &);
-    QString m_primary;
-    QString m_secondary;
-    QString m_yandexKey;
+   Plasma::AbstractRunner * m_runner;
+   QNetworkAccessManager * m_manager;
+   Plasma::RunnerContext m_context;
 };
-
-K_EXPORT_PLASMA_RUNNER(translator, Translator)
 
 #endif
