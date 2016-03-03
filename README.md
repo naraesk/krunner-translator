@@ -30,7 +30,7 @@ Further, you can specify a primany and secondary language in the configuration d
 A list of all language codes you can find [here](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
 
 ### Specify source and target language ###
-Syntax: \<sourcelang\>-\<targetlang\> \<searchterm\>
+Syntax: \<sourcelang\>-\<targetlang\> \<searchterm\>  
 *en-de house* → will translate *house* into german (*de*)
 
 ### Using primary and secondary language ###
