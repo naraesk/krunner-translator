@@ -41,6 +41,6 @@ Secondary language: *de*
 
 *de home* → *en-de home*  
 *en blau* → *de-en blau*  
-*fr maison* → *fr-en maison*  
+*fr maison* → *en-fr maison*  
 
 Thanks for your feedback and kudos! If you like the runner, please vote for it [here](http://kde-apps.org/content/show.php?content=156498).
