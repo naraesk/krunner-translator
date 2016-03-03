@@ -14,10 +14,10 @@ krunner
 ```
 ## Configuration ##
 
-The translation of sentences is done via [yandex](https://translate.yandex.com/). Therefore an api key is required. You have to obtain a key yourself by following these steps:
-1. Register at https://passport.yandex.com/
-2. Get a API key at https://tech.yandex.com/keys/get/?service=trnsl
-3. Copy the key to the configuration dialog
+The translation of sentences is done via [yandex](https://translate.yandex.com/). Therefore an api key is required. You have to obtain a key yourself by following these steps:  
+1. Register at https://passport.yandex.com/  
+2. Get a API key at https://tech.yandex.com/keys/get/?service=trnsl   
+3. Copy the key to the configuration dialog  
 
 If you do not provide an api key only the translation of single words will work.
 
@@ -31,18 +31,16 @@ A list of all language codes you can find [here](https://en.wikipedia.org/wiki/L
 
 ### Specify source and target language ###
 Syntax: \<sourcelang\>-\<targetlang\> \<searchterm\>
-
-**Example:** en-de house
-
-this will translate "house" into german (de)
+*en-de house* → will translate *house* into german (*de*)
 
 ### Using primary and secondary language ###
+Syntax: \<targetlang\> \<searchterm\>
 
-Primary language: en
-Secondary language: de
+Primary language: *en*  
+Secondary language: *de*  
 
-*de home* → *en-de home*
-*en blau* → *de-en blau*
-*fr maison* → *fr-en maison*
+*de home* → *en-de home*  
+*en blau* → *de-en blau*  
+*fr maison* → *fr-en maison*  
 
 Thanks for your feedback and kudos! If you like the runner, please vote for it [here](http://kde-apps.org/content/show.php?content=156498).
