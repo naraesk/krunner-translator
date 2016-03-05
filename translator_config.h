@@ -47,5 +47,6 @@ public Q_SLOTS:
 
 private:
     TranslatorConfigForm* m_ui;
+    const static QVector<QString> m_abbr;
 };
 #endif
