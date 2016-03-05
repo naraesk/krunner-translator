@@ -22,10 +22,10 @@ set(krunner_translator_SRCS
 )
 
 set(kcm_krunner_translator_SRCS
-    translator_config.cpp
+    config/translator_config.cpp
 )
 
-ki18n_wrap_ui(kcm_krunner_translator_SRCS translator_config.ui)
+ki18n_wrap_ui(kcm_krunner_translator_SRCS config/translator_config.ui)
 add_library(kcm_krunner_translator MODULE ${kcm_krunner_translator_SRCS})
 target_link_libraries(kcm_krunner_translator
     Qt5::Core
@@ -48,4 +48,4 @@ target_link_libraries(krunner_translator KF5::Runner Qt5::Widgets Qt5::Network
 add_dependencies(krunner_translator kcm_krunner_translator)
                       
 install(TARGETS krunner_translator kcm_krunner_translator DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES plasma-runner-translator.desktop plasma-runner-translator_config.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES plasma-runner-translator.desktop config/plasma-runner-translator_config.desktop DESTINATION ${SERVICES_INSTALL_DIR})
