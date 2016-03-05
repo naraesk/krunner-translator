@@ -21,10 +21,6 @@ The translation of sentences is done via [yandex](https://translate.yandex.com/)
 
 If you do not provide an api key only the translation of single words will work.
 
-Further, you can specify a primany and secondary language in the configuration dialog. You have to use the [ISO 639-1 codes](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes), e.g., "en" and "de" for englisch and german, respectively. This simplifies the syntax. If no source language is specified, the primary language is used. If target and primary language are identical, than secondary language is used (see *Usage* for some examples). 
-
-
-
 ## Usage ##
 
 A list of all language codes you can find [here](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
@@ -33,11 +29,11 @@ A list of all language codes you can find [here](https://en.wikipedia.org/wiki/L
 Syntax: \<sourcelang\>-\<targetlang\> \<searchterm\>  
 *en-de house* → will translate *house* into german (*de*)
 
-### Using primary and secondary language ###
+### Use default source language ###
 Syntax: \<targetlang\> \<searchterm\>
 
-Primary language: *en*  
-Secondary language: *de*  
+Defuault source language: *English (en)*  
+Alternative source language: *German (de)*  
 
 *de home* → *en-de home*  
 *en blau* → *de-en blau*  
