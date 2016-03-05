@@ -18,8 +18,8 @@
 
 #include "translator.h"
 #include "translator_config.h"
-#include "glosbe.h"
-#include "yandex.h"
+#include "api/glosbe.h"
+#include "api/yandex.h"
 
 #include <KLocalizedString>
 #include <QApplication>

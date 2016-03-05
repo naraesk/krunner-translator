@@ -17,8 +17,8 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 
 set(krunner_translator_SRCS
     translator.cpp
-    glosbe.cpp
-    yandex.cpp
+    api/glosbe.cpp
+    api/yandex.cpp
 )
 
 set(kcm_krunner_translator_SRCS
