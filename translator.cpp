@@ -17,7 +17,7 @@
  *****************************************************************************/
 
 #include "translator.h"
-#include "translator_config.h"
+#include "config/translator_config.h"
 #include "api/glosbe.h"
 #include "api/yandex.h"
 
