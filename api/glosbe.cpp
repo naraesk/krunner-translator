@@ -71,7 +71,18 @@ void Glosbe::parseResult(QNetworkReply* reply)
             match.setRelevance(relevance);
             matches.append(match);
         }
-    }   
+    }
+
+    // Create error message if no translation was found
+    if (matches.isEmpty()) {
+        relevance -= 0.01;
+        Plasma::QueryMatch match(m_runner);
+        match.setType(Plasma::QueryMatch::NoMatch);
+        match.setIcon(QIcon::fromTheme("dialog-error"));
+        match.setText("No translation found");
+        match.setRelevance(relevance);
+        matches.append(match);
+    }
     m_context.addMatches(matches);
     emit(finished());
 }
