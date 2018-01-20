@@ -80,15 +80,36 @@ void Translator::match(Plasma::RunnerContext &context)
     if (!context.isValid()) return;
     
     if (text.contains(" ")) {
-        QEventLoop loop;
-        Yandex yandex(this, context, text, language, m_yandexKey);
-        connect(&yandex, SIGNAL(finished()), &loop, SLOT(quit()));
-        loop.exec();
+        if(m_yandexPhrase) {
+            QEventLoop loop;
+            qDebug() << "start yandex phrase: " << text << endl;
+            Yandex yandex(this, context, text, language, m_yandexKey);
+            connect(&yandex, SIGNAL(finished()), &loop, SLOT(quit()));
+            loop.exec();
+        }
+        if(m_glosbePhrase) {
+            QEventLoop loop;
+            qDebug() << "start glosbe phrase: " << text << endl;
+            Glosbe glosbe(this, context, text, language);
+            connect(&glosbe, SIGNAL(finished()), &loop, SLOT(quit()));
+            loop.exec();
+        }
     } else {
-        QEventLoop loop;
-        Glosbe glosbe(this, context, text, language);
-        connect(&glosbe, SIGNAL(finished()), &loop, SLOT(quit()));
-        loop.exec();
+        if(m_yandexWord) {
+            QEventLoop loop;
+            qDebug() << "start yandex word: " << text << endl;
+            qDebug() << "m_yandexWord: " << m_yandexWord << endl;
+            Yandex yandex(this, context, text, language, m_yandexKey);
+            connect(&yandex, SIGNAL(finished()), &loop, SLOT(quit()));
+            loop.exec();
+        }
+        if(m_glosbeWord) {
+            QEventLoop loop;
+            qDebug() << "start glosbe word: " << text << endl;
+            Glosbe glosbe(this, context, text, language);
+            connect(&glosbe, SIGNAL(finished()), &loop, SLOT(quit()));
+            loop.exec();
+        }
     }
 }
 
@@ -105,6 +126,10 @@ void Translator::reloadConfiguration()
     m_primary = grp.readEntry(CONFIG_PRIMARY);
     m_secondary = grp.readEntry(CONFIG_SECONDARY);
     m_yandexKey = grp.readEntry(CONFIG_YANDEX_KEY);
+    m_glosbeWord = stringToBool(grp.readEntry(CONFIG_GLOSBE_WORD));
+    m_glosbePhrase = stringToBool(grp.readEntry(CONFIG_GLOSBE_PHRASE));
+    m_yandexWord = stringToBool(grp.readEntry(CONFIG_YANDEX_WORD));
+    m_yandexPhrase = stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE));
 }
 
 #include "moc_translator.cpp"

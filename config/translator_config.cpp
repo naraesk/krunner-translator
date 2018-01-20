@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2013 – 2016 by David Baum <david.baum@naraesk.eu>           *
+ *  Copyright (C) 2013 – 2018 by David Baum <david.baum@naraesk.eu>           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -45,6 +45,10 @@ TranslatorConfig::TranslatorConfig(QWidget* parent, const QVariantList& args) :
     connect(m_ui->primaryLanguage,SIGNAL(currentTextChanged(QString)),this, SLOT(changed()));
     connect(m_ui->secondaryLanguage,SIGNAL(currentTextChanged(QString)),this, SLOT(changed()));
     connect(m_ui->yandexKey,SIGNAL(textChanged(QString)),this,SLOT(changed()));
+    connect(m_ui->yandex_word, SIGNAL(stateChanged(int)),this,SLOT(changed()));
+    connect(m_ui->yandex_phrase, SIGNAL(stateChanged(int)),this,SLOT(changed()));
+    connect(m_ui->glosbe_word, SIGNAL(stateChanged(int)),this,SLOT(changed()));
+    connect(m_ui->glosbe_phrase, SIGNAL(stateChanged(int)),this,SLOT(changed()));
     
     load();
 }
@@ -61,8 +65,13 @@ void TranslatorConfig::load()
     int indexSecondary = m_abbr.indexOf(grp.readEntry(CONFIG_SECONDARY));
     m_ui->primaryLanguage->setCurrentIndex(indexPrimary);
     m_ui->secondaryLanguage->setCurrentIndex(indexSecondary);
-    m_ui->yandexKey->setText(grp.readEntry(CONFIG_YANDEX_KEY));    
+    m_ui->yandexKey->setText(grp.readEntry(CONFIG_YANDEX_KEY));
     
+    m_ui->glosbe_word->setChecked(stringToBool(grp.readEntry(CONFIG_GLOSBE_WORD)));
+    m_ui->glosbe_phrase->setChecked(stringToBool(grp.readEntry(CONFIG_GLOSBE_PHRASE)));
+    m_ui->yandex_word->setChecked(stringToBool(grp.readEntry(CONFIG_YANDEX_WORD)));
+    m_ui->yandex_phrase->setChecked(stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE)));
+
     emit changed(false);
 }
 
@@ -80,6 +89,11 @@ void TranslatorConfig::save()
     grp.writeEntry(CONFIG_PRIMARY, m_abbr.at(indexPrimary));
     grp.writeEntry(CONFIG_SECONDARY, m_abbr.at(indexSecondary));
     grp.writeEntry(CONFIG_YANDEX_KEY,m_ui->yandexKey->text());
+    
+    grp.writeEntry(CONFIG_GLOSBE_WORD, boolToString(m_ui->glosbe_word->isChecked()));
+    grp.writeEntry(CONFIG_GLOSBE_PHRASE, boolToString(m_ui->glosbe_phrase->isChecked()));
+    grp.writeEntry(CONFIG_YANDEX_WORD, boolToString(m_ui->yandex_word->isChecked()));
+    grp.writeEntry(CONFIG_YANDEX_PHRASE, boolToString(m_ui->yandex_phrase->isChecked()));
 
     emit changed(false);
 }

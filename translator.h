@@ -38,6 +38,10 @@ private:
     QString m_primary;
     QString m_secondary;
     QString m_yandexKey;
+    bool m_yandexWord;
+    bool m_yandexPhrase;
+    bool m_glosbeWord;
+    bool m_glosbePhrase;
 };
 
 K_EXPORT_PLASMA_RUNNER(translator, Translator)

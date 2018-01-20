@@ -13,13 +13,37 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QGroupBox" name="boxLanguage">
-     <property name="title">
-      <string>Source language settings</string>
+    <widget class="QGroupBox" name="language">
+     <property name="autoFillBackground">
+      <bool>false</bool>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
+     <property name="title">
+      <string>Sour&amp;ce Language Settings</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <layout class="QFormLayout" name="formLayout_3">
+      <item row="0" column="0">
        <layout class="QFormLayout" name="formLayout_2">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetMinimumSize</enum>
+        </property>
+        <property name="fieldGrowthPolicy">
+         <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+        </property>
+        <property name="labelAlignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+        <property name="formAlignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
         <item row="0" column="0">
          <widget class="QLabel" name="label_secondary">
           <property name="text">
@@ -27,17 +51,17 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_primary">
-          <property name="text">
-           <string>Alternative source language</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="1">
          <widget class="QComboBox" name="primaryLanguage">
           <property name="toolTip">
            <string>Will be used if no source language is specified.</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_primary">
+          <property name="text">
+           <string>Alternative source language</string>
           </property>
          </widget>
         </item>
@@ -54,37 +78,91 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="boxAPI">
-     <property name="title">
-      <string>API settings</string>
+    <widget class="QGroupBox" name="yandex">
+     <property name="enabled">
+      <bool>true</bool>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <layout class="QFormLayout" name="formLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_apikey">
-          <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://tech.yandex.com/keys/get/?service=trnsl&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;Yandex API key&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-          <property name="openExternalLinks">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="yandexKey">
-          <property name="toolTip">
-           <string comment="kennung" extracomment="iaeiae">To translate sentences it is necessary to register at yandex.com and obtain an API key. If no valid key is entered, only single words can be translated.</string>
-          </property>
-          <property name="whatsThis">
-           <string comment="iae" extracomment="aea"/>
-          </property>
-          <property name="placeholderText">
-           <string comment="iaeuiaeuiae" extracomment="uiaeiaeuiae"/>
-          </property>
-         </widget>
-        </item>
-       </layout>
+     <property name="title">
+      <string>Yandex Settings</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_apikey">
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://tech.yandex.com/keys/get/?service=trnsl&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;API key&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="openExternalLinks">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="yandexKey">
+        <property name="toolTip">
+         <string comment="kennung" extracomment="iaeiae">To translate sentences it is necessary to register at yandex.com and obtain an API key. If no valid key is entered, only single words can be translated.</string>
+        </property>
+        <property name="whatsThis">
+         <string comment="iae" extracomment="aea"/>
+        </property>
+        <property name="placeholderText">
+         <string comment="iaeuiaeuiae" extracomment="uiaeiaeuiae"/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="yandex_word">
+        <property name="mouseTracking">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string>Translate single words</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="2">
+       <widget class="QCheckBox" name="yandex_phrase">
+        <property name="text">
+         <string>Translate phrases and sentences</string>
+        </property>
+        <property name="tristate">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="glosbe">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="title">
+      <string>Glosbe Settings</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_4">
+      <property name="labelAlignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="glosbe_word">
+        <property name="text">
+         <string>Translate single words</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="glosbe_phrase">
+        <property name="text">
+         <string>Translate phrases and sentences</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

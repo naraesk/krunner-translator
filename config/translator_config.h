@@ -25,6 +25,10 @@
 static const char CONFIG_PRIMARY[] = "primaryLanguage";
 static const char CONFIG_SECONDARY[] = "secondaryLanguage";
 static const char CONFIG_YANDEX_KEY[] = "yandexKey";
+static const char CONFIG_GLOSBE_WORD[] = "glosbeWord";
+static const char CONFIG_GLOSBE_PHRASE[] = "glosbePhrase";
+static const char CONFIG_YANDEX_WORD[] = "yandexWord";
+static const char CONFIG_YANDEX_PHRASE[] = "yandexPhrase";
 
 class TranslatorConfigForm : public QWidget, public Ui::TranslatorConfigUi
 {
@@ -50,3 +54,17 @@ private:
     const static QVector<QString> m_abbr;
 };
 #endif
+
+inline const char * const boolToString(bool b)
+{
+  return b ? "true" : "false";
+}
+
+inline const bool stringToBool(QString s)
+{
+    if(s == "true") {
+        return true;
+    } else {
+        return false;
+    }
+}
