@@ -1,6 +1,6 @@
 # Translator for KDE KRunner (Plasma 5)
 
-This is a plugin for Plasma 5 KRunner. It's a translator and it translates text.
+This is a plugin for Plasma 5 KRunner. It's a translator and it translates text. Currently [glosbe](https://glosbe.com/) and [yandex](https://www.yandex.ru/) are supported.
 
 ## Installation ##
 ```
@@ -14,12 +14,12 @@ krunner
 ```
 ## Configuration ##
 
-The translation of sentences is done via [yandex](https://translate.yandex.com/). Therefore an api key is required. You have to obtain a key yourself by following these steps:  
+For being able to use yandex, an api key is required. You have to obtain a key yourself by following these steps:  
 1. Register at https://passport.yandex.com/  
 2. Get a API key at https://tech.yandex.com/keys/get/?service=trnsl   
 3. Copy the key to the configuration dialog  
 
-If you do not provide an api key only the translation of single words will work.
+If you do not provide an api key only the translation via glosbe will work.
 
 ## Usage ##
 
