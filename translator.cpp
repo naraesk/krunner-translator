@@ -20,6 +20,7 @@
 #include "config/translator_config.h"
 #include "api/glosbe.h"
 #include "api/yandex.h"
+#include "helper.h"
 
 #include <KLocalizedString>
 #include <QApplication>
@@ -82,14 +83,18 @@ void Translator::match(Plasma::RunnerContext &context)
     if (text.contains(" ")) {
         if(m_yandexPhrase) {
             QEventLoop loop;
-            qDebug() << "start yandex phrase: " << text << endl;
             Yandex yandex(this, context, text, language, m_yandexKey);
             connect(&yandex, SIGNAL(finished()), &loop, SLOT(quit()));
             loop.exec();
         }
         if(m_glosbePhrase) {
+            if(m_glosbeExamples) {
+                QEventLoop loop;
+                Glosbe glosbe(this, context, text, language, m_glosbeExamples);
+                connect(&glosbe, SIGNAL(finished()), &loop, SLOT(quit()));
+                loop.exec();
+            }
             QEventLoop loop;
-            qDebug() << "start glosbe phrase: " << text << endl;
             Glosbe glosbe(this, context, text, language);
             connect(&glosbe, SIGNAL(finished()), &loop, SLOT(quit()));
             loop.exec();
@@ -97,16 +102,13 @@ void Translator::match(Plasma::RunnerContext &context)
     } else {
         if(m_yandexWord) {
             QEventLoop loop;
-            qDebug() << "start yandex word: " << text << endl;
-            qDebug() << "m_yandexWord: " << m_yandexWord << endl;
             Yandex yandex(this, context, text, language, m_yandexKey);
             connect(&yandex, SIGNAL(finished()), &loop, SLOT(quit()));
             loop.exec();
         }
         if(m_glosbeWord) {
             QEventLoop loop;
-            qDebug() << "start glosbe word: " << text << endl;
-            Glosbe glosbe(this, context, text, language);
+            Glosbe glosbe(this, context, text, language, m_glosbeExamples);
             connect(&glosbe, SIGNAL(finished()), &loop, SLOT(quit()));
             loop.exec();
         }
@@ -128,6 +130,7 @@ void Translator::reloadConfiguration()
     m_yandexKey = grp.readEntry(CONFIG_YANDEX_KEY);
     m_glosbeWord = stringToBool(grp.readEntry(CONFIG_GLOSBE_WORD));
     m_glosbePhrase = stringToBool(grp.readEntry(CONFIG_GLOSBE_PHRASE));
+    m_glosbeExamples = stringToBool(grp.readEntry(CONFIG_GLOSBE_EXAMPLES));
     m_yandexWord = stringToBool(grp.readEntry(CONFIG_YANDEX_WORD));
     m_yandexPhrase = stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE));
 }

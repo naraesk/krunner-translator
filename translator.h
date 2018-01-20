@@ -42,6 +42,7 @@ private:
     bool m_yandexPhrase;
     bool m_glosbeWord;
     bool m_glosbePhrase;
+    bool m_glosbeExamples;
 };
 
 K_EXPORT_PLASMA_RUNNER(translator, Translator)

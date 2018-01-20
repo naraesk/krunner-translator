@@ -29,6 +29,7 @@ static const char CONFIG_GLOSBE_WORD[] = "glosbeWord";
 static const char CONFIG_GLOSBE_PHRASE[] = "glosbePhrase";
 static const char CONFIG_YANDEX_WORD[] = "yandexWord";
 static const char CONFIG_YANDEX_PHRASE[] = "yandexPhrase";
+static const char CONFIG_GLOSBE_EXAMPLES[] = "glosbeExamples";
 
 class TranslatorConfigForm : public QWidget, public Ui::TranslatorConfigUi
 {
@@ -53,18 +54,5 @@ private:
     TranslatorConfigForm* m_ui;
     const static QVector<QString> m_abbr;
 };
+
 #endif
-
-inline const char * const boolToString(bool b)
-{
-  return b ? "true" : "false";
-}
-
-inline const bool stringToBool(QString s)
-{
-    if(s == "true") {
-        return true;
-    } else {
-        return false;
-    }
-}

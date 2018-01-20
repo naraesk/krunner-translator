@@ -17,10 +17,10 @@
  *****************************************************************************/
 
 #include "translator_config.h"
+#include "helper.h"
 #include <KSharedConfig>
 #include <KPluginFactory>
 #include <krunner/abstractrunner.h>
-#include <QDebug>
 
 K_PLUGIN_FACTORY(TranslatorConfigFactory, registerPlugin<TranslatorConfig>("kcm_krunner_translator");)
 
@@ -49,6 +49,7 @@ TranslatorConfig::TranslatorConfig(QWidget* parent, const QVariantList& args) :
     connect(m_ui->yandex_phrase, SIGNAL(stateChanged(int)),this,SLOT(changed()));
     connect(m_ui->glosbe_word, SIGNAL(stateChanged(int)),this,SLOT(changed()));
     connect(m_ui->glosbe_phrase, SIGNAL(stateChanged(int)),this,SLOT(changed()));
+    connect(m_ui->glosbe_examples, SIGNAL(stateChanged(int)),this,SLOT(changed()));
     
     load();
 }
@@ -69,6 +70,7 @@ void TranslatorConfig::load()
     
     m_ui->glosbe_word->setChecked(stringToBool(grp.readEntry(CONFIG_GLOSBE_WORD)));
     m_ui->glosbe_phrase->setChecked(stringToBool(grp.readEntry(CONFIG_GLOSBE_PHRASE)));
+    m_ui->glosbe_examples->setChecked(stringToBool(grp.readEntry(CONFIG_GLOSBE_EXAMPLES)));
     m_ui->yandex_word->setChecked(stringToBool(grp.readEntry(CONFIG_YANDEX_WORD)));
     m_ui->yandex_phrase->setChecked(stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE)));
 
@@ -92,6 +94,7 @@ void TranslatorConfig::save()
     
     grp.writeEntry(CONFIG_GLOSBE_WORD, boolToString(m_ui->glosbe_word->isChecked()));
     grp.writeEntry(CONFIG_GLOSBE_PHRASE, boolToString(m_ui->glosbe_phrase->isChecked()));
+    grp.writeEntry(CONFIG_GLOSBE_EXAMPLES, boolToString(m_ui->glosbe_examples->isChecked()));
     grp.writeEntry(CONFIG_YANDEX_WORD, boolToString(m_ui->yandex_word->isChecked()));
     grp.writeEntry(CONFIG_YANDEX_PHRASE, boolToString(m_ui->yandex_phrase->isChecked()));
 

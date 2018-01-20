@@ -16,38 +16,21 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef GLOSBE_H
-#define GLOSBE_H
+#ifndef HELPER_H
+#define HELPER_H 
 
-#include <KRunner/AbstractRunner>
-#include <QtNetwork/QNetworkReply>
-#include <helper.h>
-
-/**
- * API Implementation for Glosbe (https://glosbe.com/a-api)
- */
-
-class Glosbe : public QObject
+inline const bool stringToBool(QString s)
 {
+    if(s == "true") {
+        return true;
+    } else {
+        return false;
+    }
+}
 
-    Q_OBJECT
-
-public:
-    Glosbe(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, const bool);
-    Glosbe(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &);
-    ~Glosbe();
-    
-private Q_SLOTS:
-   void parseExamples(QNetworkReply*);
-   void parseResult(QNetworkReply*);
-
-Q_SIGNALS:
-   void finished();
-   
-private:
-   Plasma::AbstractRunner * m_runner;
-   QNetworkAccessManager * m_manager;
-   Plasma::RunnerContext m_context;
-};
+inline const char * const boolToString(bool b)
+{
+  return b ? "true" : "false";
+}
 
 #endif

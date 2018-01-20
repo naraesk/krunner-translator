@@ -22,6 +22,27 @@
 #include <QJsonDocument>
 #include <QUrlQuery>
 
+Glosbe::Glosbe(Plasma::AbstractRunner * runner, Plasma::RunnerContext& context, const QString &text, const QPair<QString, QString> &language, bool examples)
+: m_runner (runner), m_context (context)
+{
+    m_manager = new QNetworkAccessManager(this);
+
+    QUrlQuery query;
+    query.addQueryItem("from", language.first);
+    query.addQueryItem("dest",language.second);
+    query.addQueryItem("format","json");
+    query.addQueryItem("phrase", text);
+    query.addQueryItem("tm", boolToString(examples));
+    query.addQueryItem("pretty", "true");
+        
+    QNetworkRequest request(QUrl("https://glosbe.com/gapi/translate?" + QUrl(query.query(QUrl::FullyEncoded).toUtf8()).toEncoded()));
+    request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+
+    m_manager -> get(request);
+    connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(parseExamples(QNetworkReply*)));
+}
+
 Glosbe::Glosbe(Plasma::AbstractRunner * runner, Plasma::RunnerContext& context, const QString &text, const QPair<QString, QString> &language)
 : m_runner (runner), m_context (context)
 {
@@ -45,6 +66,45 @@ Glosbe::Glosbe(Plasma::AbstractRunner * runner, Plasma::RunnerContext& context, 
 
 Glosbe::~Glosbe()
 {
+}
+
+void Glosbe::parseExamples(QNetworkReply* reply)
+{
+    QJsonObject jsonObject = QJsonDocument::fromJson(QString::fromUtf8(reply->readAll()).toUtf8()).object();
+
+    if (jsonObject.value("result").toString() != "ok") {
+        emit(finished());
+        return;
+    }
+    
+    QList<Plasma::QueryMatch> matches;
+    QJsonArray tuc = jsonObject.find("examples").value().toArray();
+    QVariantList v = tuc.toVariantList();
+    float relevance = 0.8;
+    foreach(QJsonValue a, tuc) {
+        QString s = a.toObject().value("second").toString();
+        if (s.size() > 0) {
+            relevance -= 0.01;
+            Plasma::QueryMatch match(m_runner);
+            match.setType(Plasma::QueryMatch::InformationalMatch);
+            match.setIcon(QIcon::fromTheme("server-database"));
+            match.setText(s);
+            match.setRelevance(relevance);
+            matches.append(match);
+        }
+    }
+    // Create error message if no translation was found
+    if (matches.isEmpty()) {
+        relevance -= 0.01;
+        Plasma::QueryMatch match(m_runner);
+        match.setType(Plasma::QueryMatch::NoMatch);
+        match.setIcon(QIcon::fromTheme("dialog-error"));
+        match.setText("No translation found");
+        match.setRelevance(relevance);
+        matches.append(match);
+    }
+    m_context.addMatches(matches);
+    emit(finished());
 }
 
 void Glosbe::parseResult(QNetworkReply* reply)
