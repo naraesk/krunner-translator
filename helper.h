@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2013 – 2016 by David Baum <david.baum@naraesk.eu>           *
+ *  Copyright (C) 2013 – 2018 by David Baum <david.baum@naraesk.eu>           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
