@@ -107,8 +107,14 @@ void Translator::match(Plasma::RunnerContext &context)
             loop.exec();
         }
         if(m_glosbeWord) {
+            if(m_glosbeExamples) {
+                QEventLoop loop;
+                Glosbe glosbe(this, context, text, language, m_glosbeExamples);
+                connect(&glosbe, SIGNAL(finished()), &loop, SLOT(quit()));
+                loop.exec();
+            }
             QEventLoop loop;
-            Glosbe glosbe(this, context, text, language, m_glosbeExamples);
+            Glosbe glosbe(this, context, text, language);
             connect(&glosbe, SIGNAL(finished()), &loop, SLOT(quit()));
             loop.exec();
         }
