@@ -6,7 +6,7 @@ This is a plugin for Plasma 5 KRunner. It's a translator and it translates text.
 ```
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=`kf5-config --prefix` -DQT_PLUGIN_INSTALL_DIR=`kf5-config --qt-plugins`
+cmake .. -DCMAKE_INSTALL_PREFIX=\`qtpaths --install-prefix\` -DQT_PLUGIN_INSTALL_DIR=\`qtpaths --plugin-dir\`
 make 
 sudo make install
 kquitapp krunner
