@@ -6,10 +6,10 @@ This is a plugin for Plasma 5 KRunner. It's a translator and it translates text.
 ```
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=\`qtpaths --install-prefix\` -DKDE_INSTALL_QTPLUGINDIR=\`qtpaths --plugin-dir\`
+cmake .. -DCMAKE_INSTALL_PREFIX=`qtpaths --install-prefix` -DKDE_INSTALL_QTPLUGINDIR=`qtpaths --plugin-dir`
 make 
 sudo make install
-kquitapp krunner
+kquitapp5 krunner
 krunner
 ```
 ## Configuration ##
@@ -40,3 +40,4 @@ Alternative source language: *German (de)*
 *fr maison* → *en-fr maison*  
 
 Thanks for your feedback and kudos! If you like the runner, please vote for it [here](http://kde-apps.org/content/show.php?content=156498).
+  
