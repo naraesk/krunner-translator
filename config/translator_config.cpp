@@ -21,6 +21,7 @@
 #include <KSharedConfig>
 #include <KPluginFactory>
 #include <krunner/abstractrunner.h>
+#include <QtDebug>
 
 K_PLUGIN_FACTORY(TranslatorConfigFactory, registerPlugin<TranslatorConfig>("kcm_krunner_translator");)
 
@@ -62,8 +63,8 @@ void TranslatorConfig::load()
     KConfigGroup grp = cfg->group("Runners");
     grp = KConfigGroup(&grp, "Translator");
     
-    int indexPrimary = m_abbr.indexOf(grp.readEntry(CONFIG_PRIMARY));
-    int indexSecondary = m_abbr.indexOf(grp.readEntry(CONFIG_SECONDARY));
+    int indexPrimary = m_abbr.indexOf(grp.readEntry(CONFIG_PRIMARY, "en"));
+    int indexSecondary = m_abbr.indexOf(grp.readEntry(CONFIG_SECONDARY, "es"));
     m_ui->primaryLanguage->setCurrentIndex(indexPrimary);
     m_ui->secondaryLanguage->setCurrentIndex(indexSecondary);
     m_ui->yandexKey->setText(grp.readEntry(CONFIG_YANDEX_KEY));
