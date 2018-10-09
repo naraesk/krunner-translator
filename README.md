@@ -35,9 +35,9 @@ Syntax: \<targetlang\> \<searchterm\>
 Defuault source language: *English (en)*  
 Alternative source language: *German (de)*  
 
-*de home* → *en-de home*  
+*de soccer* → *en-de soccer*  
 *en blau* → *de-en blau*  
-*fr maison* → *en-fr maison*  
+*fr house* → *en-fr house*  
 
 Thanks for your feedback and kudos! If you like the runner, please vote for it [here](http://kde-apps.org/content/show.php?content=156498).
   
