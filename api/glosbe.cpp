@@ -73,13 +73,12 @@ void Glosbe::parseExamples(QNetworkReply* reply)
     QJsonObject jsonObject = QJsonDocument::fromJson(QString::fromUtf8(reply->readAll()).toUtf8()).object();
 
     if (jsonObject.value("result").toString() != "ok") {
-        emit(finished());
+        emit finished();
         return;
     }
     
     QList<Plasma::QueryMatch> matches;
     QJsonArray tuc = jsonObject.find("examples").value().toArray();
-    QVariantList v = tuc.toVariantList();
     float relevance = 0.8;
     foreach(QJsonValue a, tuc) {
         QString s = a.toObject().value("second").toString();
@@ -104,7 +103,7 @@ void Glosbe::parseExamples(QNetworkReply* reply)
         matches.append(match);
     }
     m_context.addMatches(matches);
-    emit(finished());
+    emit finished();
 }
 
 void Glosbe::parseResult(QNetworkReply* reply)
@@ -112,13 +111,12 @@ void Glosbe::parseResult(QNetworkReply* reply)
     QJsonObject jsonObject = QJsonDocument::fromJson(QString::fromUtf8(reply->readAll()).toUtf8()).object();
 
     if (jsonObject.value("result").toString() != "ok") {
-        emit(finished());
+        emit finished();
         return;
     }
     
     QList<Plasma::QueryMatch> matches;
     QJsonArray tuc = jsonObject.find("tuc").value().toArray();
-    QVariantList v = tuc.toVariantList();
     float relevance = 1;
     foreach(QJsonValue a, tuc) {
         QString s = a.toObject().value("phrase").toObject().value("text").toString();
@@ -144,7 +142,7 @@ void Glosbe::parseResult(QNetworkReply* reply)
         matches.append(match);
     }
     m_context.addMatches(matches);
-    emit(finished());
+    emit finished();
 }
 
 #include "moc_glosbe.cpp"

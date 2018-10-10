@@ -19,7 +19,7 @@
 #ifndef HELPER_H
 #define HELPER_H 
 
-inline const bool stringToBool(QString s)
+inline bool stringToBool(QString s)
 {
     if(s == "true") {
         return true;
@@ -28,7 +28,7 @@ inline const bool stringToBool(QString s)
     }
 }
 
-inline const char * const boolToString(bool b)
+inline const char * boolToString(bool b)
 {
   return b ? "true" : "false";
 }

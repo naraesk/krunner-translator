@@ -21,6 +21,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QUrlQuery>
+#include <QDebug>
 
 Yandex::Yandex(Plasma::AbstractRunner * runner, Plasma::RunnerContext& context, const QString &text, const QPair<QString, QString> &language, const QString &key)
 : m_runner (runner), m_context (context)
@@ -35,6 +36,7 @@ Yandex::Yandex(Plasma::AbstractRunner * runner, Plasma::RunnerContext& context, 
     QNetworkRequest request(QUrl("https://translate.yandex.net/api/v1.5/tr.json/translate?" + QUrl(query.query(QUrl::FullyEncoded).toUtf8()).toEncoded()));
     request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    qDebug() << request.url().toString();
 
     m_manager -> get(request);
     connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(parseResult(QNetworkReply*)));
@@ -47,7 +49,7 @@ Yandex::~Yandex()
 void Yandex::parseResult(QNetworkReply* reply)
 {
     if (reply -> attribute(QNetworkRequest::HttpStatusCodeAttribute) != 200) {
-        emit(finished());
+        emit finished();
         return;
     }
 
@@ -67,7 +69,7 @@ void Yandex::parseResult(QNetworkReply* reply)
             relevance -= 0.01;
     }
     m_context.addMatches(matches);
-    emit(finished());
+    emit finished();
 }
 
 #include "moc_yandex.cpp"
