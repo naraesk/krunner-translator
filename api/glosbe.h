@@ -33,10 +33,9 @@ class Glosbe : public QObject
     Q_OBJECT
 
 public:
-    Glosbe(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, const bool);
+    Glosbe(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, bool);
     Glosbe(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &);
-    ~Glosbe();
-    
+
 private Q_SLOTS:
    void parseExamples(QNetworkReply*);
    void parseResult(QNetworkReply*);

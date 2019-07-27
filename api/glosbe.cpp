@@ -59,13 +59,8 @@ Glosbe::Glosbe(Plasma::AbstractRunner * runner, Plasma::RunnerContext& context, 
     QNetworkRequest request(QUrl("https://glosbe.com/gapi/translate?" + QUrl(query.query(QUrl::FullyEncoded).toUtf8()).toEncoded()));
     request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-
     m_manager -> get(request);
     connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(parseResult(QNetworkReply*)));
-}
-
-Glosbe::~Glosbe()
-{
 }
 
 void Glosbe::parseExamples(QNetworkReply* reply)
@@ -80,17 +75,17 @@ void Glosbe::parseExamples(QNetworkReply* reply)
     QList<Plasma::QueryMatch> matches;
     QJsonArray tuc = jsonObject.find("examples").value().toArray();
     float relevance = 0.8;
-    foreach(QJsonValue a, tuc) {
-        QString s = a.toObject().value("second").toString();
-        if (s.size() > 0) {
-            relevance -= 0.01;
-            Plasma::QueryMatch match(m_runner);
-            match.setType(Plasma::QueryMatch::InformationalMatch);
-            match.setIcon(QIcon::fromTheme("server-database"));
-            match.setText(s);
-            match.setRelevance(relevance);
-            matches.append(match);
-        }
+    foreach(const QJsonValue a, tuc) {
+       QString s = a.toObject().value("second").toString();
+       if (s.size() > 0) {
+           Plasma::QueryMatch match(m_runner);
+           match.setType(Plasma::QueryMatch::InformationalMatch);
+           match.setIcon(QIcon::fromTheme("server-database"));
+           match.setText(s);
+           relevance -= 0.01;
+           match.setRelevance(relevance);
+           matches.append(match);
+       }
     }
     // Create error message if no translation was found
     if (matches.isEmpty()) {
@@ -109,7 +104,6 @@ void Glosbe::parseExamples(QNetworkReply* reply)
 void Glosbe::parseResult(QNetworkReply* reply)
 {
     QJsonObject jsonObject = QJsonDocument::fromJson(QString::fromUtf8(reply->readAll()).toUtf8()).object();
-
     if (jsonObject.value("result").toString() != "ok") {
         emit finished();
         return;

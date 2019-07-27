@@ -42,10 +42,6 @@ Yandex::Yandex(Plasma::AbstractRunner * runner, Plasma::RunnerContext& context, 
     connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(parseResult(QNetworkReply*)));
 }
 
-Yandex::~Yandex()
-{
-}
-
 void Yandex::parseResult(QNetworkReply* reply)
 {
     if (reply -> attribute(QNetworkRequest::HttpStatusCodeAttribute) != 200) {

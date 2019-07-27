@@ -33,8 +33,7 @@ class Yandex : public QObject
 
 public:
     Yandex(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, const QString &);
-    ~Yandex();
-    
+
 private Q_SLOTS:
    void parseResult(QNetworkReply*);
 

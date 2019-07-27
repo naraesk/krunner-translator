@@ -27,11 +27,10 @@ class Translator : public Plasma::AbstractRunner
 
 public:
     Translator(QObject *parent, const QVariantList &args);
-    ~Translator();
 
-    void match(Plasma::RunnerContext &);
-    void run(const Plasma::RunnerContext &, const Plasma::QueryMatch &);
-    void reloadConfiguration();
+    void match(Plasma::RunnerContext &) override;
+    void run(const Plasma::RunnerContext &, const Plasma::QueryMatch &) override;
+    void reloadConfiguration() override;
 
 private:
     bool parseTerm(const QString &, QString &, QPair<QString, QString> &);
