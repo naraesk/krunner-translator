@@ -48,12 +48,12 @@ bool Translator::parseTerm(const QString& term, QString& text, QPair<QString, QS
     const int index = term.indexOf(" ");
     if (index == -1) return false;
     text = term.mid(index + 1);
-    QString languageTerm = term.left(index);
+    const QString languageTerm = term.left(index);
 
     if (languageTerm.contains("-")) {
-        int index = languageTerm.indexOf("-");
-        language.first = languageTerm.left(index);
-        language.second = languageTerm.mid(index + 1);
+        int languageIndex = languageTerm.indexOf("-");
+        language.first = languageTerm.left(languageIndex);
+        language.second = languageTerm.mid(languageIndex + 1);
 
     } else {
         if (m_primary == languageTerm) {
@@ -72,11 +72,9 @@ void Translator::match(Plasma::RunnerContext &context)
     QString text;
     QPair<QString, QString> language;
 
-    qDebug() << "hallo" << endl;
-    
     if (!parseTerm(term, text, language)) return;
     if (!context.isValid()) return;
-    
+
     if (text.contains(" ")) {
         if(m_yandexPhrase) {
             QEventLoop loop;
