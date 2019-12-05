@@ -51,8 +51,6 @@ TranslatorConfig::TranslatorConfig(QWidget* parent, const QVariantList& args) :
     connect(m_ui->glosbe_word, SIGNAL(stateChanged(int)),this,SLOT(changed()));
     connect(m_ui->glosbe_phrase, SIGNAL(stateChanged(int)),this,SLOT(changed()));
     connect(m_ui->glosbe_examples, SIGNAL(stateChanged(int)),this,SLOT(changed()));
-    
-    load();
 }
 
 void TranslatorConfig::load()

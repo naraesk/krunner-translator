@@ -65,7 +65,7 @@ Glosbe::Glosbe(Plasma::AbstractRunner * runner, Plasma::RunnerContext& context, 
 
 void Glosbe::parseExamples(QNetworkReply* reply)
 {
-    QJsonObject jsonObject = QJsonDocument::fromJson(QString::fromUtf8(reply->readAll()).toUtf8()).object();
+    const QJsonObject jsonObject = QJsonDocument::fromJson(QString::fromUtf8(reply->readAll()).toUtf8()).object();
 
     if (jsonObject.value("result").toString() != "ok") {
         emit finished();
@@ -73,11 +73,11 @@ void Glosbe::parseExamples(QNetworkReply* reply)
     }
     
     QList<Plasma::QueryMatch> matches;
-    QJsonArray tuc = jsonObject.find("examples").value().toArray();
+    const QJsonArray tuc = jsonObject.find("examples").value().toArray();
     float relevance = 0.8;
-    foreach(const QJsonValue a, tuc) {
-       QString s = a.toObject().value("second").toString();
-       if (s.size() > 0) {
+    for(const auto& a: tuc) {
+       const QString s = a.toObject().value("second").toString();
+       if (!s.isEmpty()) {
            Plasma::QueryMatch match(m_runner);
            match.setType(Plasma::QueryMatch::InformationalMatch);
            match.setIcon(QIcon::fromTheme("server-database"));
@@ -103,18 +103,18 @@ void Glosbe::parseExamples(QNetworkReply* reply)
 
 void Glosbe::parseResult(QNetworkReply* reply)
 {
-    QJsonObject jsonObject = QJsonDocument::fromJson(QString::fromUtf8(reply->readAll()).toUtf8()).object();
+    const QJsonObject jsonObject = QJsonDocument::fromJson(QString::fromUtf8(reply->readAll()).toUtf8()).object();
     if (jsonObject.value("result").toString() != "ok") {
         emit finished();
         return;
     }
     
     QList<Plasma::QueryMatch> matches;
-    QJsonArray tuc = jsonObject.find("tuc").value().toArray();
+    const QJsonArray tuc = jsonObject.find("tuc").value().toArray();
     float relevance = 1;
-    foreach(QJsonValue a, tuc) {
-        QString s = a.toObject().value("phrase").toObject().value("text").toString();
-        if (s.size() > 0) {
+    for(const auto& a: tuc) {
+        const QString s = a.toObject().value("phrase").toObject().value("text").toString();
+        if (!s.isEmpty()) {
             relevance -= 0.01;
             Plasma::QueryMatch match(m_runner);
             match.setType(Plasma::QueryMatch::InformationalMatch);

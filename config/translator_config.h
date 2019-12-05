@@ -44,11 +44,11 @@ class TranslatorConfig : public KCModule
     Q_OBJECT
 
 public:
-    explicit TranslatorConfig(QWidget* parent = 0, const QVariantList& args = QVariantList());
+    explicit TranslatorConfig(QWidget* parent = nullptr, const QVariantList& args = QVariantList());
     
 public Q_SLOTS:
-    void save();
-    void load();
+    void save() override;
+    void load() override;
 
 private:
     TranslatorConfigForm* m_ui;

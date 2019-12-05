@@ -3,10 +3,21 @@
 This is a plugin for Plasma 5 KRunner. It's a translator and it translates text. Currently [glosbe](https://glosbe.com/) and [yandex](https://www.yandex.ru/) are supported.
 
 ## Installation ##
+#### Required Dependencies
+Debian/Ubuntu:  
+`sudo apt install cmake extra-cmake-modules build-essential libkf5runner-dev libkf5textwidgets-dev qtdeclarative5-dev gettext`
+
+openSUSE  
+`sudo zypper install cmake extra-cmake-modules libQt5Widgets5 libQt5Core5 libqt5-qtlocation-devel ki18n-devel ktextwidgets-devel 
+kservice-devel krunner-devel gettext-tools kconfigwidgets-devel`
+
+Fedora  
+`sudo dnf install cmake extra-cmake-modules kf5-ki18n-devel kf5-kservice-devel kf5-krunner-devel kf5-ktextwidgets-devel gettext`
+
 ```
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=`kf5-config --prefix` -DKDE_INSTALL_QTPLUGINDIR=`kf5-config --qt-plugins`
+cmake .. -DCMAKE_INSTALL_PREFIX=`kf5-config --prefix` -DKDE_INSTALL_QTPLUGINDIR=`kf5-config --qt-plugins` -DCMAKE_BUILD_TYPE=Release
 make 
 sudo make install
 kquitapp5 krunner
@@ -32,7 +43,7 @@ Syntax: \<sourcelang\>-\<targetlang\> \<searchterm\>
 ### Use default source language ###
 Syntax: \<targetlang\> \<searchterm\>
 
-Defuault source language: *English (en)*  
+Default source language: *English (en)*  
 Alternative source language: *German (de)*  
 
 *de soccer* → *en-de soccer*  

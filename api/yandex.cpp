@@ -36,7 +36,6 @@ Yandex::Yandex(Plasma::AbstractRunner * runner, Plasma::RunnerContext& context, 
     QNetworkRequest request(QUrl("https://translate.yandex.net/api/v1.5/tr.json/translate?" + QUrl(query.query(QUrl::FullyEncoded).toUtf8()).toEncoded()));
     request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-    qDebug() << request.url().toString();
 
     m_manager -> get(request);
     connect(m_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(parseResult(QNetworkReply*)));
@@ -49,13 +48,13 @@ void Yandex::parseResult(QNetworkReply* reply)
         return;
     }
 
-    QString s = QString::fromUtf8(reply->readAll());
-    QJsonObject jsonObject = QJsonDocument::fromJson(s.toUtf8()).object();
+    const QString s = QString::fromUtf8(reply->readAll());
+    const QJsonObject jsonObject = QJsonDocument::fromJson(s.toUtf8()).object();
     
     QList<Plasma::QueryMatch> matches;
-    QJsonArray texts = jsonObject.find("text").value().toArray();
+    const QJsonArray texts = jsonObject.find("text").value().toArray();
     float relevance = 1;
-    foreach(QJsonValue text, texts) {
+    for(const auto& text: texts) {
         Plasma::QueryMatch match(m_runner);
             match.setType(Plasma::QueryMatch::InformationalMatch);
             match.setIcon(QIcon::fromTheme("applications-education-language"));
