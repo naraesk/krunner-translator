@@ -19,6 +19,8 @@ set(krunner_translator_SRCS
     translator.cpp
     api/glosbe.cpp
     api/yandex.cpp
+    api/baidu.cpp
+    api/youdao.cpp
 )
 
 set(kcm_krunner_translator_SRCS

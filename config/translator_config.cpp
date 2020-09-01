@@ -46,11 +46,17 @@ TranslatorConfig::TranslatorConfig(QWidget* parent, const QVariantList& args) :
     connect(m_ui->primaryLanguage,SIGNAL(currentTextChanged(QString)),this, SLOT(changed()));
     connect(m_ui->secondaryLanguage,SIGNAL(currentTextChanged(QString)),this, SLOT(changed()));
     connect(m_ui->yandexKey,SIGNAL(textChanged(QString)),this,SLOT(changed()));
+    connect(m_ui->baiduAPPID,SIGNAL(textChanged(QString)),this,SLOT(changed()));
+    connect(m_ui->baiduApiKey,SIGNAL(textChanged(QString)),this,SLOT(changed()));
+    connect(m_ui->youdaoAPPID,SIGNAL(textChanged(QString)),this,SLOT(changed()));
+    connect(m_ui->youdaoAppSec,SIGNAL(textChanged(QString)),this,SLOT(changed()));
     connect(m_ui->yandex_word, SIGNAL(stateChanged(int)),this,SLOT(changed()));
     connect(m_ui->yandex_phrase, SIGNAL(stateChanged(int)),this,SLOT(changed()));
     connect(m_ui->glosbe_word, SIGNAL(stateChanged(int)),this,SLOT(changed()));
     connect(m_ui->glosbe_phrase, SIGNAL(stateChanged(int)),this,SLOT(changed()));
     connect(m_ui->glosbe_examples, SIGNAL(stateChanged(int)),this,SLOT(changed()));
+    connect(m_ui->baiduEnable, SIGNAL(stateChanged(int)),this,SLOT(changed()));
+    connect(m_ui->youdaoEnable, SIGNAL(stateChanged(int)),this,SLOT(changed()));
 }
 
 void TranslatorConfig::load()
@@ -66,12 +72,18 @@ void TranslatorConfig::load()
     m_ui->primaryLanguage->setCurrentIndex(indexPrimary);
     m_ui->secondaryLanguage->setCurrentIndex(indexSecondary);
     m_ui->yandexKey->setText(grp.readEntry(CONFIG_YANDEX_KEY));
+    m_ui->baiduAPPID->setText(grp.readEntry(CONFIG_BAIDU_APPID));
+    m_ui->baiduApiKey->setText(grp.readEntry(CONFIG_BAIDU_APIKEY));
+    m_ui->youdaoAPPID->setText(grp.readEntry(CONFIG_YOUDAO_APPID));
+    m_ui->youdaoAppSec->setText(grp.readEntry(CONFIG_YOUDAO_APPSEC));
     
     m_ui->glosbe_word->setChecked(stringToBool(grp.readEntry(CONFIG_GLOSBE_WORD)));
     m_ui->glosbe_phrase->setChecked(stringToBool(grp.readEntry(CONFIG_GLOSBE_PHRASE)));
     m_ui->glosbe_examples->setChecked(stringToBool(grp.readEntry(CONFIG_GLOSBE_EXAMPLES)));
     m_ui->yandex_word->setChecked(stringToBool(grp.readEntry(CONFIG_YANDEX_WORD)));
     m_ui->yandex_phrase->setChecked(stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE)));
+    m_ui->baiduEnable->setChecked(stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE)));
+    m_ui->youdaoEnable->setChecked(stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE)));
 
     emit changed(false);
 }
@@ -89,13 +101,20 @@ void TranslatorConfig::save()
 
     grp.writeEntry(CONFIG_PRIMARY, m_abbr.at(indexPrimary));
     grp.writeEntry(CONFIG_SECONDARY, m_abbr.at(indexSecondary));
+
     grp.writeEntry(CONFIG_YANDEX_KEY,m_ui->yandexKey->text());
+    grp.writeEntry(CONFIG_BAIDU_APPID,m_ui->baiduAPPID->text());
+    grp.writeEntry(CONFIG_BAIDU_APIKEY,m_ui->baiduApiKey->text());
+    grp.writeEntry(CONFIG_YOUDAO_APPID,m_ui->youdaoAPPID->text());
+    grp.writeEntry(CONFIG_YOUDAO_APPSEC,m_ui->youdaoAppSec->text());
     
     grp.writeEntry(CONFIG_GLOSBE_WORD, boolToString(m_ui->glosbe_word->isChecked()));
     grp.writeEntry(CONFIG_GLOSBE_PHRASE, boolToString(m_ui->glosbe_phrase->isChecked()));
     grp.writeEntry(CONFIG_GLOSBE_EXAMPLES, boolToString(m_ui->glosbe_examples->isChecked()));
     grp.writeEntry(CONFIG_YANDEX_WORD, boolToString(m_ui->yandex_word->isChecked()));
     grp.writeEntry(CONFIG_YANDEX_PHRASE, boolToString(m_ui->yandex_phrase->isChecked()));
+    grp.writeEntry(CONFIG_BAIDU_ENABLE, boolToString(m_ui->baiduEnable->isChecked()));
+    grp.writeEntry(CONFIG_YOUDAO_ENABLE, boolToString(m_ui->youdaoEnable->isChecked()));
 
     emit changed(false);
 }
