@@ -1,8 +1,10 @@
 # Translator for KDE KRunner (Plasma 5)
 
-This is a plugin for Plasma 5 KRunner. It's a translator and it translates text. Currently [glosbe](https://glosbe.com/), [yandex](https://www.yandex.ru/), [youdao](http://fanyi.youdao.com/) and [Baidu Fanyi](https://fanyi.baidu.com/) are supported.
+This is a plugin for Plasma 5 KRunner. It's a translator and it translates text. Currently [glosbe](https://glosbe.com/), [yandex](https://www.yandex.ru/), [youdao](http://fanyi.youdao.com/) and [Baidu Fanyi](https://fanyi.baidu.com/) are supported. The latter two are more friendly to Chinese users.
 
-The latter two are more friendly to Chinese users.
+## Packages
+
+[![Logo Arch Linux](../../wiki/logos/arch_linux.png)](https://aur.archlinux.org/packages/plasma-runners-translator/)
 
 ## Installation ##
 #### Required Dependencies
