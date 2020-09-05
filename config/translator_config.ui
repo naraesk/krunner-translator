@@ -91,7 +91,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="label_apikey">
           <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://tech.yandex.com/keys/get/?service=trnsl&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;API key&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://tech.yandex.com/keys/get/?service=trnsl&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;API Key&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="openExternalLinks">
            <bool>true</bool>
@@ -181,7 +181,7 @@
    <item>
     <widget class="QGroupBox" name="baidu_2">
      <property name="title">
-      <string>Baidu Setting</string>
+      <string>Baidu Settings</string>
      </property>
      <layout class="QFormLayout" name="baidu">
       <property name="leftMargin">
@@ -213,7 +213,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>APP ID</string>
+           <string>App ID</string>
           </property>
          </widget>
         </item>
@@ -223,7 +223,7 @@
         <item row="2" column="0">
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>API KEY</string>
+           <string>API Key</string>
           </property>
          </widget>
         </item>
@@ -245,7 +245,7 @@
    <item>
     <widget class="QGroupBox" name="youdao">
      <property name="title">
-      <string>Youdao Setting</string>
+      <string>Youdao Settings</string>
      </property>
      <layout class="QFormLayout" name="baidu_4">
       <property name="leftMargin">
@@ -277,7 +277,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="label_4">
           <property name="text">
-           <string>APP ID</string>
+           <string>App ID</string>
           </property>
          </widget>
         </item>
@@ -287,7 +287,7 @@
         <item row="2" column="0">
          <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>APP SECRET</string>
+           <string>App Secret</string>
           </property>
          </widget>
         </item>
