@@ -25,11 +25,17 @@
 static const char CONFIG_PRIMARY[] = "primaryLanguage";
 static const char CONFIG_SECONDARY[] = "secondaryLanguage";
 static const char CONFIG_YANDEX_KEY[] = "yandexKey";
+static const char CONFIG_BAIDU_APPID[] = "baiduAPPID";
+static const char CONFIG_BAIDU_APIKEY[] = "baiduAPIKey";
+static const char CONFIG_YOUDAO_APPID[] = "youdaoAPPID";
+static const char CONFIG_YOUDAO_APPSEC[] = "youdaoAPPSec";
 static const char CONFIG_GLOSBE_WORD[] = "glosbeWord";
 static const char CONFIG_GLOSBE_PHRASE[] = "glosbePhrase";
 static const char CONFIG_YANDEX_WORD[] = "yandexWord";
 static const char CONFIG_YANDEX_PHRASE[] = "yandexPhrase";
 static const char CONFIG_GLOSBE_EXAMPLES[] = "glosbeExamples";
+static const char CONFIG_BAIDU_ENABLE[] = "baiduEnable";
+static const char CONFIG_YOUDAO_ENABLE[] = "youdaoEnable";
 
 class TranslatorConfigForm : public QWidget, public Ui::TranslatorConfigUi
 {

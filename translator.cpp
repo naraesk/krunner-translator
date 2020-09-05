@@ -20,6 +20,8 @@
 #include "config/translator_config.h"
 #include "api/glosbe.h"
 #include "api/yandex.h"
+#include "api/baidu.h"
+#include "api/youdao.h"
 #include "helper.h"
 
 #include <KLocalizedString>
@@ -60,7 +62,7 @@ bool Translator::parseTerm(const QString& term, QString& text, QPair<QString, QS
             language.first = m_secondary;
         } else {
             language.first = m_primary;
-        }   
+        }
         language.second = languageTerm;
     }
     return true;
@@ -75,6 +77,20 @@ void Translator::match(Plasma::RunnerContext &context)
     if (!parseTerm(term, text, language)) return;
     if (!context.isValid()) return;
 
+    if (m_baiduEnable)
+    {
+        QEventLoop baiduLoop;
+        Baidu baidu(this, context, text, language, m_baiduAPPID, m_baiduAPIKey);
+        connect(&baidu, SIGNAL(finished()), &baiduLoop, SLOT(quit()));
+        baiduLoop.exec();
+    }
+    if (m_youdaoEnable)
+    {
+        QEventLoop youdaoLoop;
+        Youdao youdao(this, context, text, language, m_youdaoAPPID, m_youdaoAppSec);
+        connect(&youdao, SIGNAL(finished()), &youdaoLoop, SLOT(quit()));
+        youdaoLoop.exec();
+    }
     if (text.contains(" ")) {
         if(m_yandexPhrase) {
             QEventLoop loop;
@@ -129,11 +145,17 @@ void Translator::reloadConfiguration()
     m_primary = grp.readEntry(CONFIG_PRIMARY);
     m_secondary = grp.readEntry(CONFIG_SECONDARY);
     m_yandexKey = grp.readEntry(CONFIG_YANDEX_KEY);
+    m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID);
+    m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY);
+    m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID);
+    m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC);
     m_glosbeWord = stringToBool(grp.readEntry(CONFIG_GLOSBE_WORD));
     m_glosbePhrase = stringToBool(grp.readEntry(CONFIG_GLOSBE_PHRASE));
     m_glosbeExamples = stringToBool(grp.readEntry(CONFIG_GLOSBE_EXAMPLES));
     m_yandexWord = stringToBool(grp.readEntry(CONFIG_YANDEX_WORD));
     m_yandexPhrase = stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE));
+    m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
+    m_youdaoEnable = stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE));
 }
 
 #include "moc_translator.cpp"

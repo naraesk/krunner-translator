@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2013 – 2018 by David Baum <david.baum@naraesk.eu>           *
+ *  Copyright (C) 2020 by P3psi Boo <boo@p3psi.xyz>                           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -16,40 +16,35 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef TRANSLATOR_H
-#define TRANSLATOR_H
+#ifndef BAIDU_H
+#define BAIDU_H
 
 #include <KRunner/AbstractRunner>
+#include <QtNetwork/QNetworkReply>
 
-class Translator : public Plasma::AbstractRunner
+/**
+ * API Implementation for Baidu http://api.fanyi.baidu.com/doc/21/)
+ */
+
+class Baidu : public QObject
 {
+
     Q_OBJECT
 
 public:
-    Translator(QObject *parent, const QVariantList &args);
+    Baidu(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, const QString &, const QString &);
 
-    void match(Plasma::RunnerContext &) override;
-    void run(const Plasma::RunnerContext &, const Plasma::QueryMatch &) override;
-    void reloadConfiguration() override;
+private Q_SLOTS:
+   void parseResult(QNetworkReply*);
 
+Q_SIGNALS:
+	void finished();
+   
 private:
-    bool parseTerm(const QString &, QString &, QPair<QString, QString> &);
-    QString m_primary;
-    QString m_secondary;
-    QString m_yandexKey;
-    QString m_baiduAPPID;
-    QString m_baiduAPIKey;
-    QString m_youdaoAPPID;
-    QString m_youdaoAppSec;
-    bool m_yandexWord;
-    bool m_yandexPhrase;
-    bool m_glosbeWord;
-    bool m_glosbePhrase;
-    bool m_glosbeExamples;
-    bool m_baiduEnable;
-    bool m_youdaoEnable;
+   Plasma::AbstractRunner * m_runner;
+   QNetworkAccessManager * m_manager;
+   Plasma::RunnerContext m_context;
+   QString langMapper(QString);
 };
-
-K_EXPORT_PLASMA_RUNNER(translator, Translator)
 
 #endif
