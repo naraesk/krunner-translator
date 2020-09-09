@@ -8,27 +8,20 @@ This is a plugin for Plasma 5 KRunner. It's a translator and it translates text.
 [![Logo Ubuntu](../../wiki/logos/ubuntu.png)](https://github.com/naraesk/krunner-translator/releases/download/v1.2.1/plasma-runners-translator_1.2.1-1.deb)
 
 
-## Installation ##
-#### Required Dependencies for manual installation
-Debian/Ubuntu:  
+## Manual Installation ##
+
+Install the necessary dependencies and then run `./install.sh`
+
+### Debian/Ubuntu  
 `sudo apt install cmake extra-cmake-modules build-essential libkf5runner-dev libkf5textwidgets-dev qtdeclarative5-dev gettext`
 
-openSUSE  
+### openSUSE
 `sudo zypper install cmake extra-cmake-modules libQt5Widgets5 libQt5Core5 libqt5-qtlocation-devel ki18n-devel ktextwidgets-devel 
 kservice-devel krunner-devel gettext-tools kconfigwidgets-devel`
 
-Fedora  
+## Fedora  
 `sudo dnf install cmake extra-cmake-modules kf5-ki18n-devel kf5-kservice-devel kf5-krunner-devel kf5-ktextwidgets-devel gettext`
 
-```
-mkdir build
-cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=`kf5-config --prefix` -DKDE_INSTALL_QTPLUGINDIR=`kf5-config --qt-plugins` -DCMAKE_BUILD_TYPE=Release
-make 
-sudo make install
-kquitapp5 krunner
-krunner
-```
 ## Configuration ##
 
 For being able to use yandex, an api key is required. You have to obtain a key yourself by following these steps:  
