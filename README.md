@@ -9,7 +9,7 @@ This is a plugin for Plasma 5 KRunner. It's a translator and it translates text.
 
 
 ## Installation ##
-#### Required Dependencies
+#### Required Dependencies for manual installation
 Debian/Ubuntu:  
 `sudo apt install cmake extra-cmake-modules build-essential libkf5runner-dev libkf5textwidgets-dev qtdeclarative5-dev gettext`
 
