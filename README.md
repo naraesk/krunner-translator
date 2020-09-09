@@ -5,6 +5,8 @@ This is a plugin for Plasma 5 KRunner. It's a translator and it translates text.
 ## Packages
 
 [![Logo Arch Linux](../../wiki/logos/arch_linux.png)](https://aur.archlinux.org/packages/plasma-runners-translator/)
+[![Logo Ubuntu](../../wiki/logos/ubuntu.png)](https://github.com/naraesk/krunner-translator/releases/download/v1.2.1/plasma-runners-translator_1.2.1-1.deb)
+
 
 ## Installation ##
 #### Required Dependencies
