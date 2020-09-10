@@ -27,6 +27,7 @@
 #include <KLocalizedString>
 #include <QApplication>
 #include <QClipboard>
+#include <api/translateShell.h>
 
 Translator::Translator(QObject *parent, const QVariantList &args)
     : Plasma::AbstractRunner(parent, args)
@@ -90,6 +91,13 @@ void Translator::match(Plasma::RunnerContext &context)
         Youdao youdao(this, context, text, language, m_youdaoAPPID, m_youdaoAppSec);
         connect(&youdao, SIGNAL(finished()), &youdaoLoop, SLOT(quit()));
         youdaoLoop.exec();
+    }
+
+    if (m_translateShellEnable){
+        QEventLoop translateShellLoop;
+        TranslateShell translateShell(this, context, text, language);
+        connect(&translateShell, SIGNAL(finished()), &translateShellLoop, SLOT(quit()));
+        translateShellLoop.exec();
     }
     if (text.contains(" ")) {
         if(m_yandexPhrase) {
