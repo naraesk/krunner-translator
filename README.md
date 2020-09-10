@@ -1,6 +1,6 @@
 # Translator for KDE KRunner (Plasma 5)
 
-This is a plugin for Plasma 5 KRunner. It's a translator and it translates text. Currently [glosbe](https://glosbe.com/), [yandex](https://www.yandex.ru/), [youdao](http://fanyi.youdao.com/) and [Baidu Fanyi](https://fanyi.baidu.com/) are supported. The latter two are more friendly to Chinese users.
+This is a plugin for Plasma 5 KRunner. It's a translator and it translates text. Currently [glosbe](https://glosbe.com/), [yandex](https://www.yandex.ru/), [youdao](http://fanyi.youdao.com/) and [Baidu Fanyi](https://fanyi.baidu.com/) are supported. Google Translate and Bing are supported via [Translate Shell](https://github.com/soimort/translate-shell).
 
 ## Packages
 
@@ -10,7 +10,9 @@ This is a plugin for Plasma 5 KRunner. It's a translator and it translates text.
 
 ## Manual Installation ##
 
-Install the necessary dependencies and then run `./install.sh`
+1. Install [Translate Shell](https://github.com/soimort/translate-shell)
+2. Install the dependencies listed below 
+3. Run `./install.sh`
 
 ### Debian/Ubuntu  
 `sudo apt install cmake extra-cmake-modules build-essential libkf5runner-dev libkf5textwidgets-dev qtdeclarative5-dev gettext`
