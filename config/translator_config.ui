@@ -92,7 +92,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="yandexTab">
       <attribute name="title">
@@ -372,6 +372,45 @@
            <widget class="QLineEdit" name="youdaoAppSec"/>
           </item>
          </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="translateShellTab">
+      <attribute name="title">
+       <string>TranslateShell</string>
+      </attribute>
+      <widget class="QGroupBox" name="translateShell">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>500</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="title">
+        <string/>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+       <layout class="QFormLayout" name="formLayout_6">
+        <property name="labelAlignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="translateShellEnable">
+          <property name="text">
+           <string>Enable</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
