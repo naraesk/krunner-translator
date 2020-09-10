@@ -36,6 +36,7 @@ static const char CONFIG_YANDEX_PHRASE[] = "yandexPhrase";
 static const char CONFIG_GLOSBE_EXAMPLES[] = "glosbeExamples";
 static const char CONFIG_BAIDU_ENABLE[] = "baiduEnable";
 static const char CONFIG_YOUDAO_ENABLE[] = "youdaoEnable";
+static const char CONFIG_TRANSLATE_SHELL_ENABLE[] = "translateShellEnable";
 
 class TranslatorConfigForm : public QWidget, public Ui::TranslatorConfigUi
 {

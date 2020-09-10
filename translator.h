@@ -48,6 +48,7 @@ private:
     bool m_glosbeExamples;
     bool m_baiduEnable;
     bool m_youdaoEnable;
+    bool m_translateShellEnable;
 };
 
 K_EXPORT_PLASMA_RUNNER(translator, Translator)

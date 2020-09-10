@@ -156,6 +156,7 @@ void Translator::reloadConfiguration()
     m_yandexPhrase = stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE));
     m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
     m_youdaoEnable = stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE));
+    m_translateShellEnable = stringToBool(grp.readEntry(CONFIG_TRANSLATE_SHELL_ENABLE));
 }
 
 #include "moc_translator.cpp"

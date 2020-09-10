@@ -57,6 +57,7 @@ TranslatorConfig::TranslatorConfig(QWidget* parent, const QVariantList& args) :
     connect(m_ui->glosbe_examples, SIGNAL(stateChanged(int)),this,SLOT(changed()));
     connect(m_ui->baiduEnable, SIGNAL(stateChanged(int)),this,SLOT(changed()));
     connect(m_ui->youdaoEnable, SIGNAL(stateChanged(int)),this,SLOT(changed()));
+    connect(m_ui->translateShellEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
 }
 
 void TranslatorConfig::load()
@@ -84,6 +85,7 @@ void TranslatorConfig::load()
     m_ui->yandex_phrase->setChecked(stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE)));
     m_ui->baiduEnable->setChecked(stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE)));
     m_ui->youdaoEnable->setChecked(stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE)));
+    m_ui->translateShellEnable->setChecked(stringToBool(grp.readEntry(CONFIG_TRANSLATE_SHELL_ENABLE)));
 
     emit changed(false);
 }
@@ -115,6 +117,7 @@ void TranslatorConfig::save()
     grp.writeEntry(CONFIG_YANDEX_PHRASE, boolToString(m_ui->yandex_phrase->isChecked()));
     grp.writeEntry(CONFIG_BAIDU_ENABLE, boolToString(m_ui->baiduEnable->isChecked()));
     grp.writeEntry(CONFIG_YOUDAO_ENABLE, boolToString(m_ui->youdaoEnable->isChecked()));
+    grp.writeEntry(CONFIG_TRANSLATE_SHELL_ENABLE, boolToString(m_ui->translateShellEnable->isChecked()));
 
     emit changed(false);
 }
