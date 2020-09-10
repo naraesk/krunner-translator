@@ -21,7 +21,7 @@ set(krunner_translator_SRCS
     api/yandex.cpp
     api/baidu.cpp
     api/youdao.cpp
-        api/translateShell.cpp api/translateShell.h)
+        api/translateShell.cpp api/translateShell.h api/translateShellProcess.cpp api/translateShellProcess.h)
 
 set(kcm_krunner_translator_SRCS
     config/translator_config.cpp
