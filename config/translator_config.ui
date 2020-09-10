@@ -92,7 +92,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="yandexTab">
       <attribute name="title">
@@ -266,27 +266,27 @@
           <property name="bottomMargin">
            <number>6</number>
           </property>
-          <item row="0" column="0">
+          <item row="1" column="0">
            <widget class="QLabel" name="label">
             <property name="text">
              <string>App ID</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
+          <item row="1" column="1">
            <widget class="QLineEdit" name="baiduAPPID"/>
           </item>
-          <item row="2" column="0">
+          <item row="3" column="0">
            <widget class="QLabel" name="label_2">
             <property name="text">
              <string>API Key</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
+          <item row="3" column="1">
            <widget class="QLineEdit" name="baiduApiKey"/>
           </item>
-          <item row="3" column="1">
+          <item row="0" column="1">
            <widget class="QCheckBox" name="baiduEnable">
             <property name="text">
              <string>Enable</string>
