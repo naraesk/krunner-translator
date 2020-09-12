@@ -30,12 +30,7 @@ public:
 
     void match(Plasma::RunnerContext &) override;
     void run(const Plasma::RunnerContext &, const Plasma::QueryMatch &) override;
-    void reloadConfiguration() override;
-    void init() override;
     QList<QAction *> actionsForMatch(const Plasma::QueryMatch &match) override;
-
-private Q_SLOTS:
-    void reload();
 
 private:
     bool parseTerm(const QString &, QString &, QPair<QString, QString> &);
@@ -55,6 +50,7 @@ private:
     bool m_baiduEnable;
     bool m_youdaoEnable;
     bool m_googleEnable;
+    bool m_bingEnable;
 };
 
 K_EXPORT_PLASMA_RUNNER(translator, Translator)

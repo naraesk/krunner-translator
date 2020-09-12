@@ -55,6 +55,7 @@ Translator::Translator(QObject *parent, const QVariantList &args)
     m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
     m_youdaoEnable = stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE));
     m_googleEnable = stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE));
+    m_bingEnable = stringToBool(grp.readEntry(CONFIG_BING_ENABLE));
     setIgnoredTypes(Plasma::RunnerContext::Directory |
                     Plasma::RunnerContext::File |
                     Plasma::RunnerContext::NetworkLocation);
@@ -174,9 +175,7 @@ void Translator::match(Plasma::RunnerContext &context)
 void Translator::run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match)
 {
     Q_UNUSED(context);
-    qDebug() << "XXXXX";
     QApplication::clipboard()->setText(match.text());
-    qDebug() << "action: " << match.selectedAction()->text();
     if(match.selectedAction()->data().toString() == QLatin1String("play")) {
         TranslateShellProcess process(this);
         process.play(match.text());
@@ -186,54 +185,11 @@ void Translator::run(const Plasma::RunnerContext &context, const Plasma::QueryMa
     QApplication::clipboard()->setText(match.text());
 }
 
-void Translator::reloadConfiguration()
-{
-    KConfigGroup grp = config();
-    m_primary = grp.readEntry(CONFIG_PRIMARY);
-    m_secondary = grp.readEntry(CONFIG_SECONDARY);
-    m_yandexKey = grp.readEntry(CONFIG_YANDEX_KEY);
-    m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID);
-    m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY);
-    m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID);
-    m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC);
-    m_glosbeWord = stringToBool(grp.readEntry(CONFIG_GLOSBE_WORD));
-    m_glosbePhrase = stringToBool(grp.readEntry(CONFIG_GLOSBE_PHRASE));
-    m_glosbeExamples = stringToBool(grp.readEntry(CONFIG_GLOSBE_EXAMPLES));
-    m_yandexWord = stringToBool(grp.readEntry(CONFIG_YANDEX_WORD));
-    m_yandexPhrase = stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE));
-    m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
-    m_youdaoEnable = stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE));
-    m_googleEnable = stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE));
-}
-
 QList<QAction *> Translator::actionsForMatch(const Plasma::QueryMatch &match) {
     if(match.data().toString() == "audio") {
         return actions;
     }
     return {actions.first()};
-}
-
-void Translator::reload() {
-    KConfigGroup grp = config();
-    m_primary = grp.readEntry(CONFIG_PRIMARY);
-    m_secondary = grp.readEntry(CONFIG_SECONDARY);
-    m_yandexKey = grp.readEntry(CONFIG_YANDEX_KEY);
-    m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID);
-    m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY);
-    m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID);
-    m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC);
-    m_glosbeWord = stringToBool(grp.readEntry(CONFIG_GLOSBE_WORD));
-    m_glosbePhrase = stringToBool(grp.readEntry(CONFIG_GLOSBE_PHRASE));
-    m_glosbeExamples = stringToBool(grp.readEntry(CONFIG_GLOSBE_EXAMPLES));
-    m_yandexWord = stringToBool(grp.readEntry(CONFIG_YANDEX_WORD));
-    m_yandexPhrase = stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE));
-    m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
-    m_youdaoEnable = stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE));
-    m_googleEnable = stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE));
-}
-
-void Translator::init() {
-    reloadConfiguration();
 }
 
 #include "moc_translator.cpp"
