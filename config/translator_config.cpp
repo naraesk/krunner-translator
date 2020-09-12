@@ -77,7 +77,6 @@ void TranslatorConfig::load()
     m_ui->baiduApiKey->setText(grp.readEntry(CONFIG_BAIDU_APIKEY));
     m_ui->youdaoAPPID->setText(grp.readEntry(CONFIG_YOUDAO_APPID));
     m_ui->youdaoAppSec->setText(grp.readEntry(CONFIG_YOUDAO_APPSEC));
-    
     m_ui->glosbe_word->setChecked(stringToBool(grp.readEntry(CONFIG_GLOSBE_WORD)));
     m_ui->glosbe_phrase->setChecked(stringToBool(grp.readEntry(CONFIG_GLOSBE_PHRASE)));
     m_ui->glosbe_examples->setChecked(stringToBool(grp.readEntry(CONFIG_GLOSBE_EXAMPLES)));
@@ -86,8 +85,6 @@ void TranslatorConfig::load()
     m_ui->baiduEnable->setChecked(stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE)));
     m_ui->youdaoEnable->setChecked(stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE)));
     m_ui->translateShellEnable->setChecked(stringToBool(grp.readEntry(CONFIG_TRANSLATE_SHELL_ENABLE)));
-
-    emit changed(false);
 }
 
 void TranslatorConfig::save()
@@ -119,7 +116,7 @@ void TranslatorConfig::save()
     grp.writeEntry(CONFIG_YOUDAO_ENABLE, boolToString(m_ui->youdaoEnable->isChecked()));
     grp.writeEntry(CONFIG_TRANSLATE_SHELL_ENABLE, boolToString(m_ui->translateShellEnable->isChecked()));
 
-    emit changed(false);
+    emit changed(true);
 }
 
 const QVector<QString>TranslatorConfig::m_abbr = {"sq", "af", "ar", "hy", "az", "eu", "be", "bs", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "gl", "ka", "de", "el", "ht", "hu", "is", "id", "ga", "it", "ja",                   
