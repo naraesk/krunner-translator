@@ -64,7 +64,7 @@ TranslatorConfig::TranslatorConfig(QWidget* parent, const QVariantList& args) :
 void TranslatorConfig::load()
 {
     KCModule::load();
-    
+
     KSharedConfig::Ptr cfg = KSharedConfig::openConfig(QStringLiteral("krunnerrc"));
     KConfigGroup grp = cfg->group("Runners");
     grp = KConfigGroup(&grp, "Translator");
@@ -85,7 +85,7 @@ void TranslatorConfig::load()
     m_ui->yandex_phrase->setChecked(stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE)));
     m_ui->baiduEnable->setChecked(stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE)));
     m_ui->youdaoEnable->setChecked(stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE)));
-    m_ui->googleEnable->setChecked(stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE)));
+    m_ui->googleEnable->setChecked(stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE, "true")));
     m_ui->bingEnable->setChecked(stringToBool(grp.readEntry(CONFIG_BING_ENABLE)));
 }
 

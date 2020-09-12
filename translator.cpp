@@ -40,8 +40,8 @@ Translator::Translator(QObject *parent, const QVariantList &args)
     setObjectName(QLatin1String("Translator"));
     KConfigGroup grp = config();
 
-    m_primary = grp.readEntry(CONFIG_PRIMARY);
-    m_secondary = grp.readEntry(CONFIG_SECONDARY);
+    m_primary = grp.readEntry(CONFIG_PRIMARY, "en");
+    m_secondary = grp.readEntry(CONFIG_SECONDARY, "es");
     m_yandexKey = grp.readEntry(CONFIG_YANDEX_KEY);
     m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID);
     m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY);
@@ -54,7 +54,7 @@ Translator::Translator(QObject *parent, const QVariantList &args)
     m_yandexPhrase = stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE));
     m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
     m_youdaoEnable = stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE));
-    m_googleEnable = stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE));
+    m_googleEnable = stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE, "true"));
     m_bingEnable = stringToBool(grp.readEntry(CONFIG_BING_ENABLE));
     setIgnoredTypes(Plasma::RunnerContext::Directory |
                     Plasma::RunnerContext::File |
@@ -102,7 +102,6 @@ void Translator::match(Plasma::RunnerContext &context)
 {
 
     KConfigGroup grp = config();
-    m_googleEnable = stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE));
     const QString term = context.query();
     QString text;
     QPair<QString, QString> language;
