@@ -54,23 +54,17 @@ Translator::Translator(QObject *parent, const QVariantList &args)
     m_yandexPhrase = stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE));
     m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
     m_youdaoEnable = stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE));
-    m_translateShellEnable = stringToBool(grp.readEntry(CONFIG_TRANSLATE_SHELL_ENABLE));
+    m_translateShellEnable = stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE));
     setIgnoredTypes(Plasma::RunnerContext::Directory |
                     Plasma::RunnerContext::File |
                     Plasma::RunnerContext::NetworkLocation);
     setSpeed(AbstractRunner::SlowSpeed);
     setPriority(HighestPriority);
-    QAction * action =  new QAction();
-    action->setIcon(QIcon::fromTheme(QStringLiteral("editcopy")));
-    action->setText("Copy to Clipboard");
-    action->setData("copy");
-
-    addAction("copy", action);
-
-   /* auto *copy = addAction(QStringLiteral("copy"),
-                           QIcon::fromTheme(QStringLiteral("editcopy")),
-                           QStringLiteral("Copy to Clipboard"));*/
-  //  copy->setData(QStringLiteral("copy"));
+    QAction * copy =  new QAction();
+    copy->setIcon(QIcon::fromTheme(QStringLiteral("editcopy")));
+    copy->setText("Copy to Clipboard");
+    copy->setData("copy");
+    addAction("copy", copy);
     auto *play = addAction(QStringLiteral("play"),
                            QIcon::fromTheme(QStringLiteral("cs-sound")),
                            QStringLiteral("Play audio"));
@@ -107,7 +101,7 @@ void Translator::match(Plasma::RunnerContext &context)
 {
 
     KConfigGroup grp = config();
-    m_translateShellEnable = stringToBool(grp.readEntry(CONFIG_TRANSLATE_SHELL_ENABLE));
+    m_translateShellEnable = stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE));
     const QString term = context.query();
     QString text;
     QPair<QString, QString> language;
@@ -209,7 +203,7 @@ void Translator::reloadConfiguration()
     m_yandexPhrase = stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE));
     m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
     m_youdaoEnable = stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE));
-    m_translateShellEnable = stringToBool(grp.readEntry(CONFIG_TRANSLATE_SHELL_ENABLE));
+    m_translateShellEnable = stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE));
 }
 
 QList<QAction *> Translator::actionsForMatch(const Plasma::QueryMatch &match) {
@@ -221,7 +215,6 @@ QList<QAction *> Translator::actionsForMatch(const Plasma::QueryMatch &match) {
 
 void Translator::reload() {
     KConfigGroup grp = config();
-    qDebug() << "reload";
     m_primary = grp.readEntry(CONFIG_PRIMARY);
     m_secondary = grp.readEntry(CONFIG_SECONDARY);
     m_yandexKey = grp.readEntry(CONFIG_YANDEX_KEY);
@@ -236,7 +229,7 @@ void Translator::reload() {
     m_yandexPhrase = stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE));
     m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
     m_youdaoEnable = stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE));
-    m_translateShellEnable = stringToBool(grp.readEntry(CONFIG_TRANSLATE_SHELL_ENABLE));
+    m_translateShellEnable = stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE));
 }
 
 void Translator::init() {
