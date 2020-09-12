@@ -30,7 +30,8 @@ public:
     ~TranslateShellProcess() override;
 
 public Q_SLOTS:
-    QString translate(const QPair<QString, QString> &language, const QString &file);
+    QString translate(const QPair<QString, QString> &language, const QString &text);
+    void play(const QString &text);
 };
 
 #endif //RUNNERTRANSLATOR_TRANSLATESHELLPROCESS_H

@@ -31,9 +31,15 @@ public:
     void match(Plasma::RunnerContext &) override;
     void run(const Plasma::RunnerContext &, const Plasma::QueryMatch &) override;
     void reloadConfiguration() override;
+    void init() override;
+    QList<QAction *> actionsForMatch(const Plasma::QueryMatch &match) override;
+
+private Q_SLOTS:
+    void reload();
 
 private:
     bool parseTerm(const QString &, QString &, QPair<QString, QString> &);
+    QList<QAction *> actions;
     QString m_primary;
     QString m_secondary;
     QString m_yandexKey;

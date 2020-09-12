@@ -28,7 +28,7 @@ class TranslateShell : public QObject {
     Q_OBJECT
 
 public:
-    TranslateShell(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &);
+    TranslateShell(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, QAction* action);
 
 Q_SIGNALS:
     void finished();

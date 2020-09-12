@@ -27,7 +27,10 @@
 #include <KLocalizedString>
 #include <QApplication>
 #include <QClipboard>
+#include <QAction>
 #include <api/translateShell.h>
+#include <api/translateShellProcess.h>
+#include <KConfigCore/KConfig>
 
 Translator::Translator(QObject *parent, const QVariantList &args)
     : Plasma::AbstractRunner(parent, args)
@@ -35,13 +38,44 @@ Translator::Translator(QObject *parent, const QVariantList &args)
     Q_UNUSED(args);
     
     setObjectName(QLatin1String("Translator"));
-    reloadConfiguration();
-    setHasRunOptions(true);
+    KConfigGroup grp = config();
+
+    m_primary = grp.readEntry(CONFIG_PRIMARY);
+    m_secondary = grp.readEntry(CONFIG_SECONDARY);
+    m_yandexKey = grp.readEntry(CONFIG_YANDEX_KEY);
+    m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID);
+    m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY);
+    m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID);
+    m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC);
+    m_glosbeWord = stringToBool(grp.readEntry(CONFIG_GLOSBE_WORD));
+    m_glosbePhrase = stringToBool(grp.readEntry(CONFIG_GLOSBE_PHRASE));
+    m_glosbeExamples = stringToBool(grp.readEntry(CONFIG_GLOSBE_EXAMPLES));
+    m_yandexWord = stringToBool(grp.readEntry(CONFIG_YANDEX_WORD));
+    m_yandexPhrase = stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE));
+    m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
+    m_youdaoEnable = stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE));
+    m_translateShellEnable = stringToBool(grp.readEntry(CONFIG_TRANSLATE_SHELL_ENABLE));
     setIgnoredTypes(Plasma::RunnerContext::Directory |
                     Plasma::RunnerContext::File |
                     Plasma::RunnerContext::NetworkLocation);
     setSpeed(AbstractRunner::SlowSpeed);
     setPriority(HighestPriority);
+    QAction * action =  new QAction();
+    action->setIcon(QIcon::fromTheme(QStringLiteral("editcopy")));
+    action->setText("Copy to Clipboard");
+    action->setData("copy");
+
+    addAction("copy", action);
+
+   /* auto *copy = addAction(QStringLiteral("copy"),
+                           QIcon::fromTheme(QStringLiteral("editcopy")),
+                           QStringLiteral("Copy to Clipboard"));*/
+  //  copy->setData(QStringLiteral("copy"));
+    auto *play = addAction(QStringLiteral("play"),
+                           QIcon::fromTheme(QStringLiteral("cs-sound")),
+                           QStringLiteral("Play audio"));
+    play->setData(QStringLiteral("play"));
+    actions = {action, play};
     setDefaultSyntax(Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<language code>")),i18n("Translates the word(s) :q: into target language")));
     setDefaultSyntax(Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<source languagce>-<target languagce>")), i18n("Translates the word(s) :q: from the source into target language")));
 }
@@ -71,6 +105,9 @@ bool Translator::parseTerm(const QString& term, QString& text, QPair<QString, QS
 
 void Translator::match(Plasma::RunnerContext &context)
 {
+
+    KConfigGroup grp = config();
+    m_translateShellEnable = stringToBool(grp.readEntry(CONFIG_TRANSLATE_SHELL_ENABLE));
     const QString term = context.query();
     QString text;
     QPair<QString, QString> language;
@@ -95,7 +132,7 @@ void Translator::match(Plasma::RunnerContext &context)
 
     if (m_translateShellEnable){
         QEventLoop translateShellLoop;
-        TranslateShell translateShell(this, context, text, language);
+        TranslateShell translateShell(this, context, text, language, actions.first());
         connect(&translateShell, SIGNAL(finished()), &translateShellLoop, SLOT(quit()));
         translateShellLoop.exec();
     }
@@ -143,13 +180,21 @@ void Translator::match(Plasma::RunnerContext &context)
 void Translator::run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match)
 {
     Q_UNUSED(context);
+    qDebug() << "XXXXX";
+    QApplication::clipboard()->setText(match.text());
+    qDebug() << "action: " << match.selectedAction()->text();
+    if(match.selectedAction()->data().toString() == QLatin1String("play")) {
+        TranslateShellProcess process(this);
+        process.play(match.text());
+    } else if (!match.selectedAction()) {
+        QApplication::clipboard()->setText(match.text());
+    }
     QApplication::clipboard()->setText(match.text());
 }
 
 void Translator::reloadConfiguration()
 {
     KConfigGroup grp = config();
-
     m_primary = grp.readEntry(CONFIG_PRIMARY);
     m_secondary = grp.readEntry(CONFIG_SECONDARY);
     m_yandexKey = grp.readEntry(CONFIG_YANDEX_KEY);
@@ -165,6 +210,37 @@ void Translator::reloadConfiguration()
     m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
     m_youdaoEnable = stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE));
     m_translateShellEnable = stringToBool(grp.readEntry(CONFIG_TRANSLATE_SHELL_ENABLE));
+}
+
+QList<QAction *> Translator::actionsForMatch(const Plasma::QueryMatch &match) {
+    if(match.data().toString() == "audio") {
+        return actions;
+    }
+    return {actions.first()};
+}
+
+void Translator::reload() {
+    KConfigGroup grp = config();
+    qDebug() << "reload";
+    m_primary = grp.readEntry(CONFIG_PRIMARY);
+    m_secondary = grp.readEntry(CONFIG_SECONDARY);
+    m_yandexKey = grp.readEntry(CONFIG_YANDEX_KEY);
+    m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID);
+    m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY);
+    m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID);
+    m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC);
+    m_glosbeWord = stringToBool(grp.readEntry(CONFIG_GLOSBE_WORD));
+    m_glosbePhrase = stringToBool(grp.readEntry(CONFIG_GLOSBE_PHRASE));
+    m_glosbeExamples = stringToBool(grp.readEntry(CONFIG_GLOSBE_EXAMPLES));
+    m_yandexWord = stringToBool(grp.readEntry(CONFIG_YANDEX_WORD));
+    m_yandexPhrase = stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE));
+    m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
+    m_youdaoEnable = stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE));
+    m_translateShellEnable = stringToBool(grp.readEntry(CONFIG_TRANSLATE_SHELL_ENABLE));
+}
+
+void Translator::init() {
+    reloadConfiguration();
 }
 
 #include "moc_translator.cpp"

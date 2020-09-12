@@ -33,3 +33,12 @@ QString TranslateShellProcess::translate(const QPair<QString, QString> &language
     QString composeOutput(readAllStandardOutput());
     return composeOutput;
 }
+
+void TranslateShellProcess::play(const QString &text) {
+    QStringList arguments;
+    arguments << text
+              << "-speak"
+              << "-no-translate";
+    start("trans", arguments);
+    waitForFinished();
+}
