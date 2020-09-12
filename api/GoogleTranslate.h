@@ -16,24 +16,27 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#include "translateShell.h"
-#include "translateShellProcess.h"
+#ifndef RUNNERTRANSLATOR_GOOGLETRANSLATE_H
+#define RUNNERTRANSLATOR_GOOGLETRANSLATE_H
 
-TranslateShell::TranslateShell(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, const QString &text,
-                               const QPair<QString, QString> &language, QAction *action)
-        : m_runner(runner), m_context(context) {
 
-    TranslateShellProcess process(this);
-    QString result = process.translate(language, text);
-    Plasma::QueryMatch match(m_runner);
-    match.setData("audio");
-    match.setType(Plasma::QueryMatch::ExactMatch);
-    match.setIcon(QIcon::fromTheme("applications-education-language"));
-    match.setText(result);
-    match.setRelevance(0.01);
-    match.setSelectedAction(action);
-    m_context.addMatch(match);
-    emit finished();
-}
+#include <QtCore/QObject>
+#include <KRunner/AbstractRunner>
 
-#include "moc_translateShell.cpp"
+class TranslateShell : public QObject {
+
+    Q_OBJECT
+
+public:
+    TranslateShell(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, QAction* action);
+
+Q_SIGNALS:
+    void finished();
+
+private:
+    Plasma::AbstractRunner * m_runner;
+    Plasma::RunnerContext m_context;
+};
+
+
+#endif //RUNNERTRANSLATOR_GOOGLETRANSLATE_H

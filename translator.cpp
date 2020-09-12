@@ -28,7 +28,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QAction>
-#include <api/translateShell.h>
+#include <api/GoogleTranslate.h>
 #include <api/translateShellProcess.h>
 #include <KConfigCore/KConfig>
 
