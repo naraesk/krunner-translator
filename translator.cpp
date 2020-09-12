@@ -126,10 +126,10 @@ void Translator::match(Plasma::RunnerContext &context)
     }
 
     if (m_googleEnable){
-        QEventLoop translateShellLoop;
-        TranslateShell translateShell(this, context, text, language, actions.first());
-        connect(&translateShell, SIGNAL(finished()), &translateShellLoop, SLOT(quit()));
-        translateShellLoop.exec();
+        QEventLoop googleLoop;
+        GoogleTranslate google(this, context, text, language, actions.first());
+        connect(&google, SIGNAL(finished()), &googleLoop, SLOT(quit()));
+        googleLoop.exec();
     }
     if (text.contains(" ")) {
         if(m_yandexPhrase) {

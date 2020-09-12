@@ -19,7 +19,7 @@
 #include "GoogleTranslate.h"
 #include "translateShellProcess.h"
 
-TranslateShell::TranslateShell(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, const QString &text,
+GoogleTranslate::GoogleTranslate(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, const QString &text,
                                const QPair<QString, QString> &language, QAction *action)
         : m_runner(runner), m_context(context) {
 

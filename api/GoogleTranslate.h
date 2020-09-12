@@ -23,12 +23,12 @@
 #include <QtCore/QObject>
 #include <KRunner/AbstractRunner>
 
-class TranslateShell : public QObject {
+class GoogleTranslate : public QObject {
 
     Q_OBJECT
 
 public:
-    TranslateShell(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, QAction* action);
+    GoogleTranslate(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, QAction* action);
 
 Q_SIGNALS:
     void finished();
