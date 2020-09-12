@@ -1,6 +1,6 @@
 # Translator for KDE KRunner (Plasma 5)
 
-This is a plugin for Plasma 5 KRunner. It's a translator and it translates text. Currently [Google Translate](https://translate.google.com/),[Bing Translator](https://www.bing.com/translator), [glosbe](https://glosbe.com/), [yandex](https://www.yandex.ru/), [youdao](http://fanyi.youdao.com/), and [Baidu Fanyi](https://fanyi.baidu.com/) are supported.
+This is a plugin for Plasma 5 KRunner. It's a translator and it translates text. Currently [Google Translate](https://translate.google.com/), [Bing Translator](https://www.bing.com/translator), [glosbe](https://glosbe.com/), [yandex](https://www.yandex.ru/), [youdao](http://fanyi.youdao.com/), and [Baidu Fanyi](https://fanyi.baidu.com/) are supported.
 
 ## Packages
 
