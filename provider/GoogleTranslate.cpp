@@ -16,27 +16,29 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef RUNNERTRANSLATOR_GOOGLETRANSLATE_H
-#define RUNNERTRANSLATOR_GOOGLETRANSLATE_H
+#include "GoogleTranslate.h"
+#include "translateShellProcess.h"
 
+GoogleTranslate::GoogleTranslate(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, QAction * action)
+        : m_runner(runner), m_context(context), m_action(action) {
+}
 
-#include <QtCore/QObject>
-#include <KRunner/AbstractRunner>
+void GoogleTranslate::run(QString &result) {
+    Plasma::QueryMatch match(m_runner);
+    match.setData("audio");
+    match.setType(Plasma::QueryMatch::ExactMatch);
+    match.setIcon(QIcon::fromTheme("applications-education-language"));
+    match.setText(result);
+    match.setSubtext("Google Translate");
+    match.setRelevance(0.01);
+    match.setSelectedAction(m_action);
+    m_context.addMatch(match);
+}
 
-class GoogleTranslate : public QObject {
+void GoogleTranslate::translate(const QString &text, const QPair<QString, QString> &language) {
+    TranslateShellProcess process(this);
+    connect(&process, SIGNAL(finished(QString&)), this, SLOT(run(QString&)));
+    process.translate(language, text);
+}
 
-    Q_OBJECT
-
-public:
-    GoogleTranslate(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, QAction* action);
-
-Q_SIGNALS:
-    void finished();
-
-private:
-    Plasma::AbstractRunner * m_runner;
-    Plasma::RunnerContext m_context;
-};
-
-
-#endif //RUNNERTRANSLATOR_GOOGLETRANSLATE_H
+#include "moc_GoogleTranslate.cpp"

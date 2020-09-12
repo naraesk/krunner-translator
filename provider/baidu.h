@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2013 – 2020 by David Baum <david.baum@naraesk.eu>           *
+ *  Copyright (C) 2020 by P3psi Boo <boo@p3psi.xyz>                           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -16,22 +16,35 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef RUNNERTRANSLATOR_TRANSLATESHELLPROCESS_H
-#define RUNNERTRANSLATOR_TRANSLATESHELLPROCESS_H
+#ifndef BAIDU_H
+#define BAIDU_H
 
-#include <QProcess>
-#include <QString>
+#include <KRunner/AbstractRunner>
+#include <QtNetwork/QNetworkReply>
 
-class TranslateShellProcess : public QProcess
+/**
+ * API Implementation for Baidu http://provider.fanyi.baidu.com/doc/21/)
+ */
+
+class Baidu : public QObject
 {
-Q_OBJECT
-public:
-    explicit TranslateShellProcess( QObject *parent = 0);
-    ~TranslateShellProcess() override;
 
-public Q_SLOTS:
-    QString translate(const QPair<QString, QString> &language, const QString &text);
-    void play(const QString &text);
+    Q_OBJECT
+
+public:
+    Baidu(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, const QString &, const QString &);
+
+private Q_SLOTS:
+   void parseResult(QNetworkReply*);
+
+Q_SIGNALS:
+	void finished();
+   
+private:
+   Plasma::AbstractRunner * m_runner;
+   QNetworkAccessManager * m_manager;
+   Plasma::RunnerContext m_context;
+   QString langMapper(QString);
 };
 
-#endif //RUNNERTRANSLATOR_TRANSLATESHELLPROCESS_H
+#endif

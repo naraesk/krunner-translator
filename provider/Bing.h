@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2013 – 2018 by David Baum <david.baum@naraesk.eu>           *
+ *  Copyright (C) 2013 – 2020 by David Baum <david.baum@naraesk.eu>           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -16,34 +16,27 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef YANDEX_H
-#define YANDEX_H
+#ifndef RUNNERTRANSLATOR_BING_H
+#define RUNNERTRANSLATOR_BING_H
 
+#include <QtCore/QObject>
 #include <KRunner/AbstractRunner>
-#include <QtNetwork/QNetworkReply>
 
-/**
- * API Implementation for Yandex https://tech.yandex.com/translate/doc/dg/concepts/api-overview-docpage/)
- */
-
-class Yandex : public QObject
-{
+class Bing : public QObject {
 
     Q_OBJECT
 
 public:
-    Yandex(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, const QString &);
+    Bing(Plasma::AbstractRunner*, Plasma::RunnerContext&, QAction *action);
+    void translate(const QString &text, const QPair<QString, QString> &language);
 
 private Q_SLOTS:
-   void parseResult(QNetworkReply*);
+    void run(QString &result);
 
-Q_SIGNALS:
-	void finished();
-   
 private:
-   Plasma::AbstractRunner * m_runner;
-   QNetworkAccessManager * m_manager;
-   Plasma::RunnerContext m_context;
+    Plasma::AbstractRunner * m_runner;
+    Plasma::RunnerContext m_context;
+    QAction * m_action;
 };
 
-#endif
+#endif //RUNNERTRANSLATOR_BING_H

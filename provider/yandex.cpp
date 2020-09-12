@@ -33,7 +33,7 @@ Yandex::Yandex(Plasma::AbstractRunner * runner, Plasma::RunnerContext& context, 
     query.addQueryItem("text", text);
     query.addQueryItem("lang", language.first + "-" + language.second);
         
-    QNetworkRequest request(QUrl("https://translate.yandex.net/api/v1.5/tr.json/translate?" + QUrl(query.query(QUrl::FullyEncoded).toUtf8()).toEncoded()));
+    QNetworkRequest request(QUrl("https://translate.yandex.net/provider/v1.5/tr.json/translate?" + QUrl(query.query(QUrl::FullyEncoded).toUtf8()).toEncoded()));
     request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 

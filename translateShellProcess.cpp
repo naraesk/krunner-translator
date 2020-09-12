@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2020 by P3psi Boo <boo@p3psi.xyz>                           *
+ *  Copyright (C) 2013 – 2020 by David Baum <david.baum@naraesk.eu>           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -16,35 +16,35 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef BAIDU_H
-#define BAIDU_H
+#include "translateShellProcess.h"
 
-#include <KRunner/AbstractRunner>
-#include <QtNetwork/QNetworkReply>
+TranslateShellProcess::TranslateShellProcess(QObject *parent) : QProcess(parent) {
+}
 
-/**
- * API Implementation for Baidu http://api.fanyi.baidu.com/doc/21/)
- */
+TranslateShellProcess::TranslateShellProcess(const QString &engine_, QObject *parent) : QProcess(parent), engine (engine_) {
+}
 
-class Baidu : public QObject
-{
+TranslateShellProcess::~TranslateShellProcess() = default;
 
-    Q_OBJECT
+QString TranslateShellProcess::translate(const QPair<QString, QString> &language, const QString &text) {
+    QStringList arguments;
+    arguments << language.first + ":" + language.second
+              << text
+              << "--brief"
+              << "-e"
+              << engine;
+    start("trans", arguments);
+    waitForFinished();
+    QString composeOutput(readLine());
+    emit finished(composeOutput);
+    return composeOutput;
+}
 
-public:
-    Baidu(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, const QString &, const QString &);
-
-private Q_SLOTS:
-   void parseResult(QNetworkReply*);
-
-Q_SIGNALS:
-	void finished();
-   
-private:
-   Plasma::AbstractRunner * m_runner;
-   QNetworkAccessManager * m_manager;
-   Plasma::RunnerContext m_context;
-   QString langMapper(QString);
-};
-
-#endif
+void TranslateShellProcess::play(const QString &text) {
+    QStringList arguments;
+    arguments << text
+              << "-speak"
+              << "-no-translate";
+    start("trans", arguments);
+    waitForFinished();
+}

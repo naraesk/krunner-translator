@@ -18,18 +18,18 @@
 
 #include "translator.h"
 #include "config/translator_config.h"
-#include "api/glosbe.h"
-#include "api/yandex.h"
-#include "api/baidu.h"
-#include "api/youdao.h"
+#include "provider/glosbe.h"
+#include "provider/GoogleTranslate.h"
+#include "provider/yandex.h"
+#include "provider/baidu.h"
+#include "provider/youdao.h"
+#include "provider/Bing.h"
 #include "helper.h"
-
+#include <translateShellProcess.h>
 #include <KLocalizedString>
 #include <QApplication>
 #include <QClipboard>
 #include <QAction>
-#include <api/GoogleTranslate.h>
-#include <api/translateShellProcess.h>
 #include <KConfigCore/KConfig>
 
 Translator::Translator(QObject *parent, const QVariantList &args)
@@ -124,12 +124,13 @@ void Translator::match(Plasma::RunnerContext &context)
         connect(&youdao, SIGNAL(finished()), &youdaoLoop, SLOT(quit()));
         youdaoLoop.exec();
     }
-
     if (m_googleEnable){
-        QEventLoop googleLoop;
-        GoogleTranslate google(this, context, text, language, actions.first());
-        connect(&google, SIGNAL(finished()), &googleLoop, SLOT(quit()));
-        googleLoop.exec();
+        GoogleTranslate google(this, context, actions.first());
+        google.translate(text, language);
+    }
+    if (m_bingEnable){
+        Bing bing(this, context, actions.first());
+        bing.translate(text, language);
     }
     if (text.contains(" ")) {
         if(m_yandexPhrase) {

@@ -17,11 +17,11 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 
 set(krunner_translator_SRCS
     translator.cpp
-    api/glosbe.cpp
-    api/yandex.cpp
-    api/baidu.cpp
-    api/youdao.cpp
-        api/GoogleTranslate.cpp api/GoogleTranslate.h api/translateShellProcess.cpp api/translateShellProcess.h)
+        provider/glosbe.cpp
+        provider/yandex.cpp
+        provider/baidu.cpp
+        provider/youdao.cpp
+        provider/GoogleTranslate.cpp provider/GoogleTranslate.h translateShellProcess.cpp translateShellProcess.h provider/Bing.cpp provider/Bing.h)
 
 set(kcm_krunner_translator_SRCS
     config/translator_config.cpp

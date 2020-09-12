@@ -16,32 +16,29 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef GLOSBE_H
-#define GLOSBE_H
+#ifndef YANDEX_H
+#define YANDEX_H
 
 #include <KRunner/AbstractRunner>
 #include <QtNetwork/QNetworkReply>
-#include <helper.h>
 
 /**
- * API Implementation for Glosbe (https://glosbe.com/a-api)
+ * API Implementation for Yandex https://tech.yandex.com/translate/doc/dg/concepts/provider-overview-docpage/)
  */
 
-class Glosbe : public QObject
+class Yandex : public QObject
 {
 
     Q_OBJECT
 
 public:
-    Glosbe(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, bool);
-    Glosbe(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &);
+    Yandex(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, const QString &);
 
 private Q_SLOTS:
-   void parseExamples(QNetworkReply*);
    void parseResult(QNetworkReply*);
 
 Q_SIGNALS:
-   void finished();
+	void finished();
    
 private:
    Plasma::AbstractRunner * m_runner;

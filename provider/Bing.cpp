@@ -16,24 +16,29 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#include "GoogleTranslate.h"
+#include "Bing.h"
 #include "translateShellProcess.h"
+Bing::Bing(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, QAction * action)
+        : m_runner(runner), m_context(context), m_action(action) {
+}
 
-GoogleTranslate::GoogleTranslate(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, const QString &text,
-                               const QPair<QString, QString> &language, QAction *action)
-        : m_runner(runner), m_context(context) {
+void Bing::translate(const QString &text, const QPair<QString, QString> &language) {
+    TranslateShellProcess process("bing");
+    connect(&process, SIGNAL(finished(QString&)), this, SLOT(run(QString&)));
+    process.translate(language, text);
+}
 
-    TranslateShellProcess process(this);
-    QString result = process.translate(language, text);
+void Bing::run(QString &result) {
+    if(result == "\n") return; // empty result
     Plasma::QueryMatch match(m_runner);
     match.setData("audio");
     match.setType(Plasma::QueryMatch::ExactMatch);
     match.setIcon(QIcon::fromTheme("applications-education-language"));
     match.setText(result);
+    match.setSubtext("Bing");
     match.setRelevance(0.01);
-    match.setSelectedAction(action);
+    match.setSelectedAction(m_action);
     m_context.addMatch(match);
-    emit finished();
 }
 
-#include "moc_translateShell.cpp"
+#include "moc_Bing.cpp"

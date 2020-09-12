@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2013 – 2020 by David Baum <david.baum@naraesk.eu>           *
+ *  Copyright (C) 2013 – 2018 by David Baum <david.baum@naraesk.eu>           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -16,29 +16,37 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#include "translateShellProcess.h"
+#ifndef GLOSBE_H
+#define GLOSBE_H
 
-TranslateShellProcess::TranslateShellProcess(QObject *parent) : QProcess(parent) {
-}
+#include <KRunner/AbstractRunner>
+#include <QtNetwork/QNetworkReply>
+#include <helper.h>
 
-TranslateShellProcess::~TranslateShellProcess() = default;
+/**
+ * API Implementation for Glosbe (https://glosbe.com/a-provider)
+ */
 
-QString TranslateShellProcess::translate(const QPair<QString, QString> &language, const QString &text) {
-    QStringList arguments;
-    arguments << language.first + ":" + language.second
-              << text
-              << "--brief";
-    start("trans", arguments);
-    waitForFinished();
-    QString composeOutput(readAllStandardOutput());
-    return composeOutput;
-}
+class Glosbe : public QObject
+{
 
-void TranslateShellProcess::play(const QString &text) {
-    QStringList arguments;
-    arguments << text
-              << "-speak"
-              << "-no-translate";
-    start("trans", arguments);
-    waitForFinished();
-}
+    Q_OBJECT
+
+public:
+    Glosbe(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, bool);
+    Glosbe(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &);
+
+private Q_SLOTS:
+   void parseExamples(QNetworkReply*);
+   void parseResult(QNetworkReply*);
+
+Q_SIGNALS:
+   void finished();
+   
+private:
+   Plasma::AbstractRunner * m_runner;
+   QNetworkAccessManager * m_manager;
+   Plasma::RunnerContext m_context;
+};
+
+#endif
