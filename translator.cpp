@@ -18,7 +18,6 @@
 
 #include "translator.h"
 #include "config/translator_config.h"
-#include "provider/glosbe.h"
 #include "provider/GoogleTranslate.h"
 #include "provider/yandex.h"
 #include "provider/baidu.h"
@@ -47,9 +46,6 @@ Translator::Translator(QObject *parent, const QVariantList &args)
     m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY);
     m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID);
     m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC);
-    m_glosbeWord = stringToBool(grp.readEntry(CONFIG_GLOSBE_WORD));
-    m_glosbePhrase = stringToBool(grp.readEntry(CONFIG_GLOSBE_PHRASE));
-    m_glosbeExamples = stringToBool(grp.readEntry(CONFIG_GLOSBE_EXAMPLES));
     m_yandexWord = stringToBool(grp.readEntry(CONFIG_YANDEX_WORD));
     m_yandexPhrase = stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE));
     m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
@@ -138,35 +134,11 @@ void Translator::match(Plasma::RunnerContext &context)
             connect(&yandex, SIGNAL(finished()), &loop, SLOT(quit()));
             loop.exec();
         }
-        if(m_glosbePhrase) {
-            if(m_glosbeExamples) {
-                QEventLoop loop;
-                Glosbe glosbe(this, context, text, language, m_glosbeExamples);
-                connect(&glosbe, SIGNAL(finished()), &loop, SLOT(quit()));
-                loop.exec();
-            }
-            QEventLoop loop;
-            Glosbe glosbe(this, context, text, language);
-            connect(&glosbe, SIGNAL(finished()), &loop, SLOT(quit()));
-            loop.exec();
-        }
     } else {
         if(m_yandexWord) {
             QEventLoop loop;
             Yandex yandex(this, context, text, language, m_yandexKey);
             connect(&yandex, SIGNAL(finished()), &loop, SLOT(quit()));
-            loop.exec();
-        }
-        if(m_glosbeWord) {
-            if(m_glosbeExamples) {
-                QEventLoop loop;
-                Glosbe glosbe(this, context, text, language, m_glosbeExamples);
-                connect(&glosbe, SIGNAL(finished()), &loop, SLOT(quit()));
-                loop.exec();
-            }
-            QEventLoop loop;
-            Glosbe glosbe(this, context, text, language);
-            connect(&glosbe, SIGNAL(finished()), &loop, SLOT(quit()));
             loop.exec();
         }
     }

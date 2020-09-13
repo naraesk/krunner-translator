@@ -2,7 +2,7 @@
 
 ![Screenshot Runner](../../wiki/screenshot/interface.png)
 
-This is a plugin for Plasma 5 KRunner. It's a translator and it translates text. Currently [Google Translate](https://translate.google.com/), [Bing Translator](https://www.bing.com/translator), [glosbe](https://glosbe.com/), [yandex](https://www.yandex.ru/), [youdao](http://fanyi.youdao.com/), and [Baidu Fanyi](https://fanyi.baidu.com/) are supported. By clicking on the corresponding icon, the translation can be copied or read aloud.
+This is a plugin for Plasma 5 KRunner. It's a translator and it translates text. Currently [Google Translate](https://translate.google.com/), [Bing Translator](https://www.bing.com/translator),  [yandex](https://www.yandex.ru/), [youdao](http://fanyi.youdao.com/), and [Baidu Fanyi](https://fanyi.baidu.com/) are supported. By clicking on the corresponding icon, the translation can be copied or read aloud.
 
 ## Packages
 
@@ -42,8 +42,6 @@ Baidu users:
 1. Register at http://api.fanyi.baidu.com/
 2. Get an API key and an API secret from Consoles
 3. Copy the key to configuration dialog
-
-If you do not provide an api key only the translation via glosbe will work.
 
 ## Usage ##
 

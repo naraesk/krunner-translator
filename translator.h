@@ -44,9 +44,6 @@ private:
     QString m_youdaoAppSec;
     bool m_yandexWord;
     bool m_yandexPhrase;
-    bool m_glosbeWord;
-    bool m_glosbePhrase;
-    bool m_glosbeExamples;
     bool m_baiduEnable;
     bool m_youdaoEnable;
     bool m_googleEnable;

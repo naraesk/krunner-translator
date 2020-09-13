@@ -291,62 +291,6 @@
        </layout>
       </widget>
      </widget>
-     <widget class="QWidget" name="glosbeTab">
-      <attribute name="title">
-       <string>Glosbe</string>
-      </attribute>
-      <widget class="QGroupBox" name="glosbe">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>500</width>
-         <height>171</height>
-        </rect>
-       </property>
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="title">
-        <string/>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-       <layout class="QFormLayout" name="formLayout_5">
-        <property name="labelAlignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-        </property>
-        <item row="0" column="0">
-         <widget class="QCheckBox" name="glosbe_examples">
-          <property name="text">
-           <string>Show example sentences</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QCheckBox" name="glosbe_word">
-          <property name="text">
-           <string>Translate single words</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QCheckBox" name="glosbe_phrase">
-          <property name="text">
-           <string>Translate phrases and sentences</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </widget>
      <widget class="QWidget" name="baiduTab">
       <attribute name="title">
        <string>Baidu</string>
