@@ -30,6 +30,9 @@
       <bool>false</bool>
      </property>
      <layout class="QFormLayout" name="formLayout_3">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+      </property>
       <item row="0" column="0">
        <layout class="QFormLayout" name="formLayout_2">
         <property name="sizeConstraint">
@@ -94,6 +97,9 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
+     <property name="usesScrollButtons">
+      <bool>true</bool>
+     </property>
      <property name="tabBarAutoHide">
       <bool>false</bool>
      </property>
@@ -109,8 +115,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>500</width>
-         <height>41</height>
+         <width>106</width>
+         <height>48</height>
         </rect>
        </property>
        <property name="layoutDirection">
@@ -122,10 +128,7 @@
        <property name="flat">
         <bool>true</bool>
        </property>
-       <layout class="QFormLayout" name="formLayout_6">
-        <property name="labelAlignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-        </property>
+       <layout class="QFormLayout" name="formLayout_4">
         <item row="0" column="0">
          <widget class="QCheckBox" name="googleEnable">
           <property name="text">
@@ -133,6 +136,9 @@
           </property>
           <property name="checked">
            <bool>true</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -151,8 +157,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>500</width>
-         <height>41</height>
+         <width>480</width>
+         <height>382</height>
         </rect>
        </property>
        <property name="layoutDirection">
@@ -164,17 +170,51 @@
        <property name="flat">
         <bool>true</bool>
        </property>
-       <layout class="QFormLayout" name="formLayout_7">
+       <layout class="QFormLayout" name="formLayout">
+        <property name="fieldGrowthPolicy">
+         <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+        </property>
+        <property name="rowWrapPolicy">
+         <enum>QFormLayout::WrapLongRows</enum>
+        </property>
         <property name="labelAlignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
         </property>
-        <item row="0" column="0">
+        <property name="horizontalSpacing">
+         <number>0</number>
+        </property>
+        <property name="verticalSpacing">
+         <number>8</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <item row="1" column="0">
          <widget class="QCheckBox" name="bingEnable">
           <property name="text">
            <string>Enable</string>
           </property>
           <property name="checked">
            <bool>false</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="KMessageWidget" name="bingWarning">
+          <property name="text">
+           <string>Bing works unreliably. It's not recommended to activate Bing as the only translation engine.</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+          <property name="closeButtonVisible">
+           <bool>false</bool>
+          </property>
+          <property name="messageType">
+           <enum>KMessageWidget::Warning</enum>
           </property>
          </widget>
         </item>
@@ -185,7 +225,7 @@
       <attribute name="title">
        <string>Yandex</string>
       </attribute>
-      <widget class="QGroupBox" name="yandex_2">
+      <widget class="QGroupBox" name="yandex">
        <property name="enabled">
         <bool>true</bool>
        </property>
@@ -466,7 +506,36 @@
     </widget>
    </item>
   </layout>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>100</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayout_4"/>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>100</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_2"/>
+  </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KMessageWidget</class>
+   <extends>QFrame</extends>
+   <header>kmessagewidget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

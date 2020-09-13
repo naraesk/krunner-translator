@@ -36,6 +36,9 @@ TranslatorConfig::TranslatorConfig(QWidget* parent, const QVariantList& args) :
     m_ui = new TranslatorConfigForm(this);
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_ui, 0, 0);
+
+
+    m_ui->bingWarning->hide();
     
     const QStringList languages = {"Albanian", "Afrikaans", "Arabic", "Armenian", "Azerbaijan", "Basque", "Belarusian", "Bosnian", "Bulgarian", "Catalan", "Chinese", "Croatian", "Czech", "Danish", "Dutch", "English", "Estonian", "Finish", "French", "Galician", "Georgian", "German", "Greek", "Haitian (Creole)", "Hungarian", "Icelandic", "Indonesian", "Irish", "Italian", "Japanese", "Kazakh", "Korean", "Kyrgyz", "Latin", "Latvian", "Lithuanian", "Macedonian", "Malagasy", "Malay", "Maltese", "Mongolian", "Norwegian", "Persian", "Polish", "Portuguese", "Romanian", "Russian", "Serbian", "Slovakian", "Slovenian", "Spanish", "Swahili", "Swedish", "Tagalog", "Tajik", 
     "Tatar", "Thai", "Turkish", "Ukrainian", "Uzbek", "Vietnamese", "Welsh", "Yiddish"};
@@ -59,6 +62,7 @@ TranslatorConfig::TranslatorConfig(QWidget* parent, const QVariantList& args) :
     connect(m_ui->youdaoEnable, SIGNAL(stateChanged(int)),this,SLOT(changed()));
     connect(m_ui->googleEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
     connect(m_ui->bingEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
+    connect(m_ui->bingEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
 }
 
 void TranslatorConfig::load()
@@ -119,6 +123,14 @@ void TranslatorConfig::save()
     grp.writeEntry(CONFIG_GOOGLE_ENABLE, boolToString(m_ui->googleEnable->isChecked()));
     grp.writeEntry(CONFIG_BING_ENABLE, boolToString(m_ui->bingEnable->isChecked()));
     emit changed(true);
+}
+
+void TranslatorConfig::warningHandler() {
+    if(m_ui->bingEnable->isChecked()){
+        m_ui->bingWarning->show();
+    } else {
+        m_ui->bingWarning->hide();
+    }
 }
 
 const QVector<QString>TranslatorConfig::m_abbr = {"sq", "af", "ar", "hy", "az", "eu", "be", "bs", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "gl", "ka", "de", "el", "ht", "hu", "is", "id", "ga", "it", "ja",                   

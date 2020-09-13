@@ -57,6 +57,7 @@ public:
 public Q_SLOTS:
     void save() override;
     void load() override;
+    void warningHandler();
 
 private:
     TranslatorConfigForm* m_ui;
