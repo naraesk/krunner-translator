@@ -506,28 +506,6 @@
     </widget>
    </item>
   </layout>
-  <widget class="QWidget" name="">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>100</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <layout class="QFormLayout" name="formLayout_4"/>
-  </widget>
-  <widget class="QWidget" name="">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>100</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout_2"/>
-  </widget>
  </widget>
  <customwidgets>
   <customwidget>
