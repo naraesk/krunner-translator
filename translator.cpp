@@ -115,10 +115,7 @@ void Translator::run(const Plasma::RunnerContext &context, const Plasma::QueryMa
     if (match.selectedAction()->data().toString() == QLatin1String("play")) {
         TranslateShellProcess process(this);
         process.play(match.text());
-    } else if (!match.selectedAction()) {
-        QApplication::clipboard()->setText(match.text());
     }
-    QApplication::clipboard()->setText(match.text());
 }
 
 QList<QAction *> Translator::actionsForMatch(const Plasma::QueryMatch &match) {
