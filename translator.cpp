@@ -22,7 +22,6 @@
 #include "provider/baidu.h"
 #include "provider/youdao.h"
 #include "provider/Bing.h"
-#include "helper.h"
 #include <translateShellProcess.h>
 #include <KLocalizedString>
 #include <QApplication>
@@ -126,17 +125,17 @@ QList<QAction *> Translator::actionsForMatch(const Plasma::QueryMatch &match) {
 }
 
 void Translator::reloadConfiguration() {
-    KConfigGroup grp = config();
+    auto grp = config();
     m_primary = grp.readEntry(CONFIG_PRIMARY, "en");
     m_secondary = grp.readEntry(CONFIG_SECONDARY, "es");
-    m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID);
-    m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY);
-    m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID);
-    m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC);
-    m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
-    m_youdaoEnable = stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE));
-    m_googleEnable = stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE, "true"));
-    m_bingEnable = stringToBool(grp.readEntry(CONFIG_BING_ENABLE));
+    m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID, "");
+    m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY, "");
+    m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID, "");
+    m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC, "");
+    m_baiduEnable = grp.readEntry(CONFIG_BAIDU_ENABLE, false);
+    m_youdaoEnable = grp.readEntry(CONFIG_YOUDAO_ENABLE, false);
+    m_googleEnable = grp.readEntry(CONFIG_GOOGLE_ENABLE, true);
+    m_bingEnable = grp.readEntry(CONFIG_BING_ENABLE, false);
 }
 
 #include "moc_translator.cpp"
