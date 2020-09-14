@@ -31,6 +31,7 @@ public:
     void match(Plasma::RunnerContext &) override;
     void run(const Plasma::RunnerContext &, const Plasma::QueryMatch &) override;
     QList<QAction *> actionsForMatch(const Plasma::QueryMatch &match) override;
+    void reloadConfiguration() override;
 
 private:
     bool parseTerm(const QString &, QString &, QPair<QString, QString> &);

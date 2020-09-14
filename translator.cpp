@@ -31,29 +31,16 @@
 #include <KConfigCore/KConfig>
 
 Translator::Translator(QObject *parent, const QVariantList &args)
-    : Plasma::AbstractRunner(parent, args)
-{
+        : Plasma::AbstractRunner(parent, args) {
     Q_UNUSED(args);
-    
-    setObjectName(QLatin1String("Translator"));
-    KConfigGroup grp = config();
 
-    m_primary = grp.readEntry(CONFIG_PRIMARY, "en");
-    m_secondary = grp.readEntry(CONFIG_SECONDARY, "es");
-    m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID);
-    m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY);
-    m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID);
-    m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC);
-    m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
-    m_youdaoEnable = stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE));
-    m_googleEnable = stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE, "true"));
-    m_bingEnable = stringToBool(grp.readEntry(CONFIG_BING_ENABLE));
+    setObjectName(QLatin1String("Translator"));
     setIgnoredTypes(Plasma::RunnerContext::Directory |
                     Plasma::RunnerContext::File |
                     Plasma::RunnerContext::NetworkLocation);
     setSpeed(AbstractRunner::SlowSpeed);
     setPriority(HighestPriority);
-    QAction * copy =  new QAction();
+    QAction *copy = new QAction();
     copy->setIcon(QIcon::fromTheme(QStringLiteral("editcopy")));
     copy->setText("Copy to Clipboard");
     copy->setData("copy");
@@ -63,12 +50,14 @@ Translator::Translator(QObject *parent, const QVariantList &args)
                            QStringLiteral("Play audio"));
     play->setData(QStringLiteral("play"));
     actions = {copy, play};
-    setDefaultSyntax(Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<language code>")),i18n("Translates the word(s) :q: into target language")));
-    setDefaultSyntax(Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<source languagce>-<target languagce>")), i18n("Translates the word(s) :q: from the source into target language")));
+    setDefaultSyntax(Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<language code>")),
+                                          i18n("Translates the word(s) :q: into target language")));
+    setDefaultSyntax(
+            Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<source languagce>-<target languagce>")),
+                                 i18n("Translates the word(s) :q: from the source into target language")));
 }
 
-bool Translator::parseTerm(const QString& term, QString& text, QPair<QString, QString> &language)
-{
+bool Translator::parseTerm(const QString &term, QString &text, QPair<QString, QString> &language) {
     const int index = term.indexOf(" ");
     if (index == -1) return false;
     text = term.mid(index + 1);
@@ -90,10 +79,7 @@ bool Translator::parseTerm(const QString& term, QString& text, QPair<QString, QS
     return true;
 }
 
-void Translator::match(Plasma::RunnerContext &context)
-{
-
-    KConfigGroup grp = config();
+void Translator::match(Plasma::RunnerContext &context) {
     const QString term = context.query();
     QString text;
     QPair<QString, QString> language;
@@ -101,35 +87,32 @@ void Translator::match(Plasma::RunnerContext &context)
     if (!parseTerm(term, text, language)) return;
     if (!context.isValid()) return;
 
-    if (m_baiduEnable)
-    {
+    if (m_baiduEnable) {
         QEventLoop baiduLoop;
         Baidu baidu(this, context, text, language, m_baiduAPPID, m_baiduAPIKey);
         connect(&baidu, SIGNAL(finished()), &baiduLoop, SLOT(quit()));
         baiduLoop.exec();
     }
-    if (m_youdaoEnable)
-    {
+    if (m_youdaoEnable) {
         QEventLoop youdaoLoop;
         Youdao youdao(this, context, text, language, m_youdaoAPPID, m_youdaoAppSec);
         connect(&youdao, SIGNAL(finished()), &youdaoLoop, SLOT(quit()));
         youdaoLoop.exec();
     }
-    if (m_googleEnable){
+    if (m_googleEnable) {
         GoogleTranslate google(this, context, actions.first());
         google.translate(text, language);
     }
-    if (m_bingEnable){
+    if (m_bingEnable) {
         Bing bing(this, context, actions.first());
         bing.translate(text, language);
     }
 }
 
-void Translator::run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match)
-{
+void Translator::run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match) {
     Q_UNUSED(context);
     QApplication::clipboard()->setText(match.text());
-    if(match.selectedAction()->data().toString() == QLatin1String("play")) {
+    if (match.selectedAction()->data().toString() == QLatin1String("play")) {
         TranslateShellProcess process(this);
         process.play(match.text());
     } else if (!match.selectedAction()) {
@@ -139,10 +122,24 @@ void Translator::run(const Plasma::RunnerContext &context, const Plasma::QueryMa
 }
 
 QList<QAction *> Translator::actionsForMatch(const Plasma::QueryMatch &match) {
-    if(match.data().toString() == "audio") {
+    if (match.data().toString() == "audio") {
         return actions;
     }
     return {actions.first()};
+}
+
+void Translator::reloadConfiguration() {
+    KConfigGroup grp = config();
+    m_primary = grp.readEntry(CONFIG_PRIMARY, "en");
+    m_secondary = grp.readEntry(CONFIG_SECONDARY, "es");
+    m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID);
+    m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY);
+    m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID);
+    m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC);
+    m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
+    m_youdaoEnable = stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE));
+    m_googleEnable = stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE, "true"));
+    m_bingEnable = stringToBool(grp.readEntry(CONFIG_BING_ENABLE));
 }
 
 #include "moc_translator.cpp"
