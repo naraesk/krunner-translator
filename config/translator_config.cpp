@@ -37,8 +37,7 @@ TranslatorConfig::TranslatorConfig(QWidget* parent, const QVariantList& args) :
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_ui, 0, 0);
 
-
-    m_ui->bingWarning->hide();
+    warningHandler();
     
     const QStringList languages = {"Albanian", "Afrikaans", "Arabic", "Armenian", "Azerbaijan", "Basque", "Belarusian", "Bosnian", "Bulgarian", "Catalan", "Chinese", "Croatian", "Czech", "Danish", "Dutch", "English", "Estonian", "Finish", "French", "Galician", "Georgian", "German", "Greek", "Haitian (Creole)", "Hungarian", "Icelandic", "Indonesian", "Irish", "Italian", "Japanese", "Kazakh", "Korean", "Kyrgyz", "Latin", "Latvian", "Lithuanian", "Macedonian", "Malagasy", "Malay", "Maltese", "Mongolian", "Norwegian", "Persian", "Polish", "Portuguese", "Romanian", "Russian", "Serbian", "Slovakian", "Slovenian", "Spanish", "Swahili", "Swedish", "Tagalog", "Tajik", 
     "Tatar", "Thai", "Turkish", "Ukrainian", "Uzbek", "Vietnamese", "Welsh", "Yiddish"};
@@ -59,7 +58,13 @@ TranslatorConfig::TranslatorConfig(QWidget* parent, const QVariantList& args) :
     connect(m_ui->youdaoEnable, SIGNAL(stateChanged(int)),this,SLOT(changed()));
     connect(m_ui->googleEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
     connect(m_ui->bingEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
+    
     connect(m_ui->bingEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
+    connect(m_ui->googleEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
+    connect(m_ui->baiduEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
+    connect(m_ui->youdaoEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
+    connect(m_ui->yandex_word, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
+    connect(m_ui->yandex_phrase, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));    
 }
 
 void TranslatorConfig::load()
@@ -116,10 +121,20 @@ void TranslatorConfig::save()
 }
 
 void TranslatorConfig::warningHandler() {
-    if(m_ui->bingEnable->isChecked()){
-        m_ui->bingWarning->show();
+    if(m_ui->bingEnable->isChecked() &&
+        !m_ui->googleEnable->isChecked() &&
+        !m_ui->yandex_phrase->isChecked() &&
+        !m_ui->yandex_phrase->isChecked() &&
+        !m_ui->baiduEnable->isChecked() &&
+        !m_ui->youdaoEnable->isChecked()) {
+        m_ui->bingWarningOnlyEngine->show();
     } else {
-        m_ui->bingWarning->hide();
+        m_ui->bingWarningOnlyEngine->hide();
+    }
+    if(m_ui->bingEnable->isChecked()){
+        m_ui->bingWarningReliability->show();
+    } else {
+        m_ui->bingWarningReliability->hide();
     }
 }
 
