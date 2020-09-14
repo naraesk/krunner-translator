@@ -19,7 +19,6 @@
 #include "translator.h"
 #include "config/translator_config.h"
 #include "provider/GoogleTranslate.h"
-#include "provider/yandex.h"
 #include "provider/baidu.h"
 #include "provider/youdao.h"
 #include "provider/Bing.h"
@@ -41,13 +40,10 @@ Translator::Translator(QObject *parent, const QVariantList &args)
 
     m_primary = grp.readEntry(CONFIG_PRIMARY, "en");
     m_secondary = grp.readEntry(CONFIG_SECONDARY, "es");
-    m_yandexKey = grp.readEntry(CONFIG_YANDEX_KEY);
     m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID);
     m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY);
     m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID);
     m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC);
-    m_yandexWord = stringToBool(grp.readEntry(CONFIG_YANDEX_WORD));
-    m_yandexPhrase = stringToBool(grp.readEntry(CONFIG_YANDEX_PHRASE));
     m_baiduEnable = stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE));
     m_youdaoEnable = stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE));
     m_googleEnable = stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE, "true"));
@@ -126,21 +122,6 @@ void Translator::match(Plasma::RunnerContext &context)
     if (m_bingEnable){
         Bing bing(this, context, actions.first());
         bing.translate(text, language);
-    }
-    if (text.contains(" ")) {
-        if(m_yandexPhrase) {
-            QEventLoop loop;
-            Yandex yandex(this, context, text, language, m_yandexKey);
-            connect(&yandex, SIGNAL(finished()), &loop, SLOT(quit()));
-            loop.exec();
-        }
-    } else {
-        if(m_yandexWord) {
-            QEventLoop loop;
-            Yandex yandex(this, context, text, language, m_yandexKey);
-            connect(&yandex, SIGNAL(finished()), &loop, SLOT(quit()));
-            loop.exec();
-        }
     }
 }
 

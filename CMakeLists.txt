@@ -17,7 +17,6 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 
 set(krunner_translator_SRCS
     translator.cpp
-        provider/yandex.cpp
         provider/baidu.cpp
         provider/youdao.cpp
         provider/GoogleTranslate.cpp provider/GoogleTranslate.h translateShellProcess.cpp translateShellProcess.h provider/Bing.cpp provider/Bing.h)

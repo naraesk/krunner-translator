@@ -37,13 +37,10 @@ private:
     QList<QAction *> actions;
     QString m_primary;
     QString m_secondary;
-    QString m_yandexKey;
     QString m_baiduAPPID;
     QString m_baiduAPIKey;
     QString m_youdaoAPPID;
     QString m_youdaoAppSec;
-    bool m_yandexWord;
-    bool m_yandexPhrase;
     bool m_baiduEnable;
     bool m_youdaoEnable;
     bool m_googleEnable;

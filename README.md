@@ -2,7 +2,7 @@
 
 ![Screenshot Runner](../../wiki/screenshot/interface.png)
 
-This is a plugin for Plasma 5 KRunner. It's a translator and it translates text. Currently [Google Translate](https://translate.google.com/), [Bing Translator](https://www.bing.com/translator),  [yandex](https://www.yandex.ru/), [youdao](http://fanyi.youdao.com/), and [Baidu Fanyi](https://fanyi.baidu.com/) are supported. By clicking on the corresponding icon, the translation can be copied or read aloud.
+This is a plugin for Plasma 5 KRunner. It's a translator and it translates text. Currently [Google Translate](https://translate.google.com/), [Bing Translator](https://www.bing.com/translator), [youdao](http://fanyi.youdao.com/), and [Baidu Fanyi](https://fanyi.baidu.com/) are supported. By clicking on the corresponding icon, the translation can be copied or read aloud.
 
 ## Packages
 
@@ -28,17 +28,14 @@ kservice-devel krunner-devel gettext-tools kconfigwidgets-devel`
 
 ## Configuration ##
 
-For being able to use yandex, an api key is required. You have to obtain a key yourself by following these steps:  
-1. Register at https://passport.yandex.com/  
-2. Get an API key at https://tech.yandex.com/keys/get/?service=trnsl   
-3. Copy the key to the configuration dialog  
+For being able to use Youdao and Baidu, an api key is required. You have to obtain a key yourself by following these steps:  
 
-For users who use Youdao Translation:
+### Youdao
 1. Register at https://ai.youdao.com/
 2. Get an API key and an API secret from Application Manager
 3. Copy the key to configuration dialog
 
-Baidu users:
+### Baidu
 1. Register at http://api.fanyi.baidu.com/
 2. Get an API key and an API secret from Consoles
 3. Copy the key to configuration dialog
