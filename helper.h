@@ -19,11 +19,6 @@
 #ifndef HELPER_H
 #define HELPER_H 
 
-inline bool stringToBool(const QString& value)
-{
-    return value == "true";
-}
-
 inline const char * boolToString(bool value)
 {
   return value ? "true" : "false";

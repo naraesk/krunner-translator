@@ -74,14 +74,14 @@ void TranslatorConfig::load()
     int indexSecondary = m_abbr.indexOf(grp.readEntry(CONFIG_SECONDARY, "es"));
     m_ui->primaryLanguage->setCurrentIndex(indexPrimary);
     m_ui->secondaryLanguage->setCurrentIndex(indexSecondary);
-    m_ui->baiduAPPID->setText(grp.readEntry(CONFIG_BAIDU_APPID));
-    m_ui->baiduApiKey->setText(grp.readEntry(CONFIG_BAIDU_APIKEY));
-    m_ui->youdaoAPPID->setText(grp.readEntry(CONFIG_YOUDAO_APPID));
-    m_ui->youdaoAppSec->setText(grp.readEntry(CONFIG_YOUDAO_APPSEC));
-    m_ui->baiduEnable->setChecked(stringToBool(grp.readEntry(CONFIG_BAIDU_ENABLE)));
-    m_ui->youdaoEnable->setChecked(stringToBool(grp.readEntry(CONFIG_YOUDAO_ENABLE)));
-    m_ui->googleEnable->setChecked(stringToBool(grp.readEntry(CONFIG_GOOGLE_ENABLE, "true")));
-    m_ui->bingEnable->setChecked(stringToBool(grp.readEntry(CONFIG_BING_ENABLE)));
+    m_ui->baiduAPPID->setText(grp.readEntry(CONFIG_BAIDU_APPID, ""));
+    m_ui->baiduApiKey->setText(grp.readEntry(CONFIG_BAIDU_APIKEY, ""));
+    m_ui->youdaoAPPID->setText(grp.readEntry(CONFIG_YOUDAO_APPID, ""));
+    m_ui->youdaoAppSec->setText(grp.readEntry(CONFIG_YOUDAO_APPSEC, ""));
+    m_ui->baiduEnable->setChecked(grp.readEntry(CONFIG_BAIDU_ENABLE, false));
+    m_ui->youdaoEnable->setChecked(grp.readEntry(CONFIG_YOUDAO_ENABLE, false));
+    m_ui->googleEnable->setChecked(grp.readEntry(CONFIG_GOOGLE_ENABLE, true));
+    m_ui->bingEnable->setChecked(grp.readEntry(CONFIG_BING_ENABLE, false));
 }
 
 void TranslatorConfig::save()
