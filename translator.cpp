@@ -31,8 +31,6 @@
 
 Translator::Translator(QObject *parent, const QVariantList &args)
         : Plasma::AbstractRunner(parent, args) {
-    Q_UNUSED(args);
-
     setObjectName(QLatin1String("Translator"));
     setIgnoredTypes(Plasma::RunnerContext::Directory |
                     Plasma::RunnerContext::File |
