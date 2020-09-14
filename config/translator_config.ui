@@ -81,6 +81,22 @@
     </widget>
    </item>
    <item>
+    <widget class="KMessageWidget" name="noEngineWarning">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;All translation engines are disabled. Enable at least one translation engine to see results.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="closeButtonVisible">
+      <bool>false</bool>
+     </property>
+     <property name="messageType">
+      <enum>KMessageWidget::Error</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="KMessageWidget" name="bingWarningOnlyEngine">
      <property name="text">
       <string>It's not recommended to activate Bing as the only translation engine.</string>

@@ -64,7 +64,7 @@ TranslatorConfig::TranslatorConfig(QWidget* parent, const QVariantList& args) :
     connect(m_ui->baiduEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
     connect(m_ui->youdaoEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
     connect(m_ui->yandex_word, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
-    connect(m_ui->yandex_phrase, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));    
+    connect(m_ui->yandex_phrase, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
 }
 
 void TranslatorConfig::load()
@@ -121,6 +121,9 @@ void TranslatorConfig::save()
 }
 
 void TranslatorConfig::warningHandler() {
+    
+    // show warning if only bing is enabled
+    
     if(m_ui->bingEnable->isChecked() &&
         !m_ui->googleEnable->isChecked() &&
         !m_ui->yandex_phrase->isChecked() &&
@@ -131,10 +134,26 @@ void TranslatorConfig::warningHandler() {
     } else {
         m_ui->bingWarningOnlyEngine->hide();
     }
+    
+    // show warning if bing is enabled
+    
     if(m_ui->bingEnable->isChecked()){
         m_ui->bingWarningReliability->show();
     } else {
         m_ui->bingWarningReliability->hide();
+    }
+    
+    // show error message if all engines are disabled
+    
+    if(!m_ui->bingEnable->isChecked() &&
+        !m_ui->googleEnable->isChecked() &&
+        !m_ui->yandex_phrase->isChecked() &&
+        !m_ui->yandex_phrase->isChecked() &&
+        !m_ui->baiduEnable->isChecked() &&
+        !m_ui->youdaoEnable->isChecked()) {
+        m_ui->noEngineWarning->show();
+    } else {
+        m_ui->noEngineWarning->hide();
     }
 }
 
