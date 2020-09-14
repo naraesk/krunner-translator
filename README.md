@@ -45,11 +45,11 @@ For being able to use Youdao and Baidu, an api key is required. You have to obta
 A list of all language codes you can find [here](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
 
 ### Specify source and target language ###
-Syntax: \<sourcelang\>-\<targetlang\> \<searchterm\>  
+Syntax: `<sourcelang>-<targetlang> <searchterm>`  
 *en-de house* → will translate *house* into german (*de*)
 
 ### Use default source language ###
-Syntax: \<targetlang\> \<searchterm\>
+Syntax: `<targetlang> <searchterm>`
 
 Default source language: *English (en)*  
 Alternative source language: *German (de)*  
