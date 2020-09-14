@@ -179,7 +179,7 @@
      </widget>
      <widget class="QWidget" name="bingTab">
       <attribute name="title">
-       <string>Bing</string>
+       <string>Bing Translator</string>
       </attribute>
       <widget class="QGroupBox" name="bing">
        <property name="enabled">
