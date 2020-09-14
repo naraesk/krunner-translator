@@ -17,7 +17,6 @@
  *****************************************************************************/
 
 #include "translator_config.h"
-#include "helper.h"
 #include <KSharedConfig>
 #include <KPluginFactory>
 #include <krunner/abstractrunner.h>
@@ -101,10 +100,10 @@ void TranslatorConfig::save()
     grp.writeEntry(CONFIG_BAIDU_APIKEY,m_ui->baiduApiKey->text());
     grp.writeEntry(CONFIG_YOUDAO_APPID,m_ui->youdaoAPPID->text());
     grp.writeEntry(CONFIG_YOUDAO_APPSEC,m_ui->youdaoAppSec->text());
-    grp.writeEntry(CONFIG_BAIDU_ENABLE, boolToString(m_ui->baiduEnable->isChecked()));
-    grp.writeEntry(CONFIG_YOUDAO_ENABLE, boolToString(m_ui->youdaoEnable->isChecked()));
-    grp.writeEntry(CONFIG_GOOGLE_ENABLE, boolToString(m_ui->googleEnable->isChecked()));
-    grp.writeEntry(CONFIG_BING_ENABLE, boolToString(m_ui->bingEnable->isChecked()));
+    grp.writeEntry(CONFIG_BAIDU_ENABLE, m_ui->baiduEnable->isChecked());
+    grp.writeEntry(CONFIG_YOUDAO_ENABLE, m_ui->youdaoEnable->isChecked());
+    grp.writeEntry(CONFIG_GOOGLE_ENABLE, m_ui->googleEnable->isChecked());
+    grp.writeEntry(CONFIG_BING_ENABLE, m_ui->bingEnable->isChecked());
     emit changed(true);
 }
 
