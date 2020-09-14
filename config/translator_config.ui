@@ -81,6 +81,22 @@
     </widget>
    </item>
    <item>
+    <widget class="KMessageWidget" name="bingWarningOnlyEngine">
+     <property name="text">
+      <string>It's not recommended to activate Bing as the only translation engine.</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="closeButtonVisible">
+      <bool>false</bool>
+     </property>
+     <property name="messageType">
+      <enum>KMessageWidget::Warning</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="minimumSize">
       <size>
@@ -95,7 +111,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="usesScrollButtons">
       <bool>true</bool>
@@ -196,22 +212,6 @@
          <widget class="KMessageWidget" name="bingWarningReliability">
           <property name="text">
            <string>Bing Translate works unreliably. It will only sometimes show results.</string>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
-          <property name="closeButtonVisible">
-           <bool>false</bool>
-          </property>
-          <property name="messageType">
-           <enum>KMessageWidget::Warning</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" colspan="2">
-         <widget class="KMessageWidget" name="bingWarningOnlyEngine">
-          <property name="text">
-           <string>It's not recommended to activate Bing as the only translation engine.</string>
           </property>
           <property name="wordWrap">
            <bool>true</bool>
