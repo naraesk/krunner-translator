@@ -20,6 +20,7 @@
 #define TRANSLATOR_H
 
 #include <KRunner/AbstractRunner>
+#include <provider/GoogleTranslate.h>
 
 class Translator : public Plasma::AbstractRunner
 {
@@ -27,7 +28,6 @@ class Translator : public Plasma::AbstractRunner
 
 public:
     Translator(QObject *parent, const QVariantList &args);
-
     void match(Plasma::RunnerContext &) override;
     void run(const Plasma::RunnerContext &, const Plasma::QueryMatch &) override;
     QList<QAction *> actionsForMatch(const Plasma::QueryMatch &match) override;
@@ -44,8 +44,7 @@ private:
     QString m_youdaoAppSec;
     bool m_baiduEnable;
     bool m_youdaoEnable;
-    bool m_googleEnable;
-    bool m_bingEnable;
+    QList<CommandLineEngine*> engines;
 };
 
 K_EXPORT_PLASMA_RUNNER(translator, Translator)

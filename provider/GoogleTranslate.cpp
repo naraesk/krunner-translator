@@ -19,11 +19,13 @@
 #include "GoogleTranslate.h"
 #include "translateShellProcess.h"
 
-GoogleTranslate::GoogleTranslate(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, QAction * action)
-        : m_runner(runner), m_context(context), m_action(action) {
+GoogleTranslate::GoogleTranslate(Plasma::AbstractRunner *runner, QAction * action)
+        : m_runner(runner), m_action(action) {
 }
 
-void GoogleTranslate::run(QString &result) {
+Plasma::QueryMatch GoogleTranslate::translate(const QString &text, const QPair<QString, QString> &language) {
+    TranslateShellProcess process;
+    QString result = process.translate(language, text);
     Plasma::QueryMatch match(m_runner);
     match.setData("audio");
     match.setType(Plasma::QueryMatch::ExactMatch);
@@ -32,13 +34,9 @@ void GoogleTranslate::run(QString &result) {
     match.setSubtext("Google Translate");
     match.setRelevance(0.01);
     match.setSelectedAction(m_action);
-    m_context.addMatch(match);
+    return match;
 }
 
-void GoogleTranslate::translate(const QString &text, const QPair<QString, QString> &language) {
-    TranslateShellProcess process(this);
-    connect(&process, SIGNAL(finished(QString&)), this, SLOT(run(QString&)));
-    process.translate(language, text);
-}
+GoogleTranslate::~GoogleTranslate() = default;
 
 #include "moc_GoogleTranslate.cpp"

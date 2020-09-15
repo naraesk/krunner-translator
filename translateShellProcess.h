@@ -30,9 +30,6 @@ public:
     explicit TranslateShellProcess(const QString &engine, QObject *parent = 0);
     ~TranslateShellProcess() override;
 
-Q_SIGNALS:
-    void finished(QString &result);
-
 public Q_SLOTS:
     QString translate(const QPair<QString, QString> &language, const QString &text);
     void play(const QString &text);

@@ -19,23 +19,17 @@
 #ifndef RUNNERTRANSLATOR_BING_H
 #define RUNNERTRANSLATOR_BING_H
 
-#include <QtCore/QObject>
 #include <KRunner/AbstractRunner>
+#include <api/CommandLineEngine.h>
 
-class Bing : public QObject {
-
-    Q_OBJECT
-
+class Bing : public CommandLineEngine {
 public:
-    Bing(Plasma::AbstractRunner*, Plasma::RunnerContext&, QAction *action);
-    void translate(const QString &text, const QPair<QString, QString> &language);
-
-private Q_SLOTS:
-    void run(QString &result);
+    Bing(Plasma::AbstractRunner*, QAction *action);
+    ~Bing() override;
+    Plasma::QueryMatch translate(const QString &text, const QPair<QString, QString> &language) override;
 
 private:
     Plasma::AbstractRunner * m_runner;
-    Plasma::RunnerContext m_context;
     QAction * m_action;
 };
 

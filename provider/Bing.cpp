@@ -18,27 +18,27 @@
 
 #include "Bing.h"
 #include "translateShellProcess.h"
-Bing::Bing(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, QAction * action)
-        : m_runner(runner), m_context(context), m_action(action) {
+
+Bing::Bing(Plasma::AbstractRunner *runner, QAction * action)
+        : m_runner(runner), m_action(action) {
 }
 
-void Bing::translate(const QString &text, const QPair<QString, QString> &language) {
+Plasma::QueryMatch Bing::translate(const QString &text, const QPair<QString, QString> &language) {
     TranslateShellProcess process("bing");
-    connect(&process, SIGNAL(finished(QString&)), this, SLOT(run(QString&)));
-    process.translate(language, text);
-}
-
-void Bing::run(QString &result) {
-    if(result == "\n") return; // empty result
+    QString result = process.translate(language, text);
     Plasma::QueryMatch match(m_runner);
-    match.setData("audio");
-    match.setType(Plasma::QueryMatch::ExactMatch);
-    match.setIcon(QIcon::fromTheme("applications-education-language"));
-    match.setText(result);
-    match.setSubtext("Bing");
-    match.setRelevance(0.01);
-    match.setSelectedAction(m_action);
-    m_context.addMatch(match);
+    if(result == "\n") { // empty result
+        match.setType(Plasma::QueryMatch::NoMatch);
+    } else {
+        match.setData("audio");
+        match.setType(Plasma::QueryMatch::ExactMatch);
+        match.setIcon(QIcon::fromTheme("applications-education-language"));
+        match.setText(result);
+        match.setSubtext("Bing");
+        match.setRelevance(0.01);
+        match.setSelectedAction(m_action);
+    }
+    return match;
 }
 
-#include "moc_Bing.cpp"
+Bing::~Bing() = default;

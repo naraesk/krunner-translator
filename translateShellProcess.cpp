@@ -36,7 +36,6 @@ QString TranslateShellProcess::translate(const QPair<QString, QString> &language
     start("trans", arguments);
     waitForFinished();
     QString composeOutput(readLine());
-    emit finished(composeOutput);
     return composeOutput;
 }
 

@@ -96,13 +96,9 @@ void Translator::match(Plasma::RunnerContext &context) {
         connect(&youdao, SIGNAL(finished()), &youdaoLoop, SLOT(quit()));
         youdaoLoop.exec();
     }
-    if (m_googleEnable) {
-        GoogleTranslate google(this, context, actions.first());
-        google.translate(text, language);
-    }
-    if (m_bingEnable) {
-        Bing bing(this, context, actions.first());
-        bing.translate(text, language);
+    for(auto engine : engines) {
+        Plasma::QueryMatch match = engine->translate(text, language);
+        context.addMatch(match);
     }
 }
 
@@ -110,7 +106,7 @@ void Translator::run(const Plasma::RunnerContext &context, const Plasma::QueryMa
     Q_UNUSED(context);
     QApplication::clipboard()->setText(match.text());
     if (match.selectedAction()->data().toString() == QLatin1String("play")) {
-        TranslateShellProcess process(this);
+        TranslateShellProcess process;
         process.play(match.text());
     }
 }
@@ -132,8 +128,18 @@ void Translator::reloadConfiguration() {
     m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC, "");
     m_baiduEnable = grp.readEntry(CONFIG_BAIDU_ENABLE, false);
     m_youdaoEnable = grp.readEntry(CONFIG_YOUDAO_ENABLE, false);
-    m_googleEnable = grp.readEntry(CONFIG_GOOGLE_ENABLE, true);
-    m_bingEnable = grp.readEntry(CONFIG_BING_ENABLE, false);
+
+    const bool googleEnable = grp.readEntry(CONFIG_GOOGLE_ENABLE, true);
+    if(googleEnable) {
+        CommandLineEngine * googleTranslate = new GoogleTranslate(this, actions.first());
+        engines.push_front(googleTranslate);
+    }
+
+    const bool bingEnable = grp.readEntry(CONFIG_BING_ENABLE, false);
+    if(bingEnable) {
+        CommandLineEngine * bingTranslate = new Bing(this, actions.first());
+        engines.push_front(bingTranslate);
+    }
 }
 
 #include "moc_translator.cpp"
