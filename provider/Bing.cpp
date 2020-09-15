@@ -19,14 +19,13 @@
 #include "Bing.h"
 #include "translateShellProcess.h"
 
-Bing::Bing(Plasma::AbstractRunner *runner, QAction * action)
-        : m_runner(runner), m_action(action) {
+Bing::Bing(Plasma::AbstractRunner *runner)
+        : match(runner) {
 }
 
 Plasma::QueryMatch Bing::translate(const QString &text, const QPair<QString, QString> &language) {
     TranslateShellProcess process("bing");
     QString result = process.translate(language, text);
-    Plasma::QueryMatch match(m_runner);
     if(result == "\n") { // empty result
         match.setType(Plasma::QueryMatch::NoMatch);
     } else {
@@ -36,7 +35,6 @@ Plasma::QueryMatch Bing::translate(const QString &text, const QPair<QString, QSt
         match.setText(result);
         match.setSubtext("Bing");
         match.setRelevance(1);
-        match.setSelectedAction(m_action);
     }
     return match;
 }
