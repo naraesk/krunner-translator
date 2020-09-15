@@ -32,11 +32,9 @@ Plasma::QueryMatch GoogleTranslate::translate(const QString &text, const QPair<Q
     match.setIcon(QIcon::fromTheme("applications-education-language"));
     match.setText(result);
     match.setSubtext("Google Translate");
-    match.setRelevance(0.01);
+    match.setRelevance(1);
     match.setSelectedAction(m_action);
     return match;
 }
 
 GoogleTranslate::~GoogleTranslate() = default;
-
-#include "moc_GoogleTranslate.cpp"
