@@ -25,7 +25,7 @@
 class GoogleTranslate : public CommandLineEngine {
 
 public:
-    GoogleTranslate(Plasma::AbstractRunner*);
+    explicit GoogleTranslate(Plasma::AbstractRunner*);
     ~GoogleTranslate() override;
     Plasma::QueryMatch translate(const QString &text, const QPair<QString, QString> &language) override;
 
