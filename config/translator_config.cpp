@@ -17,10 +17,12 @@
  *****************************************************************************/
 
 #include "translator_config.h"
+#include "languages.h"
 #include <KSharedConfig>
 #include <KPluginFactory>
 #include <krunner/abstractrunner.h>
 #include <QtDebug>
+#include <QtWidgets/QGridLayout>
 
 K_PLUGIN_FACTORY(TranslatorConfigFactory, registerPlugin<TranslatorConfig>("kcm_krunner_translator");)
 
@@ -37,13 +39,13 @@ TranslatorConfig::TranslatorConfig(QWidget* parent, const QVariantList& args) :
     layout->addWidget(m_ui, 0, 0);
 
     warningHandler();
-    
-    const QStringList languages = {"Albanian", "Afrikaans", "Arabic", "Armenian", "Azerbaijan", "Basque", "Belarusian", "Bosnian", "Bulgarian", "Catalan", "Chinese", "Croatian", "Czech", "Danish", "Dutch", "English", "Estonian", "Finish", "French", "Galician", "Georgian", "German", "Greek", "Haitian (Creole)", "Hungarian", "Icelandic", "Indonesian", "Irish", "Italian", "Japanese", "Kazakh", "Korean", "Kyrgyz", "Latin", "Latvian", "Lithuanian", "Macedonian", "Malagasy", "Malay", "Maltese", "Mongolian", "Norwegian", "Persian", "Polish", "Portuguese", "Romanian", "Russian", "Serbian", "Slovakian", "Slovenian", "Spanish", "Swahili", "Swedish", "Tagalog", "Tajik", 
-    "Tatar", "Thai", "Turkish", "Ukrainian", "Uzbek", "Vietnamese", "Welsh", "Yiddish"};
-    
-    m_ui->primaryLanguage -> addItems(languages);
-    m_ui->secondaryLanguage -> addItems(languages);
+    Language::initialize();
 
+    QList<Language*> * supportedLanguages = Language::getSupportedLanguages();
+    for(auto language: *supportedLanguages) {
+        m_ui->primaryLanguage->addItem(language->getCombinedName());
+        m_ui->secondaryLanguage->addItem(language->getCombinedName());
+    }
     connect(m_ui->primaryLanguage,SIGNAL(currentTextChanged(QString)),this, SLOT(changed()));
     connect(m_ui->secondaryLanguage,SIGNAL(currentTextChanged(QString)),this, SLOT(changed()));
     connect(m_ui->baiduAPPID,SIGNAL(textChanged(QString)),this,SLOT(changed()));
@@ -69,10 +71,12 @@ void TranslatorConfig::load()
     KConfigGroup grp = cfg->group("Runners");
     grp = KConfigGroup(&grp, "Translator");
     
-    int indexPrimary = m_abbr.indexOf(grp.readEntry(CONFIG_PRIMARY, "en"));
-    int indexSecondary = m_abbr.indexOf(grp.readEntry(CONFIG_SECONDARY, "es"));
-    m_ui->primaryLanguage->setCurrentIndex(indexPrimary);
-    m_ui->secondaryLanguage->setCurrentIndex(indexSecondary);
+    QString abbrPrimaryLanguage = grp.readEntry(CONFIG_PRIMARY, "en");
+    QString abbrSecondaryLanguage = grp.readEntry(CONFIG_SECONDARY, "es");
+    QString textPrimaryLanguage = Language::getCombinedName(abbrPrimaryLanguage);
+    QString textSecondaryLanguage = Language::getCombinedName(abbrSecondaryLanguage);
+    m_ui->primaryLanguage->setCurrentText(textPrimaryLanguage);
+    m_ui->secondaryLanguage->setCurrentText(textSecondaryLanguage);
     m_ui->baiduAPPID->setText(grp.readEntry(CONFIG_BAIDU_APPID, ""));
     m_ui->baiduApiKey->setText(grp.readEntry(CONFIG_BAIDU_APIKEY, ""));
     m_ui->youdaoAPPID->setText(grp.readEntry(CONFIG_YOUDAO_APPID, ""));
@@ -94,8 +98,9 @@ void TranslatorConfig::save()
     int indexPrimary = m_ui->primaryLanguage->currentIndex();
     int indexSecondary = m_ui-> secondaryLanguage->currentIndex();
 
-    grp.writeEntry(CONFIG_PRIMARY, m_abbr.at(indexPrimary));
-    grp.writeEntry(CONFIG_SECONDARY, m_abbr.at(indexSecondary));
+    QList<Language*> * languages = Language::getSupportedLanguages();
+    grp.writeEntry(CONFIG_PRIMARY, languages->at(indexPrimary)->getAbbreviation());
+    grp.writeEntry(CONFIG_SECONDARY, languages->at(indexSecondary)->getAbbreviation());
     grp.writeEntry(CONFIG_BAIDU_APPID,m_ui->baiduAPPID->text());
     grp.writeEntry(CONFIG_BAIDU_APIKEY,m_ui->baiduApiKey->text());
     grp.writeEntry(CONFIG_YOUDAO_APPID,m_ui->youdaoAPPID->text());
@@ -139,8 +144,5 @@ void TranslatorConfig::warningHandler() {
         m_ui->noEngineWarning->hide();
     }
 }
-
-const QVector<QString>TranslatorConfig::m_abbr = {"sq", "af", "ar", "hy", "az", "eu", "be", "bs", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "et", "fi", "fr", "gl", "ka", "de", "el", "ht", "hu", "is", "id", "ga", "it", "ja",                   
-                                "kk", "ko", "ky", "la", "lv", "lt", "mk", "mg", "ms", "mt", "mn", "no", "fa", "pl", "pt", "ro", "ru", "sr", "sk", "sl", "es", "sw", "sv", "tl", "tg", "tt", "th", "tr", "uk", "uz", "vi", "cy", "he"};
 
 #include "translator_config.moc"
