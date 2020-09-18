@@ -15,7 +15,7 @@
  *  along with this library; see the file COPYING.LIB.                        *
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
- 
+
 #ifndef RUNNERTRANSLATOR_SUPPORTEDLANGUAGES_H
 #define RUNNERTRANSLATOR_SUPPORTEDLANGUAGES_H
 

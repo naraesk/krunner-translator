@@ -41,11 +41,13 @@ TranslatorConfig::TranslatorConfig(QWidget* parent, const QVariantList& args) :
     warningHandler();
    languages.initialize();
 
-    QList<Language*> * supportedLanguages = languages.getSupportedLanguages();
-    for(auto language: *supportedLanguages) {
-        m_ui->primaryLanguage->addItem(language->getCombinedName());
-        m_ui->secondaryLanguage->addItem(language->getCombinedName());
+    QList<Language> supportedLanguages = languages.getSupportedLanguages();
+    for(auto language: supportedLanguages) {
+        QVariant variant = QVariant::fromValue<Language>(language);
+        m_ui->primaryLanguage->addItem(language.getCombinedName(), variant);
+        m_ui->secondaryLanguage->addItem(language.getCombinedName(), variant);
     }
+
     connect(m_ui->primaryLanguage,SIGNAL(currentTextChanged(QString)),this, SLOT(changed()));
     connect(m_ui->secondaryLanguage,SIGNAL(currentTextChanged(QString)),this, SLOT(changed()));
     connect(m_ui->baiduAPPID,SIGNAL(textChanged(QString)),this,SLOT(changed()));
@@ -95,12 +97,11 @@ void TranslatorConfig::save()
     KConfigGroup grp = cfg->group("Runners");
     grp = KConfigGroup(&grp, "Translator");
 
-    int indexPrimary = m_ui->primaryLanguage->currentIndex();
-    int indexSecondary = m_ui-> secondaryLanguage->currentIndex();
+    Language primaryLanguage= m_ui->primaryLanguage->currentData().value<Language>();
+    Language secondaryLanguage= m_ui->secondaryLanguage->currentData().value<Language>();
 
-    QList<Language*> * supportedLanguages = languages.getSupportedLanguages();
-    grp.writeEntry(CONFIG_PRIMARY, supportedLanguages->at(indexPrimary)->getAbbreviation());
-    grp.writeEntry(CONFIG_SECONDARY, supportedLanguages->at(indexSecondary)->getAbbreviation());
+    grp.writeEntry(CONFIG_PRIMARY, primaryLanguage.getAbbreviation());
+    grp.writeEntry(CONFIG_SECONDARY, secondaryLanguage.getAbbreviation());
     grp.writeEntry(CONFIG_BAIDU_APPID,m_ui->baiduAPPID->text());
     grp.writeEntry(CONFIG_BAIDU_APIKEY,m_ui->baiduApiKey->text());
     grp.writeEntry(CONFIG_YOUDAO_APPID,m_ui->youdaoAPPID->text());

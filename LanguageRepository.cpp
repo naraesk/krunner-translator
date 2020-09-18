@@ -85,18 +85,18 @@ void LanguageRepository::initialize() {
 }
 
 void LanguageRepository::addSupportedLanguage(SupportedLanguage supportedLanguage, QString name, QString abbreviation) {
-    Language *language = new Language(supportedLanguage, name, abbreviation);
-    supportedLanguages->push_back(language);
+    Language language(supportedLanguage, name, abbreviation);
+    supportedLanguages->insert(supportedLanguage, language);
 }
 
-QList<Language *> *LanguageRepository::getSupportedLanguages() {
-    return supportedLanguages;
+QList<Language> LanguageRepository::getSupportedLanguages() {
+    return supportedLanguages->values();
 }
 
 QString LanguageRepository::getCombinedName(QString abbreviation) {
     for(auto language : *supportedLanguages) {
-        if(language->getAbbreviation() == abbreviation) {
-            return language->getCombinedName();
+        if(language.getAbbreviation() == abbreviation) {
+            return language.getCombinedName();
         }
     }
     return "";

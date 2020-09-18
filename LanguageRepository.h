@@ -26,11 +26,10 @@ class LanguageRepository {
 public:
     void addSupportedLanguage(SupportedLanguage language, QString name, QString abbreviation);
     void initialize();
-    QList<Language *> *getSupportedLanguages();
+    QList<struct Language> getSupportedLanguages();
     QString getCombinedName(QString abbreviation);
 private:
-    QList<Language *> *supportedLanguages = new QList<Language*>;
+    QMap<SupportedLanguage, Language> * supportedLanguages = new QMap<SupportedLanguage, Language>;
 };
-
 
 #endif //RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H

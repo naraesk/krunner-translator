@@ -26,17 +26,24 @@
 #include "SupportedLanguages.h"
 
 class Language {
+
 public:
+    Language() = default;
+    ~Language() = default;
     Language(SupportedLanguage language, QString name, QString abbreviation);
+
+    Language(Language const &language) = default;
 
     QString getCombinedName();
 
     QString getAbbreviation();
 
 private:
-    const QString name;
-    const QString abbreviation;
-    const SupportedLanguage language;
+    QString name;
+    QString abbreviation;
+    SupportedLanguage language;
 };
+
+Q_DECLARE_METATYPE(Language)
 
 #endif //RUNNERTRANSLATOR_LANGUAGES_H
