@@ -18,8 +18,6 @@
 
 #include "LanguageRepository.h"
 
-QList<Language *> *LanguageRepository::supportedLanguages = new QList<Language*>;
-
 void LanguageRepository::initialize() {
     addSupportedLanguage("Afrikaans", "af");
     addSupportedLanguage("Albanian", "sq");

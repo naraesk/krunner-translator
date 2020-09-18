@@ -28,8 +28,6 @@ QString Language::getCombinedName() {
     return name + " (" + abbreviation + ")";
 }
 
-
-
 QString Language::getAbbreviation() {
     return abbreviation;
 }

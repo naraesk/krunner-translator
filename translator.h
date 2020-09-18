@@ -21,6 +21,7 @@
 
 #include <KRunner/AbstractRunner>
 #include <provider/GoogleTranslate.h>
+#include "LanguageRepository.h"
 
 class Translator : public Plasma::AbstractRunner
 {
@@ -45,6 +46,7 @@ private:
     bool m_baiduEnable;
     bool m_youdaoEnable;
     QList<CommandLineEngine*> engines;
+    LanguageRepository languages;
 };
 
 K_EXPORT_PLASMA_RUNNER(translator, Translator)

@@ -52,6 +52,7 @@ Translator::Translator(QObject *parent, const QVariantList &args)
     setDefaultSyntax(
             Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<source languagce>-<target languagce>")),
                                  i18n("Translates the word(s) :q: from the source into target language")));
+    languages.initialize();
 }
 
 bool Translator::parseTerm(const QString &term, QString &text, QPair<QString, QString> &language) {

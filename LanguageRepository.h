@@ -24,12 +24,12 @@
 
 class LanguageRepository {
 public:
-    static void addSupportedLanguage(QString name, QString abbreviation);
-    static void initialize();
-    static QList<Language *> *getSupportedLanguages();
-    static QString getCombinedName(QString abbreviation);
+    void addSupportedLanguage(QString name, QString abbreviation);
+    void initialize();
+    QList<Language *> *getSupportedLanguages();
+    QString getCombinedName(QString abbreviation);
 private:
-    static QList<Language *> *supportedLanguages;
+    QList<Language *> *supportedLanguages = new QList<Language*>;
 };
 
 

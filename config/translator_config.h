@@ -21,6 +21,7 @@
 
 #include "ui_translator_config.h"
 #include <KCModule>
+#include <LanguageRepository.h>
 
 static const char CONFIG_PRIMARY[] = "primaryLanguage";
 static const char CONFIG_SECONDARY[] = "secondaryLanguage";
@@ -55,7 +56,7 @@ public Q_SLOTS:
 
 private:
     TranslatorConfigForm* m_ui;
-    const static QVector<QString> m_abbr;
+    LanguageRepository languages;
 };
 
 #endif

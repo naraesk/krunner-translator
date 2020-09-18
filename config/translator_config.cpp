@@ -18,7 +18,6 @@
 
 #include "translator_config.h"
 #include "languages.h"
-#include "LanguageRepository.h"
 #include <KSharedConfig>
 #include <KPluginFactory>
 #include <krunner/abstractrunner.h>
@@ -40,9 +39,9 @@ TranslatorConfig::TranslatorConfig(QWidget* parent, const QVariantList& args) :
     layout->addWidget(m_ui, 0, 0);
 
     warningHandler();
-    LanguageRepository::initialize();
+   languages.initialize();
 
-    QList<Language*> * supportedLanguages = LanguageRepository::getSupportedLanguages();
+    QList<Language*> * supportedLanguages = languages.getSupportedLanguages();
     for(auto language: *supportedLanguages) {
         m_ui->primaryLanguage->addItem(language->getCombinedName());
         m_ui->secondaryLanguage->addItem(language->getCombinedName());
@@ -74,8 +73,8 @@ void TranslatorConfig::load()
     
     QString abbrPrimaryLanguage = grp.readEntry(CONFIG_PRIMARY, "en");
     QString abbrSecondaryLanguage = grp.readEntry(CONFIG_SECONDARY, "es");
-    QString textPrimaryLanguage = LanguageRepository::getCombinedName(abbrPrimaryLanguage);
-    QString textSecondaryLanguage = LanguageRepository::getCombinedName(abbrSecondaryLanguage);
+    QString textPrimaryLanguage = languages.getCombinedName(abbrPrimaryLanguage);
+    QString textSecondaryLanguage = languages.getCombinedName(abbrSecondaryLanguage);
     m_ui->primaryLanguage->setCurrentText(textPrimaryLanguage);
     m_ui->secondaryLanguage->setCurrentText(textSecondaryLanguage);
     m_ui->baiduAPPID->setText(grp.readEntry(CONFIG_BAIDU_APPID, ""));
@@ -99,9 +98,9 @@ void TranslatorConfig::save()
     int indexPrimary = m_ui->primaryLanguage->currentIndex();
     int indexSecondary = m_ui-> secondaryLanguage->currentIndex();
 
-    QList<Language*> * languages = LanguageRepository::getSupportedLanguages();
-    grp.writeEntry(CONFIG_PRIMARY, languages->at(indexPrimary)->getAbbreviation());
-    grp.writeEntry(CONFIG_SECONDARY, languages->at(indexSecondary)->getAbbreviation());
+    QList<Language*> * supportedLanguages = languages.getSupportedLanguages();
+    grp.writeEntry(CONFIG_PRIMARY, supportedLanguages->at(indexPrimary)->getAbbreviation());
+    grp.writeEntry(CONFIG_SECONDARY, supportedLanguages->at(indexSecondary)->getAbbreviation());
     grp.writeEntry(CONFIG_BAIDU_APPID,m_ui->baiduAPPID->text());
     grp.writeEntry(CONFIG_BAIDU_APIKEY,m_ui->baiduApiKey->text());
     grp.writeEntry(CONFIG_YOUDAO_APPID,m_ui->youdaoAPPID->text());

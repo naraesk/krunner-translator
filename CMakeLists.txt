@@ -19,11 +19,13 @@ set(krunner_translator_SRCS
     translator.cpp
         provider/baidu.cpp
         provider/youdao.cpp
-        provider/GoogleTranslate.cpp provider/GoogleTranslate.h translateShellProcess.cpp translateShellProcess.h provider/Bing.cpp provider/Bing.h)
+        provider/GoogleTranslate.cpp provider/GoogleTranslate.h translateShellProcess.cpp translateShellProcess.h provider/Bing.cpp provider/Bing.h
+        LanguageRepository.cpp LanguageRepository.h
+        languages.cpp languages.h)
 
 set(kcm_krunner_translator_SRCS
     config/translator_config.cpp
-        api/CommandLineEngine.h config/languages.cpp config/languages.h config/LanguageRepository.cpp config/LanguageRepository.h)
+        api/CommandLineEngine.h languages.cpp languages.h LanguageRepository.cpp LanguageRepository.h)
 
 ki18n_wrap_ui(kcm_krunner_translator_SRCS config/translator_config.ui)
 add_library(kcm_krunner_translator MODULE ${kcm_krunner_translator_SRCS})
