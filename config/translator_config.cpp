@@ -18,6 +18,7 @@
 
 #include "translator_config.h"
 #include "languages.h"
+#include "LanguageRepository.h"
 #include <KSharedConfig>
 #include <KPluginFactory>
 #include <krunner/abstractrunner.h>
@@ -39,9 +40,9 @@ TranslatorConfig::TranslatorConfig(QWidget* parent, const QVariantList& args) :
     layout->addWidget(m_ui, 0, 0);
 
     warningHandler();
-    Language::initialize();
+    LanguageRepository::initialize();
 
-    QList<Language*> * supportedLanguages = Language::getSupportedLanguages();
+    QList<Language*> * supportedLanguages = LanguageRepository::getSupportedLanguages();
     for(auto language: *supportedLanguages) {
         m_ui->primaryLanguage->addItem(language->getCombinedName());
         m_ui->secondaryLanguage->addItem(language->getCombinedName());
@@ -73,8 +74,8 @@ void TranslatorConfig::load()
     
     QString abbrPrimaryLanguage = grp.readEntry(CONFIG_PRIMARY, "en");
     QString abbrSecondaryLanguage = grp.readEntry(CONFIG_SECONDARY, "es");
-    QString textPrimaryLanguage = Language::getCombinedName(abbrPrimaryLanguage);
-    QString textSecondaryLanguage = Language::getCombinedName(abbrSecondaryLanguage);
+    QString textPrimaryLanguage = LanguageRepository::getCombinedName(abbrPrimaryLanguage);
+    QString textSecondaryLanguage = LanguageRepository::getCombinedName(abbrSecondaryLanguage);
     m_ui->primaryLanguage->setCurrentText(textPrimaryLanguage);
     m_ui->secondaryLanguage->setCurrentText(textSecondaryLanguage);
     m_ui->baiduAPPID->setText(grp.readEntry(CONFIG_BAIDU_APPID, ""));
@@ -98,7 +99,7 @@ void TranslatorConfig::save()
     int indexPrimary = m_ui->primaryLanguage->currentIndex();
     int indexSecondary = m_ui-> secondaryLanguage->currentIndex();
 
-    QList<Language*> * languages = Language::getSupportedLanguages();
+    QList<Language*> * languages = LanguageRepository::getSupportedLanguages();
     grp.writeEntry(CONFIG_PRIMARY, languages->at(indexPrimary)->getAbbreviation());
     grp.writeEntry(CONFIG_SECONDARY, languages->at(indexSecondary)->getAbbreviation());
     grp.writeEntry(CONFIG_BAIDU_APPID,m_ui->baiduAPPID->text());

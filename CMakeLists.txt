@@ -23,7 +23,7 @@ set(krunner_translator_SRCS
 
 set(kcm_krunner_translator_SRCS
     config/translator_config.cpp
-        api/CommandLineEngine.h config/languages.cpp config/languages.h)
+        api/CommandLineEngine.h config/languages.cpp config/languages.h config/LanguageRepository.cpp config/LanguageRepository.h)
 
 ki18n_wrap_ui(kcm_krunner_translator_SRCS config/translator_config.ui)
 add_library(kcm_krunner_translator MODULE ${kcm_krunner_translator_SRCS})

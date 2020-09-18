@@ -18,99 +18,17 @@
 
 #include "languages.h"
 
-QList<Language *> *Language::supportedLanguages = new QList<Language*>;
+
 
 Language::Language(QString name, QString abbreviation)
 : name (name), abbreviation(abbreviation) {
-}
-
-void Language::initialize() {
-    addSupportedLanguage("Afrikaans", "af");
-    addSupportedLanguage("Albanian", "sq");
-    addSupportedLanguage("Arabic", "ar");
-    addSupportedLanguage("Armenian", "hy");
-    addSupportedLanguage("Azerbaijan", "az");
-    addSupportedLanguage("Basque", "eu");
-    addSupportedLanguage("Belarusian", "be");
-    addSupportedLanguage("Bosnian", "bs");
-    addSupportedLanguage("Bulgarian", "bg");
-    addSupportedLanguage("Catalan", "ca");
-    addSupportedLanguage("Chinese", "zh");
-    addSupportedLanguage("Croatian", "hr");
-    addSupportedLanguage("Czech", "cs");
-    addSupportedLanguage("Danish", "da");
-    addSupportedLanguage("Dutch", "nl");
-    addSupportedLanguage("English", "en");
-    addSupportedLanguage("Estonian", "et");
-    addSupportedLanguage("Finish", "fi");
-    addSupportedLanguage("French", "fr");
-    addSupportedLanguage("Galician", "gl");
-    addSupportedLanguage("Georgian", "ka");
-    addSupportedLanguage("German", "de");
-    addSupportedLanguage("Greek", "el");
-    addSupportedLanguage("Haitian (Creole)", "ht");
-    addSupportedLanguage("Hungarian", "hu");
-    addSupportedLanguage("Icelandic", "is");
-    addSupportedLanguage("Indonesian", "id");
-    addSupportedLanguage("Irish", "ga");
-    addSupportedLanguage("Italian", "it");
-    addSupportedLanguage("Japanese", "ja");
-    addSupportedLanguage("Kazakh", "kk");
-    addSupportedLanguage("Korean", "ko");
-    addSupportedLanguage("Kyrgyz", "ky");
-    addSupportedLanguage("Latin", "la");
-    addSupportedLanguage("Latvian", "lv");
-    addSupportedLanguage("Lithuanian", "lt");
-    addSupportedLanguage("Macedonian", "mk");
-    addSupportedLanguage("Malagasy", "mg");
-    addSupportedLanguage("Malay", "ms");
-    addSupportedLanguage("Maltese", "mt");
-    addSupportedLanguage("Mongolian", "mn");
-    addSupportedLanguage("Norwegian", "no");
-    addSupportedLanguage("Persian", "fa");
-    addSupportedLanguage("Polish", "pl");
-    addSupportedLanguage("Portuguese", "pt");
-    addSupportedLanguage("Romanian", "ro");
-    addSupportedLanguage("Russian", "ru");
-    addSupportedLanguage("Serbian", "sr");
-    addSupportedLanguage("Slovakian", "sk");
-    addSupportedLanguage("Slovenian", "sl");
-    addSupportedLanguage("Spanish", "es");
-    addSupportedLanguage("Swahili", "sw");
-    addSupportedLanguage("Swedish", "sv");
-    addSupportedLanguage("Tagalog", "tl");
-    addSupportedLanguage("Tajik", "tg");
-    addSupportedLanguage("Tatar", "tt");
-    addSupportedLanguage("Thai", "th");
-    addSupportedLanguage("Turkish", "tr");
-    addSupportedLanguage("Ukrainian", "uk");
-    addSupportedLanguage("Uzbek", "uz");
-    addSupportedLanguage("Vietnamese", "vi");
-    addSupportedLanguage("Welsh", "cy");
-    addSupportedLanguage("Yiddish", "he");
-}
-
-void Language::addSupportedLanguage(QString name, QString abbreviation) {
-    Language *language = new Language(name, abbreviation);
-    supportedLanguages->push_back(language);
-}
-
-QList<Language *> *Language::getSupportedLanguages() {
-    return supportedLanguages;
 }
 
 QString Language::getCombinedName() {
     return name + " (" + abbreviation + ")";
 }
 
-QString Language::getCombinedName(QString abbreviation) {
-    for(auto language : *supportedLanguages) {
-        if(language->abbreviation == abbreviation) {
-            return language->getCombinedName();
-        }
-    }
-    return "";
-}
+
 
 QString Language::getAbbreviation() {
     return abbreviation;

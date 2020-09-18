@@ -16,25 +16,21 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef RUNNERTRANSLATOR_LANGUAGES_H
-#define RUNNERTRANSLATOR_LANGUAGES_H
+#ifndef RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H
+#define RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H
 
 
-#include <QtCore/QString>
-#include <QtCore/QList>
-#include <QtCore/QVariant>
+#include "languages.h"
 
-class Language {
+class LanguageRepository {
 public:
-    Language(QString name, QString abbreviation);
-
-    QString getCombinedName();
-
-    QString getAbbreviation();
-
+    static void addSupportedLanguage(QString name, QString abbreviation);
+    static void initialize();
+    static QList<Language *> *getSupportedLanguages();
+    static QString getCombinedName(QString abbreviation);
 private:
-    const QString name;
-    const QString abbreviation;
+    static QList<Language *> *supportedLanguages;
 };
 
-#endif //RUNNERTRANSLATOR_LANGUAGES_H
+
+#endif //RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H
