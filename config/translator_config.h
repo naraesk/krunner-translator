@@ -34,28 +34,29 @@ static const char CONFIG_YOUDAO_ENABLE[] = "youdaoEnable";
 static const char CONFIG_GOOGLE_ENABLE[] = "googleEnable";
 static const char CONFIG_BING_ENABLE[] = "bingEnable";
 
-class TranslatorConfigForm : public QWidget, public Ui::TranslatorConfigUi
-{
-    Q_OBJECT
+class TranslatorConfigForm : public QWidget, public Ui::TranslatorConfigUi {
+Q_OBJECT
 
 public:
-    explicit TranslatorConfigForm(QWidget* parent);
+    explicit TranslatorConfigForm(QWidget *parent);
 };
 
-class TranslatorConfig : public KCModule
-{
-    Q_OBJECT
+class TranslatorConfig : public KCModule {
+Q_OBJECT
 
 public:
-    explicit TranslatorConfig(QWidget* parent = nullptr, const QVariantList& args = QVariantList());
-    
+    explicit TranslatorConfig(QWidget *parent = nullptr, const QVariantList &args = QVariantList());
+
 public Q_SLOTS:
+
     void save() override;
+
     void load() override;
+
     void warningHandler();
 
 private:
-    TranslatorConfigForm* m_ui;
+    TranslatorConfigForm *m_ui;
     LanguageRepository languages;
 };
 

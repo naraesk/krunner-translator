@@ -94,8 +94,8 @@ QList<Language> LanguageRepository::getSupportedLanguages() {
 }
 
 QString LanguageRepository::getCombinedName(QString abbreviation) {
-    for(auto language : *supportedLanguages) {
-        if(language.getAbbreviation() == abbreviation) {
+    for (auto language : *supportedLanguages) {
+        if (language.getAbbreviation() == abbreviation) {
             return language.getCombinedName();
         }
     }

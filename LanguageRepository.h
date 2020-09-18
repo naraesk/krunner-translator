@@ -19,17 +19,20 @@
 #ifndef RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H
 #define RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H
 
-
 #include "languages.h"
 
 class LanguageRepository {
 public:
     void addSupportedLanguage(SupportedLanguage language, QString name, QString abbreviation);
+
     void initialize();
+
     QList<struct Language> getSupportedLanguages();
+
     QString getCombinedName(QString abbreviation);
+
 private:
-    QMap<SupportedLanguage, Language> * supportedLanguages = new QMap<SupportedLanguage, Language>;
+    QMap<SupportedLanguage, Language> *supportedLanguages = new QMap<SupportedLanguage, Language>;
 };
 
 #endif //RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H

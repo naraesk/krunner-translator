@@ -97,7 +97,7 @@ void Translator::match(Plasma::RunnerContext &context) {
         connect(&youdao, SIGNAL(finished()), &youdaoLoop, SLOT(quit()));
         youdaoLoop.exec();
     }
-    for(auto engine : engines) {
+    for (auto engine : engines) {
         Plasma::QueryMatch match = engine->translate(text, language);
         match.setSelectedAction(actions.first());
         context.addMatch(match);
@@ -132,14 +132,14 @@ void Translator::reloadConfiguration() {
     m_youdaoEnable = grp.readEntry(CONFIG_YOUDAO_ENABLE, false);
 
     const bool googleEnable = grp.readEntry(CONFIG_GOOGLE_ENABLE, true);
-    if(googleEnable) {
-        CommandLineEngine * googleTranslate = new GoogleTranslate(this);
+    if (googleEnable) {
+        CommandLineEngine *googleTranslate = new GoogleTranslate(this);
         engines.push_front(googleTranslate);
     }
 
     const bool bingEnable = grp.readEntry(CONFIG_BING_ENABLE, false);
-    if(bingEnable) {
-        CommandLineEngine * bingTranslate = new Bing(this);
+    if (bingEnable) {
+        CommandLineEngine *bingTranslate = new Bing(this);
         engines.push_front(bingTranslate);
     }
 }

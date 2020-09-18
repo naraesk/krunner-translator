@@ -26,53 +26,50 @@
 
 K_PLUGIN_FACTORY(TranslatorConfigFactory, registerPlugin<TranslatorConfig>("kcm_krunner_translator");)
 
-TranslatorConfigForm::TranslatorConfigForm(QWidget* parent) : QWidget(parent)
-{
+TranslatorConfigForm::TranslatorConfigForm(QWidget *parent) : QWidget(parent) {
     setupUi(this);
 }
 
-TranslatorConfig::TranslatorConfig(QWidget* parent, const QVariantList& args) :
-        KCModule(parent, args)
-{
+TranslatorConfig::TranslatorConfig(QWidget *parent, const QVariantList &args) :
+        KCModule(parent, args) {
     m_ui = new TranslatorConfigForm(this);
-    QGridLayout* layout = new QGridLayout(this);
+    QGridLayout *layout = new QGridLayout(this);
     layout->addWidget(m_ui, 0, 0);
 
     warningHandler();
-   languages.initialize();
+    languages.initialize();
 
     QList<Language> supportedLanguages = languages.getSupportedLanguages();
-    for(auto language: supportedLanguages) {
+    for (auto language: supportedLanguages) {
         QVariant variant = QVariant::fromValue<Language>(language);
         m_ui->primaryLanguage->addItem(language.getCombinedName(), variant);
         m_ui->secondaryLanguage->addItem(language.getCombinedName(), variant);
     }
 
-    connect(m_ui->primaryLanguage,SIGNAL(currentTextChanged(QString)),this, SLOT(changed()));
-    connect(m_ui->secondaryLanguage,SIGNAL(currentTextChanged(QString)),this, SLOT(changed()));
-    connect(m_ui->baiduAPPID,SIGNAL(textChanged(QString)),this,SLOT(changed()));
-    connect(m_ui->baiduApiKey,SIGNAL(textChanged(QString)),this,SLOT(changed()));
-    connect(m_ui->youdaoAPPID,SIGNAL(textChanged(QString)),this,SLOT(changed()));
-    connect(m_ui->youdaoAppSec,SIGNAL(textChanged(QString)),this,SLOT(changed()));
-    connect(m_ui->baiduEnable, SIGNAL(stateChanged(int)),this,SLOT(changed()));
-    connect(m_ui->youdaoEnable, SIGNAL(stateChanged(int)),this,SLOT(changed()));
+    connect(m_ui->primaryLanguage, SIGNAL(currentTextChanged(QString)), this, SLOT(changed()));
+    connect(m_ui->secondaryLanguage, SIGNAL(currentTextChanged(QString)), this, SLOT(changed()));
+    connect(m_ui->baiduAPPID, SIGNAL(textChanged(QString)), this, SLOT(changed()));
+    connect(m_ui->baiduApiKey, SIGNAL(textChanged(QString)), this, SLOT(changed()));
+    connect(m_ui->youdaoAPPID, SIGNAL(textChanged(QString)), this, SLOT(changed()));
+    connect(m_ui->youdaoAppSec, SIGNAL(textChanged(QString)), this, SLOT(changed()));
+    connect(m_ui->baiduEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
+    connect(m_ui->youdaoEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
     connect(m_ui->googleEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
     connect(m_ui->bingEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
-    
+
     connect(m_ui->bingEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
     connect(m_ui->googleEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
     connect(m_ui->baiduEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
     connect(m_ui->youdaoEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
 }
 
-void TranslatorConfig::load()
-{
+void TranslatorConfig::load() {
     KCModule::load();
 
     KSharedConfig::Ptr cfg = KSharedConfig::openConfig(QStringLiteral("krunnerrc"));
     KConfigGroup grp = cfg->group("Runners");
     grp = KConfigGroup(&grp, "Translator");
-    
+
     QString abbrPrimaryLanguage = grp.readEntry(CONFIG_PRIMARY, "en");
     QString abbrSecondaryLanguage = grp.readEntry(CONFIG_SECONDARY, "es");
     QString textPrimaryLanguage = languages.getCombinedName(abbrPrimaryLanguage);
@@ -89,23 +86,22 @@ void TranslatorConfig::load()
     m_ui->bingEnable->setChecked(grp.readEntry(CONFIG_BING_ENABLE, false));
 }
 
-void TranslatorConfig::save()
-{
+void TranslatorConfig::save() {
     KCModule::save();
 
     KSharedConfig::Ptr cfg = KSharedConfig::openConfig(QStringLiteral("krunnerrc"));
     KConfigGroup grp = cfg->group("Runners");
     grp = KConfigGroup(&grp, "Translator");
 
-    Language primaryLanguage= m_ui->primaryLanguage->currentData().value<Language>();
-    Language secondaryLanguage= m_ui->secondaryLanguage->currentData().value<Language>();
+    Language primaryLanguage = m_ui->primaryLanguage->currentData().value<Language>();
+    Language secondaryLanguage = m_ui->secondaryLanguage->currentData().value<Language>();
 
     grp.writeEntry(CONFIG_PRIMARY, primaryLanguage.getAbbreviation());
     grp.writeEntry(CONFIG_SECONDARY, secondaryLanguage.getAbbreviation());
-    grp.writeEntry(CONFIG_BAIDU_APPID,m_ui->baiduAPPID->text());
-    grp.writeEntry(CONFIG_BAIDU_APIKEY,m_ui->baiduApiKey->text());
-    grp.writeEntry(CONFIG_YOUDAO_APPID,m_ui->youdaoAPPID->text());
-    grp.writeEntry(CONFIG_YOUDAO_APPSEC,m_ui->youdaoAppSec->text());
+    grp.writeEntry(CONFIG_BAIDU_APPID, m_ui->baiduAPPID->text());
+    grp.writeEntry(CONFIG_BAIDU_APIKEY, m_ui->baiduApiKey->text());
+    grp.writeEntry(CONFIG_YOUDAO_APPID, m_ui->youdaoAPPID->text());
+    grp.writeEntry(CONFIG_YOUDAO_APPSEC, m_ui->youdaoAppSec->text());
     grp.writeEntry(CONFIG_BAIDU_ENABLE, m_ui->baiduEnable->isChecked());
     grp.writeEntry(CONFIG_YOUDAO_ENABLE, m_ui->youdaoEnable->isChecked());
     grp.writeEntry(CONFIG_GOOGLE_ENABLE, m_ui->googleEnable->isChecked());
@@ -114,10 +110,10 @@ void TranslatorConfig::save()
 }
 
 void TranslatorConfig::warningHandler() {
-    
+
     // show warning if only bing is enabled
-    
-    if(m_ui->bingEnable->isChecked() &&
+
+    if (m_ui->bingEnable->isChecked() &&
         !m_ui->googleEnable->isChecked() &&
         !m_ui->baiduEnable->isChecked() &&
         !m_ui->youdaoEnable->isChecked()) {
@@ -125,18 +121,18 @@ void TranslatorConfig::warningHandler() {
     } else {
         m_ui->bingWarningOnlyEngine->hide();
     }
-    
+
     // show warning if bing is enabled
-    
-    if(m_ui->bingEnable->isChecked()){
+
+    if (m_ui->bingEnable->isChecked()) {
         m_ui->bingWarningReliability->show();
     } else {
         m_ui->bingWarningReliability->hide();
     }
-    
+
     // show error message if all engines are disabled
-    
-    if(!m_ui->bingEnable->isChecked() &&
+
+    if (!m_ui->bingEnable->isChecked() &&
         !m_ui->googleEnable->isChecked() &&
         !m_ui->baiduEnable->isChecked() &&
         !m_ui->youdaoEnable->isChecked()) {

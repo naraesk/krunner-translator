@@ -29,7 +29,9 @@ class Language {
 
 public:
     Language() = default;
+
     ~Language() = default;
+
     Language(SupportedLanguage language, QString name, QString abbreviation);
 
     Language(Language const &language) = default;
