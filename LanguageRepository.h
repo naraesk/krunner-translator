@@ -24,7 +24,7 @@
 
 class LanguageRepository {
 public:
-    void addSupportedLanguage(QString name, QString abbreviation);
+    void addSupportedLanguage(SupportedLanguage language, QString name, QString abbreviation);
     void initialize();
     QList<Language *> *getSupportedLanguages();
     QString getCombinedName(QString abbreviation);

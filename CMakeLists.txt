@@ -21,7 +21,7 @@ set(krunner_translator_SRCS
         provider/youdao.cpp
         provider/GoogleTranslate.cpp provider/GoogleTranslate.h translateShellProcess.cpp translateShellProcess.h provider/Bing.cpp provider/Bing.h
         LanguageRepository.cpp LanguageRepository.h
-        languages.cpp languages.h)
+        languages.cpp languages.h SupportedLanguages.h)
 
 set(kcm_krunner_translator_SRCS
     config/translator_config.cpp

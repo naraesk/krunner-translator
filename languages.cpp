@@ -20,8 +20,8 @@
 
 
 
-Language::Language(QString name, QString abbreviation)
-: name (name), abbreviation(abbreviation) {
+Language::Language(SupportedLanguage language, QString name, QString abbreviation)
+: name (name), abbreviation(abbreviation), language(language) {
 }
 
 QString Language::getCombinedName() {

@@ -23,10 +23,11 @@
 #include <QtCore/QString>
 #include <QtCore/QList>
 #include <QtCore/QVariant>
+#include "SupportedLanguages.h"
 
 class Language {
 public:
-    Language(QString name, QString abbreviation);
+    Language(SupportedLanguage language, QString name, QString abbreviation);
 
     QString getCombinedName();
 
@@ -35,6 +36,7 @@ public:
 private:
     const QString name;
     const QString abbreviation;
+    const SupportedLanguage language;
 };
 
 #endif //RUNNERTRANSLATOR_LANGUAGES_H
