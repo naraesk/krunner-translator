@@ -65,7 +65,11 @@ bool Translator::parseTerm(const QString &term, QString &text, QPair<QString, QS
         int languageIndex = languageTerm.indexOf("-");
         language.first = languageTerm.left(languageIndex);
         language.second = languageTerm.mid(languageIndex + 1);
-
+        if(languages.containsAbbreviation( language.first) && languages.containsAbbreviation( language.second) ) {
+            return true;
+        } else {
+            return false;
+        }
     } else {
         if (m_primary == languageTerm) {
             language.first = m_secondary;

@@ -29,6 +29,8 @@ public:
 
     QList<struct Language> getSupportedLanguages();
 
+    bool containsAbbreviation(QString abbreviation);
+
     QString getCombinedName(QString abbreviation);
 
 private:

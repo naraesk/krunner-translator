@@ -101,3 +101,11 @@ QString LanguageRepository::getCombinedName(QString abbreviation) {
     }
     return "";
 }
+
+bool LanguageRepository::containsAbbreviation(QString abbreviation) {
+    for(auto language: supportedLanguages->values()) {
+        if(language.getAbbreviation() == abbreviation)
+            return true;
+    }
+    return false;
+}
