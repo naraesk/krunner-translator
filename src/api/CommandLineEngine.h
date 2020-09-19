@@ -24,6 +24,7 @@
 class CommandLineEngine {
 public:
     virtual Plasma::QueryMatch translate(const QString &text, const QPair<QString, QString> &language) = 0;
+
     virtual ~CommandLineEngine() {};
 };
 

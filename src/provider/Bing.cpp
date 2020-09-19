@@ -26,7 +26,7 @@ Bing::Bing(Plasma::AbstractRunner *runner)
 Plasma::QueryMatch Bing::translate(const QString &text, const QPair<QString, QString> &language) {
     TranslateShellProcess process("bing");
     QString result = process.translate(language, text);
-    if(result == "\n") { // empty result
+    if (result == "\n") { // empty result
         match.setType(Plasma::QueryMatch::NoMatch);
     } else {
         match.setData(QStringLiteral("audio"));

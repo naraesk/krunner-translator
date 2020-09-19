@@ -21,7 +21,8 @@
 TranslateShellProcess::TranslateShellProcess(QObject *parent) : QProcess(parent) {
 }
 
-TranslateShellProcess::TranslateShellProcess(const QString &engine_, QObject *parent) : QProcess(parent), engine (engine_) {
+TranslateShellProcess::TranslateShellProcess(const QString &engine_, QObject *parent) : QProcess(parent),
+                                                                                        engine(engine_) {
 }
 
 TranslateShellProcess::~TranslateShellProcess() = default;
