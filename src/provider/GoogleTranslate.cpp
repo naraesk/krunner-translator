@@ -26,11 +26,11 @@ GoogleTranslate::GoogleTranslate(Plasma::AbstractRunner *runner)
 Plasma::QueryMatch GoogleTranslate::translate(const QString &text, const QPair<QString, QString> &language) {
     TranslateShellProcess process;
     QString result = process.translate(language, text);
-    match.setData("audio");
+    match.setData(QStringLiteral("audio"));
     match.setType(Plasma::QueryMatch::ExactMatch);
-    match.setIcon(QIcon::fromTheme("applications-education-language"));
+    match.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
     match.setText(result);
-    match.setSubtext("Google Translate");
+    match.setSubtext(QStringLiteral("Google Translate"));
     match.setRelevance(1);
     return match;
 }

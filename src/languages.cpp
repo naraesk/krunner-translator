@@ -23,7 +23,7 @@ Language::Language(SupportedLanguage language, QString name, QString abbreviatio
 }
 
 QString Language::getCombinedName() {
-    return name + " (" + abbreviation + ")";
+    return name + QStringLiteral(" (") + abbreviation + QStringLiteral(")");
 }
 
 QString Language::getAbbreviation() {

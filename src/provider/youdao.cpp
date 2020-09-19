@@ -54,14 +54,14 @@ Youdao::Youdao(Plasma::AbstractRunner * runner, Plasma::RunnerContext& context, 
     //QString signSha256 = QString::fromUtf8(hash);
     
     QUrlQuery postData;
-    postData.addQueryItem("q", text);
-    postData.addQueryItem("from", langMapper(language.first));
-    postData.addQueryItem("to", langMapper(language.second));
-    postData.addQueryItem("appKey", appid);
-    postData.addQueryItem("salt", salt);
-    postData.addQueryItem("sign", hash.toHex());
-    postData.addQueryItem("signType", "v3");
-    postData.addQueryItem("curtime", QString::number(timestamp));
+    postData.addQueryItem(QStringLiteral("q"), text);
+    postData.addQueryItem(QStringLiteral("from"), langMapper(language.first));
+    postData.addQueryItem(QStringLiteral("to"), langMapper(language.second));
+    postData.addQueryItem(QStringLiteral("appKey"), appid);
+    postData.addQueryItem(QStringLiteral("salt"), salt);
+    postData.addQueryItem(QStringLiteral("sign"), hash.toHex());
+    postData.addQueryItem(QStringLiteral("signType"), "v3");
+    postData.addQueryItem(QStringLiteral("curtime"), QString::number(timestamp));
 
     QNetworkRequest request;
     request.setUrl(QUrl("http://openapi.youdao.com/provider"));
@@ -115,7 +115,7 @@ void Youdao::parseResult(QNetworkReply* reply)
     } else {
         Plasma::QueryMatch match(m_runner);
         match.setType(Plasma::QueryMatch::HelperMatch);
-        match.setIcon(QIcon::fromTheme("dialog-error"));
+        match.setIcon(QIcon::fromTheme(QStringLiteral("dialog-error")));
         match.setText(QString::fromUtf8("(Youdao) Error code: %1").arg(QString::number(errorCode)));
         match.setRelevance(1);
         m_context.addMatch(match);

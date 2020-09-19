@@ -69,11 +69,11 @@ void Baidu::parseResult(QNetworkReply* reply)
 
     const QString s = QString::fromUtf8(reply->readAll());
     const QJsonObject jsonObject = QJsonDocument::fromJson(s.toUtf8()).object();
-    if (jsonObject.contains("error_code"))
+    if (jsonObject.contains(QStringLiteral("error_code")))
     {
         Plasma::QueryMatch match(m_runner);
         match.setType(Plasma::QueryMatch::HelperMatch);
-        match.setIcon(QIcon::fromTheme("dialog-error"));
+        match.setIcon(QIcon::fromTheme(QStringLiteral("dialog-error")));
         match.setText(QString::fromUtf8("(Baidu) Error code: %1").arg(jsonObject.find("error_code").value().toString()));
         match.setRelevance(1);
         m_context.addMatch(match);

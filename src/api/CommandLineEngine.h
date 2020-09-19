@@ -19,7 +19,6 @@
 #ifndef RUNNERTRANSLATOR_COMMANDLINEENGINE_H
 #define RUNNERTRANSLATOR_COMMANDLINEENGINE_H
 
-
 #include <KRunner/krunner/querymatch.h>
 
 class CommandLineEngine {

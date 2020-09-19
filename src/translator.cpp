@@ -31,7 +31,7 @@
 
 Translator::Translator(QObject *parent, const QVariantList &args)
         : Plasma::AbstractRunner(parent, args) {
-    setObjectName(QLatin1String("Translator"));
+    setObjectName(QStringLiteral("Translator"));
     setIgnoredTypes(Plasma::RunnerContext::Directory |
                     Plasma::RunnerContext::File |
                     Plasma::RunnerContext::NetworkLocation);
@@ -56,7 +56,7 @@ Translator::Translator(QObject *parent, const QVariantList &args)
 }
 
 bool Translator::parseTerm(const QString &term, QString &text, QPair<QString, QString> &language) {
-    const int index = term.indexOf(" ");
+    const int index = term.indexOf(QStringLiteral(" "));
     if (index == -1) return false;
     text = term.mid(index + 1);
     const QString languageTerm = term.left(index);
@@ -118,7 +118,7 @@ void Translator::run(const Plasma::RunnerContext &context, const Plasma::QueryMa
 }
 
 QList<QAction *> Translator::actionsForMatch(const Plasma::QueryMatch &match) {
-    if (match.data().toString() == "audio") {
+    if (match.data().toString() == QStringLiteral("audio")) {
         return actions;
     }
     return {actions.first()};
@@ -126,12 +126,12 @@ QList<QAction *> Translator::actionsForMatch(const Plasma::QueryMatch &match) {
 
 void Translator::reloadConfiguration() {
     auto grp = config();
-    m_primary = grp.readEntry(CONFIG_PRIMARY, "en");
-    m_secondary = grp.readEntry(CONFIG_SECONDARY, "es");
-    m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID, "");
-    m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY, "");
-    m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID, "");
-    m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC, "");
+    m_primary = grp.readEntry(CONFIG_PRIMARY, QStringLiteral("en"));
+    m_secondary = grp.readEntry(CONFIG_SECONDARY, QStringLiteral("es"));
+    m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID, QStringLiteral(""));
+    m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY, QStringLiteral(""));
+    m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID, QStringLiteral(""));
+    m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC, QStringLiteral(""));
     m_baiduEnable = grp.readEntry(CONFIG_BAIDU_ENABLE, false);
     m_youdaoEnable = grp.readEntry(CONFIG_YOUDAO_ENABLE, false);
 

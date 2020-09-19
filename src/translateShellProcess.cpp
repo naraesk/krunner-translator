@@ -28,10 +28,10 @@ TranslateShellProcess::~TranslateShellProcess() = default;
 
 QString TranslateShellProcess::translate(const QPair<QString, QString> &language, const QString &text) {
     QStringList arguments;
-    arguments << language.first + ":" + language.second
+    arguments << language.first + QStringLiteral(":") + language.second
               << text
-              << "--brief"
-              << "-e"
+              << QStringLiteral("--brief")
+              << QStringLiteral("-e")
               << engine;
     start("trans", arguments);
     waitForFinished();
@@ -42,8 +42,8 @@ QString TranslateShellProcess::translate(const QPair<QString, QString> &language
 void TranslateShellProcess::play(const QString &text) {
     QStringList arguments;
     arguments << text
-              << "-speak"
-              << "-no-translate";
+              << QStringLiteral("-speak")
+              << QStringLiteral("-no-translate");
     start("trans", arguments);
     waitForFinished();
 }
