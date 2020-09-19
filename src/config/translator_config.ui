@@ -29,53 +29,34 @@
      <property name="checkable">
       <bool>false</bool>
      </property>
-     <layout class="QFormLayout" name="formLayout_3">
-      <property name="fieldGrowthPolicy">
-       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-      </property>
+     <layout class="QFormLayout" name="formLayout_2">
       <item row="0" column="0">
-       <layout class="QFormLayout" name="formLayout_2">
-        <property name="sizeConstraint">
-         <enum>QLayout::SetMinimumSize</enum>
+       <widget class="QLabel" name="label_secondary">
+        <property name="text">
+         <string>Default source language</string>
         </property>
-        <property name="fieldGrowthPolicy">
-         <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="primaryLanguage">
+        <property name="toolTip">
+         <string>Will be used if no source language is specified.</string>
         </property>
-        <property name="labelAlignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_primary">
+        <property name="text">
+         <string>Alternative source language</string>
         </property>
-        <property name="formAlignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="secondaryLanguage">
+        <property name="toolTip">
+         <string>Will be used if target language and default source language are identical.</string>
         </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_secondary">
-          <property name="text">
-           <string>Default source language</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QComboBox" name="primaryLanguage">
-          <property name="toolTip">
-           <string>Will be used if no source language is specified.</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_primary">
-          <property name="text">
-           <string>Alternative source language</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QComboBox" name="secondaryLanguage">
-          <property name="toolTip">
-           <string>Will be used if target language and default source language are identical.</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       </widget>
       </item>
      </layout>
     </widget>
