@@ -18,7 +18,7 @@
       <bool>false</bool>
      </property>
      <property name="title">
-      <string>Sour&amp;ce Language Settings</string>
+      <string/>
      </property>
      <property name="alignment">
       <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
