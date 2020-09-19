@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2013 – 2018 by David Baum <david.baum@naraesk.eu>           *
+ *  Copyright (C) 2013 – 2020 by David Baum <david.baum@naraesk.eu>           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -16,48 +16,20 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef TRANSLATORCONFIG_H
-#define TRANSLATORCONFIG_H
+#ifndef RUNNERTRANSLATOR_BING_H
+#define RUNNERTRANSLATOR_BING_H
 
-#include "ui_translator_config.h"
-#include <KCModule>
-#include <LanguageRepository.h>
+#include <KRunner/AbstractRunner>
+#include <src/api/CommandLineEngine.h>
 
-static const char CONFIG_PRIMARY[] = "primaryLanguage";
-static const char CONFIG_SECONDARY[] = "secondaryLanguage";
-static const char CONFIG_BAIDU_APPID[] = "baiduAPPID";
-static const char CONFIG_BAIDU_APIKEY[] = "baiduAPIKey";
-static const char CONFIG_YOUDAO_APPID[] = "youdaoAPPID";
-static const char CONFIG_YOUDAO_APPSEC[] = "youdaoAPPSec";
-static const char CONFIG_BAIDU_ENABLE[] = "baiduEnable";
-static const char CONFIG_YOUDAO_ENABLE[] = "youdaoEnable";
-static const char CONFIG_GOOGLE_ENABLE[] = "googleEnable";
-static const char CONFIG_BING_ENABLE[] = "bingEnable";
-
-class TranslatorConfigForm : public QWidget, public Ui::TranslatorConfigUi {
-Q_OBJECT
-
+class Bing : public CommandLineEngine {
 public:
-    explicit TranslatorConfigForm(QWidget *parent);
-};
-
-class TranslatorConfig : public KCModule {
-Q_OBJECT
-
-public:
-    explicit TranslatorConfig(QWidget *parent = nullptr, const QVariantList &args = QVariantList());
-
-public Q_SLOTS:
-
-    void save() override;
-
-    void load() override;
-
-    void warningHandler();
+    explicit Bing(Plasma::AbstractRunner*);
+    ~Bing() override;
+    Plasma::QueryMatch translate(const QString &text, const QPair<QString, QString> &language) override;
 
 private:
-    TranslatorConfigForm *m_ui;
-    LanguageRepository languages;
+    Plasma::QueryMatch match;
 };
 
-#endif
+#endif //RUNNERTRANSLATOR_BING_H

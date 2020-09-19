@@ -16,21 +16,27 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef RUNNERTRANSLATOR_GOOGLETRANSLATE_H
-#define RUNNERTRANSLATOR_GOOGLETRANSLATE_H
+#include "Bing.h"
+#include "src/translateShellProcess.h"
 
-#include <KRunner/AbstractRunner>
-#include <api/CommandLineEngine.h>
+Bing::Bing(Plasma::AbstractRunner *runner)
+        : match(runner) {
+}
 
-class GoogleTranslate : public CommandLineEngine {
+Plasma::QueryMatch Bing::translate(const QString &text, const QPair<QString, QString> &language) {
+    TranslateShellProcess process("bing");
+    QString result = process.translate(language, text);
+    if(result == "\n") { // empty result
+        match.setType(Plasma::QueryMatch::NoMatch);
+    } else {
+        match.setData("audio");
+        match.setType(Plasma::QueryMatch::ExactMatch);
+        match.setIcon(QIcon::fromTheme("applications-education-language"));
+        match.setText(result);
+        match.setSubtext("Bing");
+        match.setRelevance(1);
+    }
+    return match;
+}
 
-public:
-    explicit GoogleTranslate(Plasma::AbstractRunner*);
-    ~GoogleTranslate() override;
-    Plasma::QueryMatch translate(const QString &text, const QPair<QString, QString> &language) override;
-
-private:
-    Plasma::QueryMatch match;
-};
-
-#endif //RUNNERTRANSLATOR_GOOGLETRANSLATE_H
+Bing::~Bing() = default;

@@ -17,7 +17,7 @@
  *****************************************************************************/
 
 #include "GoogleTranslate.h"
-#include "translateShellProcess.h"
+#include "src/translateShellProcess.h"
 
 GoogleTranslate::GoogleTranslate(Plasma::AbstractRunner *runner)
         : match(runner) {

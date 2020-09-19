@@ -22,7 +22,7 @@
 #include "provider/baidu.h"
 #include "provider/youdao.h"
 #include "provider/Bing.h"
-#include <translateShellProcess.h>
+#include <src/translateShellProcess.h>
 #include <KLocalizedString>
 #include <QApplication>
 #include <QClipboard>

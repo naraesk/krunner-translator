@@ -17,7 +17,7 @@
  *****************************************************************************/
 
 #include "translator_config.h"
-#include "languages.h"
+#include "src/languages.h"
 #include <KSharedConfig>
 #include <KPluginFactory>
 #include <krunner/abstractrunner.h>
