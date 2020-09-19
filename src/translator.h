@@ -20,7 +20,7 @@
 #define TRANSLATOR_H
 
 #include <KRunner/AbstractRunner>
-#include <provider/GoogleTranslate.h>
+#include "provider/GoogleTranslate.h"
 #include "LanguageRepository.h"
 
 class Translator : public Plasma::AbstractRunner
