@@ -34,8 +34,7 @@ void LanguageRepository::initialize() {
     addSupportedLanguage(Catalan, "Catalan", "ca");
     addSupportedLanguage(Cebuano, "Cebuano", "ceb");
     addSupportedLanguage(Chewa, "Chewa", "ny");
-    addSupportedLanguage(ChineseSimplified, "Chinese (Simplified)", "zh");
-    addSupportedLanguage(ChineseTraditional, "Chinese (Traditional)", "zhh");
+    addSupportedLanguage(Chinese, "Chinese", "zh");
     addSupportedLanguage(Corsican, "Corsican", "co");
     addSupportedLanguage(Croatian, "Croatian", "hr");
     addSupportedLanguage(Czech, "Czech", "cs");
