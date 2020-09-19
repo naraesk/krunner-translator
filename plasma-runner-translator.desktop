@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Translator
-Comment=Translates into any lanugage. For list of language codes visit https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+Comment=Translates into any language
 X-KDE-ServiceTypes=Plasma/Runner
 Type=Service
 Icon=applications-education-language
