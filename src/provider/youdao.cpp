@@ -28,7 +28,7 @@
 #include <QUuid>
 
 Youdao::Youdao(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, const QString &text,
-               const QPair<QString, QString> &language, const QString &appid, const QString &appSec)
+               const QPair<Language, Language> &language, const QString &appid, const QString &appSec)
         : m_runner(runner), m_context(context) {
     m_manager = new QNetworkAccessManager(this);
 
@@ -54,8 +54,8 @@ Youdao::Youdao(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, c
 
     QUrlQuery postData;
     postData.addQueryItem(QStringLiteral("q"), text);
-    postData.addQueryItem(QStringLiteral("from"), langMapper(language.first));
-    postData.addQueryItem(QStringLiteral("to"), langMapper(language.second));
+    postData.addQueryItem(QStringLiteral("from"), langMapper(language.first.getAbbreviation()));
+    postData.addQueryItem(QStringLiteral("to"), langMapper(language.second.getAbbreviation()));
     postData.addQueryItem(QStringLiteral("appKey"), appid);
     postData.addQueryItem(QStringLiteral("salt"), salt);
     postData.addQueryItem(QStringLiteral("sign"), hash.toHex());

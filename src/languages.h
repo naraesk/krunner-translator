@@ -38,7 +38,7 @@ public:
 
     QString getCombinedName();
 
-    QString getAbbreviation();
+    QString getAbbreviation() const;
 
 private:
     QString name;

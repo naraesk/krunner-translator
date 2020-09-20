@@ -17,6 +17,7 @@
  *****************************************************************************/
 
 #include "translateShellProcess.h"
+#include "languages.h"
 
 TranslateShellProcess::TranslateShellProcess(QObject *parent) : QProcess(parent) {
 }
@@ -27,16 +28,16 @@ TranslateShellProcess::TranslateShellProcess(const QString &engine_, QObject *pa
 
 TranslateShellProcess::~TranslateShellProcess() = default;
 
-QString TranslateShellProcess::translate(const QPair<QString, QString> &language, const QString &text) {
+QString TranslateShellProcess::translate(const QPair<Language, Language> &language, const QString &text) {
     QStringList arguments;
-    arguments << language.first + QStringLiteral(":") + language.second
+    arguments << language.first.getAbbreviation() + QStringLiteral(":") + language.second.getAbbreviation()
               << text
               << QStringLiteral("--brief")
               << QStringLiteral("-e")
               << engine;
     start("trans", arguments);
     waitForFinished();
-    QString composeOutput(readLine());
+    QString composeOutput(readLine().trimmed());
     return composeOutput;
 }
 

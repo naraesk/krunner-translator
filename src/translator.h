@@ -35,7 +35,7 @@ public:
     void reloadConfiguration() override;
 
 private:
-    bool parseTerm(const QString &, QString &, QPair<QString, QString> &);
+    bool parseTerm(const QString &, QString &, QPair<Language, Language> &);
     QList<QAction *> actions;
     QString m_primary;
     QString m_secondary;

@@ -27,7 +27,7 @@
 #include <QRandomGenerator>
 
 Baidu::Baidu(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, const QString &text,
-             const QPair<QString, QString> &language, const QString &appid, const QString &key)
+             const QPair<Language, Language> &language, const QString &appid, const QString &key)
         : m_runner(runner), m_context(context) {
     m_manager = new QNetworkAccessManager(this);
 
@@ -46,8 +46,8 @@ Baidu::Baidu(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, con
     QUrlQuery query;
     query.addQueryItem("appid", appid);
     query.addQueryItem("q", text);
-    query.addQueryItem("from", langMapper(language.first));
-    query.addQueryItem("to", langMapper(language.second));
+    query.addQueryItem("from", langMapper(language.first.getAbbreviation()));
+    query.addQueryItem("to", langMapper(language.second.getAbbreviation()));
     query.addQueryItem("salt", QString::number(salt));
     query.addQueryItem("sign", signMD5);
 

@@ -55,28 +55,32 @@ Translator::Translator(QObject *parent, const QVariantList &args)
     languages.initialize();
 }
 
-bool Translator::parseTerm(const QString &term, QString &text, QPair<QString, QString> &language) {
+bool Translator::parseTerm(const QString &term, QString &text, QPair<Language, Language> &language) {
     const int index = term.indexOf(QStringLiteral(" "));
     if (index == -1) return false;
     text = term.mid(index + 1);
     const QString languageTerm = term.left(index);
 
-    if (languageTerm.contains("-")) {
+    if (languageTerm.contains(QStringLiteral("-"))) {
         int languageIndex = languageTerm.indexOf("-");
-        language.first = languageTerm.left(languageIndex);
-        language.second = languageTerm.mid(languageIndex + 1);
-        if(languages.containsAbbreviation( language.first) && languages.containsAbbreviation( language.second) ) {
+        QString sourceLanguageAbbreviation = languageTerm.left(languageIndex);
+        QString targetLanguageAbbreviation = languageTerm.mid(languageIndex + 1);
+        Language sourceLanguage = languages.getLanguage(sourceLanguageAbbreviation);
+        Language targetLanguage = languages.getLanguage(targetLanguageAbbreviation);
+        Language test = languages.getLanguage(QStringLiteral("xx"));
+        qDebug() << test.getCombinedName();
+        if(languages.containsAbbreviation( sourceLanguageAbbreviation) && languages.containsAbbreviation( targetLanguageAbbreviation) ) {
             return true;
         } else {
             return false;
         }
     } else {
         if (m_primary == languageTerm) {
-            language.first = m_secondary;
+            language.first = languages.getLanguage(m_secondary);
         } else {
-            language.first = m_primary;
+            language.first = languages.getLanguage(m_primary);
         }
-        language.second = languageTerm;
+        language.second = languages.getLanguage(languageTerm);
     }
     return true;
 }
@@ -84,7 +88,7 @@ bool Translator::parseTerm(const QString &term, QString &text, QPair<QString, QS
 void Translator::match(Plasma::RunnerContext &context) {
     const QString term = context.query();
     QString text;
-    QPair<QString, QString> language;
+    QPair<Language, Language> language;
 
     if (!parseTerm(term, text, language)) return;
     if (!context.isValid()) return;

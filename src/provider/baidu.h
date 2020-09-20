@@ -21,6 +21,7 @@
 
 #include <KRunner/AbstractRunner>
 #include <QtNetwork/QNetworkReply>
+#include <src/languages.h>
 
 /**
  * API Implementation for Baidu http://provider.fanyi.baidu.com/doc/21/)
@@ -32,7 +33,7 @@ class Baidu : public QObject
     Q_OBJECT
 
 public:
-    Baidu(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, const QString &, const QString &);
+    Baidu(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<Language, Language> &, const QString &, const QString &);
 
 private Q_SLOTS:
    void parseResult(QNetworkReply*);

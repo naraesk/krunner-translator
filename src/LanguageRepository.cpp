@@ -16,6 +16,7 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
+#include <iostream>
 #include "LanguageRepository.h"
 
 void LanguageRepository::initialize() {
@@ -133,6 +134,7 @@ void LanguageRepository::initialize() {
 void LanguageRepository::addSupportedLanguage(SupportedLanguage supportedLanguage, QString name, QString abbreviation) {
     Language language(supportedLanguage, name, abbreviation);
     supportedLanguages->insert(supportedLanguage, language);
+    abbrMap->insert(language.getAbbreviation(), supportedLanguage);
 }
 
 QList<Language> LanguageRepository::getSupportedLanguages() {
@@ -154,4 +156,9 @@ bool LanguageRepository::containsAbbreviation(QString abbreviation) {
             return true;
     }
     return false;
+}
+
+Language LanguageRepository::getLanguage(QString abbr) {
+    SupportedLanguage sl = abbrMap->find(abbr).value();
+    return supportedLanguages->find(sl).value();
 }

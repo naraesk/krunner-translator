@@ -23,10 +23,10 @@ Bing::Bing(Plasma::AbstractRunner *runner)
         : match(runner) {
 }
 
-Plasma::QueryMatch Bing::translate(const QString &text, const QPair<QString, QString> &language) {
+Plasma::QueryMatch Bing::translate(const QString &text, const QPair<Language, Language> &language) {
     TranslateShellProcess process("bing");
     QString result = process.translate(language, text);
-    if (result == "\n") { // empty result
+    if (result == "") { // empty result
         match.setType(Plasma::QueryMatch::NoMatch);
     } else {
         match.setData(QStringLiteral("audio"));

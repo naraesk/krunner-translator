@@ -26,7 +26,7 @@ class Bing : public CommandLineEngine {
 public:
     explicit Bing(Plasma::AbstractRunner*);
     ~Bing() override;
-    Plasma::QueryMatch translate(const QString &text, const QPair<QString, QString> &language) override;
+    Plasma::QueryMatch translate(const QString &text, const QPair<Language, Language> &language) override;
 
 private:
     Plasma::QueryMatch match;

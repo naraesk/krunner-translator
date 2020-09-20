@@ -23,7 +23,7 @@ GoogleTranslate::GoogleTranslate(Plasma::AbstractRunner *runner)
         : match(runner) {
 }
 
-Plasma::QueryMatch GoogleTranslate::translate(const QString &text, const QPair<QString, QString> &language) {
+Plasma::QueryMatch GoogleTranslate::translate(const QString &text, const QPair<Language, Language> &language) {
     TranslateShellProcess process;
     QString result = process.translate(language, text);
     match.setData(QStringLiteral("audio"));

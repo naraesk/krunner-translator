@@ -21,6 +21,7 @@
 
 #include <QProcess>
 #include <QString>
+#include "languages.h"
 
 class TranslateShellProcess : public QProcess
 {
@@ -31,7 +32,7 @@ public:
     ~TranslateShellProcess() override;
 
 public Q_SLOTS:
-    QString translate(const QPair<QString, QString> &language, const QString &text);
+    QString translate(const QPair<Language, Language> &language, const QString &text);
     void play(const QString &text);
 private:
     QString engine = "google";

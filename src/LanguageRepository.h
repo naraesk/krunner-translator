@@ -33,8 +33,11 @@ public:
 
     QString getCombinedName(QString abbreviation);
 
+    Language getLanguage(QString abbr);
+
 private:
     QMap<SupportedLanguage, Language> *supportedLanguages = new QMap<SupportedLanguage, Language>;
+    QMap<QString, SupportedLanguage> *abbrMap = new QMap<QString, SupportedLanguage>;
 };
 
 #endif //RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H

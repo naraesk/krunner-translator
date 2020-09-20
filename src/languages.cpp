@@ -26,6 +26,6 @@ QString Language::getCombinedName() {
     return name + QStringLiteral(" (") + abbreviation + QStringLiteral(")");
 }
 
-QString Language::getAbbreviation() {
+QString Language::getAbbreviation() const {
     return abbreviation;
 }
