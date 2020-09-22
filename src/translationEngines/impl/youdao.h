@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2013 – 2020 by David Baum <david.baum@naraesk.eu>           *
+ *  Copyright (C) 2020 by P3psi Boo <boo@p3psi.xyz>                           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -16,26 +16,36 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef RUNNERTRANSLATOR_TRANSLATESHELLPROCESS_H
-#define RUNNERTRANSLATOR_TRANSLATESHELLPROCESS_H
+#ifndef YOUDAO_H
+#define YOUDAO_H
 
-#include <QProcess>
-#include <QString>
-#include "languages.h"
+#include <KRunner/AbstractRunner>
+#include <QtNetwork/QNetworkReply>
+#include <src/language/Language.h>
 
-class TranslateShellProcess : public QProcess
+/**
+ * API Implementation for Youdao https://ai.youdao.com/DOCSIRMA/html/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E7%BF%BB%E8%AF%91/API%E6%96%87%E6%A1%A3/%E6%96%87%E6%9C%AC%E7%BF%BB%E8%AF%91%E6%9C%8D%E5%8A%A1/%E6%96%87%E6%9C%AC%E7%BF%BB%E8%AF%91%E6%9C%8D%E5%8A%A1-API%E6%96%87%E6%A1%A3.html)
+ */
+
+class Youdao : public QObject
 {
-Q_OBJECT
-public:
-    explicit TranslateShellProcess( QObject *parent = 0);
-    explicit TranslateShellProcess(const QString &engine, QObject *parent = 0);
-    ~TranslateShellProcess() override;
 
-public Q_SLOTS:
-    QString translate(const QPair<Language, Language> &language, const QString &text);
-    void play(const QString &text);
+    Q_OBJECT
+
+public:
+    Youdao(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<Language, Language> &, const QString &, const QString &);
+
+private Q_SLOTS:
+   void parseResult(QNetworkReply*);
+
+Q_SIGNALS:
+	void finished();
+   
 private:
-    QString engine = "google";
+   Plasma::AbstractRunner * m_runner;
+   QNetworkAccessManager * m_manager;
+   Plasma::RunnerContext m_context;
+   QString langMapper(QString);
 };
 
-#endif //RUNNERTRANSLATOR_TRANSLATESHELLPROCESS_H
+#endif

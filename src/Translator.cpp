@@ -16,13 +16,13 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#include "translator.h"
+#include "Translator.h"
 #include "config/translator_config.h"
-#include "provider/GoogleTranslate.h"
-#include "provider/baidu.h"
-#include "provider/youdao.h"
-#include "provider/Bing.h"
-#include <src/translateShellProcess.h>
+#include "translationEngines/impl/GoogleTranslate.h"
+#include "translationEngines/impl/baidu.h"
+#include "translationEngines/impl/youdao.h"
+#include "translationEngines/impl/Bing.h"
+#include <src/TranslateShellProcess.h>
 #include <KLocalizedString>
 #include <QApplication>
 #include <QClipboard>
@@ -152,4 +152,4 @@ void Translator::reloadConfiguration() {
     }
 }
 
-#include "moc_translator.cpp"
+#include "moc_Translator.cpp"

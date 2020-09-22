@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2013 – 2020 by David Baum <david.baum@naraesk.eu>           *
+ *  Copyright (C) 2020 by P3psi Boo <boo@p3psi.xyz>                           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -16,28 +16,36 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H
-#define RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H
+#ifndef BAIDU_H
+#define BAIDU_H
 
-#include "languages.h"
+#include <KRunner/AbstractRunner>
+#include <QtNetwork/QNetworkReply>
+#include <src/language/Language.h>
 
-class LanguageRepository {
+/**
+ * API Implementation for Baidu http://translationEngines.fanyi.baidu.com/doc/21/)
+ */
+
+class Baidu : public QObject
+{
+
+    Q_OBJECT
+
 public:
-    void addSupportedLanguage(SupportedLanguage language, QString name, QString abbreviation);
+    Baidu(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<Language, Language> &, const QString &, const QString &);
 
-    void initialize();
+private Q_SLOTS:
+   void parseResult(QNetworkReply*);
 
-    QList<struct Language> getSupportedLanguages();
-
-    bool containsAbbreviation(QString abbreviation);
-
-    QString getCombinedName(QString abbreviation);
-
-    Language getLanguage(QString abbr);
-
+Q_SIGNALS:
+	void finished();
+   
 private:
-    QMap<SupportedLanguage, Language> *supportedLanguages = new QMap<SupportedLanguage, Language>;
-    QMap<QString, SupportedLanguage> *abbrMap = new QMap<QString, SupportedLanguage>;
+   Plasma::AbstractRunner * m_runner;
+   QNetworkAccessManager * m_manager;
+   Plasma::RunnerContext m_context;
+   QString langMapper(QString);
 };
 
-#endif //RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H
+#endif

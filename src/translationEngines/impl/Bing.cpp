@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2013 – 2018 by David Baum <david.baum@naraesk.eu>           *
+ *  Copyright (C) 2013 – 2020 by David Baum <david.baum@naraesk.eu>           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -16,39 +16,27 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef TRANSLATOR_H
-#define TRANSLATOR_H
+#include "Bing.h"
+#include "src/TranslateShellProcess.h"
 
-#include <KRunner/AbstractRunner>
-#include "provider/GoogleTranslate.h"
-#include "LanguageRepository.h"
+Bing::Bing(Plasma::AbstractRunner *runner)
+        : match(runner) {
+}
 
-class Translator : public Plasma::AbstractRunner
-{
-    Q_OBJECT
+Plasma::QueryMatch Bing::translate(const QString &text, const QPair<Language, Language> &language) {
+    TranslateShellProcess process("bing");
+    QString result = process.translate(language, text);
+    if (result == "") { // empty result
+        match.setType(Plasma::QueryMatch::NoMatch);
+    } else {
+        match.setData(QStringLiteral("audio"));
+        match.setType(Plasma::QueryMatch::ExactMatch);
+        match.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
+        match.setText(result);
+        match.setSubtext(QStringLiteral("Bing"));
+        match.setRelevance(1);
+    }
+    return match;
+}
 
-public:
-    Translator(QObject *parent, const QVariantList &args);
-    void match(Plasma::RunnerContext &) override;
-    void run(const Plasma::RunnerContext &, const Plasma::QueryMatch &) override;
-    QList<QAction *> actionsForMatch(const Plasma::QueryMatch &match) override;
-    void reloadConfiguration() override;
-
-private:
-    bool parseTerm(const QString &, QString &, QPair<Language, Language> &);
-    QList<QAction *> actions;
-    QString m_primary;
-    QString m_secondary;
-    QString m_baiduAPPID;
-    QString m_baiduAPIKey;
-    QString m_youdaoAPPID;
-    QString m_youdaoAppSec;
-    bool m_baiduEnable;
-    bool m_youdaoEnable;
-    QList<CommandLineEngine*> engines;
-    LanguageRepository languages;
-};
-
-K_EXPORT_PLASMA_RUNNER(translator, Translator)
-
-#endif
+Bing::~Bing() = default;

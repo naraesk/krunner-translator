@@ -16,19 +16,18 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#include "translateShellProcessTest.h"
+#ifndef RUNNERTRANSLATOR_COMMANDLINEENGINE_H
+#define RUNNERTRANSLATOR_COMMANDLINEENGINE_H
 
-void translateShellProcessTest::initTestCase() {
-    repository.initialize();
-}
+#include <KF5/KRunner/krunner/querymatch.h>
+#include <src/language/Language.h>
 
-void translateShellProcessTest::germanToEnglishTest() {
-    QPair<Language, Language> languages;
-    languages = qMakePair(repository.getLanguage(QStringLiteral("de")), repository.getLanguage(QStringLiteral("en")));
-    QString result = process.translate(languages, QStringLiteral("Haus"));
-    QCOMPARE(result, QStringLiteral("House"));
-}
+class CommandLineEngine {
+public:
+    virtual Plasma::QueryMatch translate(const QString &text, const QPair<Language, Language> &language) = 0;
 
-QTEST_MAIN(translateShellProcessTest)
+    virtual ~CommandLineEngine() {};
+};
 
-#include "translateShellProcessTest.moc"
+
+#endif //RUNNERTRANSLATOR_COMMANDLINEENGINE_H

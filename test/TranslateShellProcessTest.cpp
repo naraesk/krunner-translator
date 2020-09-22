@@ -16,36 +16,19 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef RUNNERTRANSLATOR_LANGUAGES_H
-#define RUNNERTRANSLATOR_LANGUAGES_H
+#include "TranslateShellProcessTest.h"
 
+void TranslateShellProcessTest::initTestCase() {
+    repository.initialize();
+}
 
-#include <QtCore/QString>
-#include <QtCore/QList>
-#include <QtCore/QVariant>
-#include "SupportedLanguages.h"
+void TranslateShellProcessTest::germanToEnglishTest() {
+    QPair<Language, Language> languages;
+    languages = qMakePair(repository.getLanguage(QStringLiteral("de")), repository.getLanguage(QStringLiteral("en")));
+    QString result = process.translate(languages, QStringLiteral("Haus"));
+    QCOMPARE(result, QStringLiteral("House"));
+}
 
-class Language {
+QTEST_MAIN(TranslateShellProcessTest)
 
-public:
-    Language() = default;
-
-    ~Language() = default;
-
-    Language(SupportedLanguage language, QString name, QString abbreviation);
-
-    Language(Language const &language) = default;
-
-    QString getCombinedName();
-
-    QString getAbbreviation() const;
-
-private:
-    QString name;
-    QString abbreviation;
-    SupportedLanguage language;
-};
-
-Q_DECLARE_METATYPE(Language)
-
-#endif //RUNNERTRANSLATOR_LANGUAGES_H
+#include "TranslateShellProcessTest.moc"

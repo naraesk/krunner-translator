@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2020 by P3psi Boo <boo@p3psi.xyz>                           *
+ *  Copyright (C) 2013 – 2020 by David Baum <david.baum@naraesk.eu>           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -16,36 +16,28 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef YOUDAO_H
-#define YOUDAO_H
+#ifndef RUNNERTRANSLATOR_TRANSLATESHELLPROCESSTEST_H
+#define RUNNERTRANSLATOR_TRANSLATESHELLPROCESSTEST_H
 
-#include <KRunner/AbstractRunner>
-#include <QtNetwork/QNetworkReply>
-#include <src/languages.h>
+#include <QtTest/QtTest>
+#include <QtCore/QObject>
+#include "../src/TranslateShellProcess.h"
+#include "src/language/LanguageRepository.h"
 
-/**
- * API Implementation for Youdao https://ai.youdao.com/DOCSIRMA/html/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E7%BF%BB%E8%AF%91/API%E6%96%87%E6%A1%A3/%E6%96%87%E6%9C%AC%E7%BF%BB%E8%AF%91%E6%9C%8D%E5%8A%A1/%E6%96%87%E6%9C%AC%E7%BF%BB%E8%AF%91%E6%9C%8D%E5%8A%A1-API%E6%96%87%E6%A1%A3.html)
- */
+class TranslateShellProcessTest : public QObject {
 
-class Youdao : public QObject
-{
+Q_OBJECT;
 
-    Q_OBJECT
+    TranslateShellProcess process;
+    LanguageRepository repository;
 
-public:
-    Youdao(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<Language, Language> &, const QString &, const QString &);
+private slots:
 
-private Q_SLOTS:
-   void parseResult(QNetworkReply*);
+    void initTestCase();
 
-Q_SIGNALS:
-	void finished();
-   
-private:
-   Plasma::AbstractRunner * m_runner;
-   QNetworkAccessManager * m_manager;
-   Plasma::RunnerContext m_context;
-   QString langMapper(QString);
+    void germanToEnglishTest();
+
 };
 
-#endif
+
+#endif //RUNNERTRANSLATOR_TRANSLATESHELLPROCESSTEST_H

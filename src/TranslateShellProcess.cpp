@@ -16,16 +16,36 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#include "languages.h"
+#include "TranslateShellProcess.h"
+#include "src/language/Language.h"
 
-Language::Language(SupportedLanguage language, QString name, QString abbreviation)
-        : name(name), abbreviation(abbreviation), language(language) {
+TranslateShellProcess::TranslateShellProcess(QObject *parent) : QProcess(parent) {
 }
 
-QString Language::getCombinedName() {
-    return name + QStringLiteral(" (") + abbreviation + QStringLiteral(")");
+TranslateShellProcess::TranslateShellProcess(const QString &engine_, QObject *parent) : QProcess(parent),
+                                                                                        engine(engine_) {
 }
 
-QString Language::getAbbreviation() const {
-    return abbreviation;
+TranslateShellProcess::~TranslateShellProcess() = default;
+
+QString TranslateShellProcess::translate(const QPair<Language, Language> &language, const QString &text) {
+    QStringList arguments;
+    arguments << language.first.getAbbreviation() + QStringLiteral(":") + language.second.getAbbreviation()
+              << text
+              << QStringLiteral("--brief")
+              << QStringLiteral("-e")
+              << engine;
+    start("trans", arguments);
+    waitForFinished();
+    QString composeOutput(readLine().trimmed());
+    return composeOutput;
+}
+
+void TranslateShellProcess::play(const QString &text) {
+    QStringList arguments;
+    arguments << text
+              << QStringLiteral("-speak")
+              << QStringLiteral("-no-translate");
+    start("trans", arguments);
+    waitForFinished();
 }

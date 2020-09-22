@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2020 by P3psi Boo <boo@p3psi.xyz>                           *
+ *  Copyright (C) 2013 – 2020 by David Baum <david.baum@naraesk.eu>           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -16,36 +16,28 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef BAIDU_H
-#define BAIDU_H
+#ifndef RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H
+#define RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H
 
-#include <KRunner/AbstractRunner>
-#include <QtNetwork/QNetworkReply>
-#include <src/languages.h>
+#include "Language.h"
 
-/**
- * API Implementation for Baidu http://provider.fanyi.baidu.com/doc/21/)
- */
-
-class Baidu : public QObject
-{
-
-    Q_OBJECT
-
+class LanguageRepository {
 public:
-    Baidu(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<Language, Language> &, const QString &, const QString &);
+    void addSupportedLanguage(SupportedLanguage language, QString name, QString abbreviation);
 
-private Q_SLOTS:
-   void parseResult(QNetworkReply*);
+    void initialize();
 
-Q_SIGNALS:
-	void finished();
-   
+    QList<struct Language> getSupportedLanguages();
+
+    bool containsAbbreviation(QString abbreviation);
+
+    QString getCombinedName(QString abbreviation);
+
+    Language getLanguage(QString abbr);
+
 private:
-   Plasma::AbstractRunner * m_runner;
-   QNetworkAccessManager * m_manager;
-   Plasma::RunnerContext m_context;
-   QString langMapper(QString);
+    QMap<SupportedLanguage, Language> *supportedLanguages = new QMap<SupportedLanguage, Language>;
+    QMap<QString, SupportedLanguage> *abbrMap = new QMap<QString, SupportedLanguage>;
 };
 
-#endif
+#endif //RUNNERTRANSLATOR_LANGUAGEREPOSITORY_H

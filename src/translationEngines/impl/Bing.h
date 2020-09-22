@@ -16,36 +16,20 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#include "translateShellProcess.h"
-#include "languages.h"
+#ifndef RUNNERTRANSLATOR_BING_H
+#define RUNNERTRANSLATOR_BING_H
 
-TranslateShellProcess::TranslateShellProcess(QObject *parent) : QProcess(parent) {
-}
+#include <KRunner/AbstractRunner>
+#include <src/translationEngines/api/CommandLineEngine.h>
 
-TranslateShellProcess::TranslateShellProcess(const QString &engine_, QObject *parent) : QProcess(parent),
-                                                                                        engine(engine_) {
-}
+class Bing : public CommandLineEngine {
+public:
+    explicit Bing(Plasma::AbstractRunner*);
+    ~Bing() override;
+    Plasma::QueryMatch translate(const QString &text, const QPair<Language, Language> &language) override;
 
-TranslateShellProcess::~TranslateShellProcess() = default;
+private:
+    Plasma::QueryMatch match;
+};
 
-QString TranslateShellProcess::translate(const QPair<Language, Language> &language, const QString &text) {
-    QStringList arguments;
-    arguments << language.first.getAbbreviation() + QStringLiteral(":") + language.second.getAbbreviation()
-              << text
-              << QStringLiteral("--brief")
-              << QStringLiteral("-e")
-              << engine;
-    start("trans", arguments);
-    waitForFinished();
-    QString composeOutput(readLine().trimmed());
-    return composeOutput;
-}
-
-void TranslateShellProcess::play(const QString &text) {
-    QStringList arguments;
-    arguments << text
-              << QStringLiteral("-speak")
-              << QStringLiteral("-no-translate");
-    start("trans", arguments);
-    waitForFinished();
-}
+#endif //RUNNERTRANSLATOR_BING_H

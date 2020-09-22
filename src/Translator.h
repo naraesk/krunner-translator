@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2013 – 2020 by David Baum <david.baum@naraesk.eu>           *
+ *  Copyright (C) 2013 – 2018 by David Baum <david.baum@naraesk.eu>           *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -16,18 +16,39 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef RUNNERTRANSLATOR_COMMANDLINEENGINE_H
-#define RUNNERTRANSLATOR_COMMANDLINEENGINE_H
+#ifndef TRANSLATOR_H
+#define TRANSLATOR_H
 
-#include <KRunner/krunner/querymatch.h>
-#include <src/languages.h>
+#include <KRunner/AbstractRunner>
+#include "src/translationEngines/api/CommandLineEngine.h"
+#include "src/language/LanguageRepository.h"
 
-class CommandLineEngine {
+class Translator : public Plasma::AbstractRunner
+{
+    Q_OBJECT
+
 public:
-    virtual Plasma::QueryMatch translate(const QString &text, const QPair<Language, Language> &language) = 0;
+    Translator(QObject *parent, const QVariantList &args);
+    void match(Plasma::RunnerContext &) override;
+    void run(const Plasma::RunnerContext &, const Plasma::QueryMatch &) override;
+    QList<QAction *> actionsForMatch(const Plasma::QueryMatch &match) override;
+    void reloadConfiguration() override;
 
-    virtual ~CommandLineEngine() {};
+private:
+    bool parseTerm(const QString &, QString &, QPair<Language, Language> &);
+    QList<QAction *> actions;
+    QString m_primary;
+    QString m_secondary;
+    QString m_baiduAPPID;
+    QString m_baiduAPIKey;
+    QString m_youdaoAPPID;
+    QString m_youdaoAppSec;
+    bool m_baiduEnable;
+    bool m_youdaoEnable;
+    QList<CommandLineEngine*> engines;
+    LanguageRepository languages;
 };
 
+K_EXPORT_PLASMA_RUNNER(translator, Translator)
 
-#endif //RUNNERTRANSLATOR_COMMANDLINEENGINE_H
+#endif

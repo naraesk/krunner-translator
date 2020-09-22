@@ -16,21 +16,26 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef RUNNERTRANSLATOR_GOOGLETRANSLATE_H
-#define RUNNERTRANSLATOR_GOOGLETRANSLATE_H
+#ifndef RUNNERTRANSLATOR_TRANSLATESHELLPROCESS_H
+#define RUNNERTRANSLATOR_TRANSLATESHELLPROCESS_H
 
-#include <KRunner/AbstractRunner>
-#include <src/api/CommandLineEngine.h>
+#include <QProcess>
+#include <QString>
+#include "src/language/Language.h"
 
-class GoogleTranslate : public CommandLineEngine {
-
+class TranslateShellProcess : public QProcess
+{
+Q_OBJECT
 public:
-    explicit GoogleTranslate(Plasma::AbstractRunner*);
-    ~GoogleTranslate() override;
-    Plasma::QueryMatch translate(const QString &text, const QPair<Language, Language> &language) override;
+    explicit TranslateShellProcess( QObject *parent = 0);
+    explicit TranslateShellProcess(const QString &engine, QObject *parent = 0);
+    ~TranslateShellProcess() override;
 
+public Q_SLOTS:
+    QString translate(const QPair<Language, Language> &language, const QString &text);
+    void play(const QString &text);
 private:
-    Plasma::QueryMatch match;
+    QString engine = "google";
 };
 
-#endif //RUNNERTRANSLATOR_GOOGLETRANSLATE_H
+#endif //RUNNERTRANSLATOR_TRANSLATESHELLPROCESS_H

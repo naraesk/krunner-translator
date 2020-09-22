@@ -19,16 +19,16 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 enable_testing(true)
 
 set(krunner_translator_SRCS
-        src/translator.cpp
-        src/provider/baidu.cpp
-        src/provider/youdao.cpp
-        src/provider/GoogleTranslate.cpp src/provider/GoogleTranslate.h src/translateShellProcess.cpp src/translateShellProcess.h src/provider/Bing.cpp src/provider/Bing.h
-        src/LanguageRepository.cpp src/LanguageRepository.h
-        src/languages.cpp src/languages.h src/SupportedLanguages.h)
+        src/Translator.cpp
+        src/translationEngines/impl/baidu.cpp
+        src/translationEngines/impl/youdao.cpp
+        src/translationEngines/impl/GoogleTranslate.cpp src/translationEngines/impl/GoogleTranslate.h src/TranslateShellProcess.cpp src/TranslateShellProcess.h src/translationEngines/impl/Bing.cpp src/translationEngines/impl/Bing.h
+        src/language/LanguageRepository.cpp src/language/LanguageRepository.h
+        src/language/Language.cpp src/language/Language.h src/language/SupportedLanguages.h)
 
 set(kcm_krunner_translator_SRCS
         src/config/translator_config.cpp
-        src/api/CommandLineEngine.h src/languages.cpp src/languages.h src/LanguageRepository.cpp src/LanguageRepository.h)
+        src/translationEngines/api/CommandLineEngine.h src/language/Language.cpp src/language/Language.h src/language/LanguageRepository.cpp src/language/LanguageRepository.h)
 
 ki18n_wrap_ui(kcm_krunner_translator_SRCS src/config/translator_config.ui)
 add_library(kcm_krunner_translator MODULE ${kcm_krunner_translator_SRCS})
@@ -58,11 +58,11 @@ install(FILES plasma-runner-translator.desktop src/config/plasma-runner-translat
 # Testing
 
 set(test_dependencies
-        src/translateShellProcess.cpp
-        src/LanguageRepository.cpp
-        src/languages.cpp
+        src/TranslateShellProcess.cpp
+        src/language/LanguageRepository.cpp
+        src/language/Language.cpp
         )
-add_executable(translator_test test/translateShellProcessTest.cpp ${test_dependencies} )
+add_executable(translator_test test/TranslateShellProcessTest.cpp ${test_dependencies} )
 add_test(NAME translator_test COMMAND translator_test )
 
 target_link_libraries(translator_test PRIVATE Qt5::Test)

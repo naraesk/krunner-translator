@@ -21,7 +21,7 @@
 
 #include "ui_translator_config.h"
 #include <KCModule>
-#include <src/LanguageRepository.h>
+#include <src/language/LanguageRepository.h>
 
 static const char CONFIG_PRIMARY[] = "primaryLanguage";
 static const char CONFIG_SECONDARY[] = "secondaryLanguage";

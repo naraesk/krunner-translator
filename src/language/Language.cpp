@@ -16,27 +16,16 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#include "Bing.h"
-#include "src/translateShellProcess.h"
+#include "Language.h"
 
-Bing::Bing(Plasma::AbstractRunner *runner)
-        : match(runner) {
+Language::Language(SupportedLanguage language, QString name, QString abbreviation)
+        : name(name), abbreviation(abbreviation), language(language) {
 }
 
-Plasma::QueryMatch Bing::translate(const QString &text, const QPair<Language, Language> &language) {
-    TranslateShellProcess process("bing");
-    QString result = process.translate(language, text);
-    if (result == "") { // empty result
-        match.setType(Plasma::QueryMatch::NoMatch);
-    } else {
-        match.setData(QStringLiteral("audio"));
-        match.setType(Plasma::QueryMatch::ExactMatch);
-        match.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
-        match.setText(result);
-        match.setSubtext(QStringLiteral("Bing"));
-        match.setRelevance(1);
-    }
-    return match;
+QString Language::getCombinedName() {
+    return name + QStringLiteral(" (") + abbreviation + QStringLiteral(")");
 }
 
-Bing::~Bing() = default;
+QString Language::getAbbreviation() const {
+    return abbreviation;
+}
