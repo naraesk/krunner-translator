@@ -43,11 +43,10 @@ Translator::Translator(QObject *parent, const QVariantList &args)
                            QStringLiteral("Play audio"));
     play->setData(QStringLiteral("play"));
     actions = {copy, play};
-    setDefaultSyntax(Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<language code>")),
-                                          i18n("Translates the word(s) :q: into target language")));
-    setDefaultSyntax(
-            Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<source languagce>-<target languagce>")),
-                                 i18n("Translates the word(s) :q: from the source into target language")));
+    addSyntax(Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<language code>")),
+                                   i18n("Translates the word(s) :q: into target language")));
+    addSyntax(Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<source languagce>-<target languagce>")),
+                                   i18n("Translates the word(s) :q: from the source into target language")));
     languages.initialize();
 }
 
