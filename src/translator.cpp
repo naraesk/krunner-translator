@@ -128,10 +128,10 @@ void Translator::reloadConfiguration() {
     auto grp = config();
     m_primary = grp.readEntry(CONFIG_PRIMARY, QStringLiteral("en"));
     m_secondary = grp.readEntry(CONFIG_SECONDARY, QStringLiteral("es"));
-    m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID, QStringLiteral(""));
-    m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY, QStringLiteral(""));
-    m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID, QStringLiteral(""));
-    m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC, QStringLiteral(""));
+    m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID, QString());
+    m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY, QString());
+    m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID, QString());
+    m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC, QString());
     m_baiduEnable = grp.readEntry(CONFIG_BAIDU_ENABLE, false);
     m_youdaoEnable = grp.readEntry(CONFIG_YOUDAO_ENABLE, false);
 
