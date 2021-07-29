@@ -32,10 +32,6 @@
 Translator::Translator(QObject *parent, const QVariantList &args)
         : Plasma::AbstractRunner(parent, args) {
     setObjectName(QStringLiteral("Translator"));
-    setIgnoredTypes(Plasma::RunnerContext::Directory |
-                    Plasma::RunnerContext::File |
-                    Plasma::RunnerContext::NetworkLocation);
-    setSpeed(AbstractRunner::SlowSpeed);
     setPriority(HighestPriority);
     QAction *copy = new QAction();
     copy->setIcon(QIcon::fromTheme(QStringLiteral("editcopy")));
