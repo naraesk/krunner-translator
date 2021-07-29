@@ -27,7 +27,7 @@ public:
 
     void initialize();
 
-    QList<struct Language> getSupportedLanguages();
+    QList<class Language> getSupportedLanguages();
 
     bool containsAbbreviation(QString abbreviation);
 
