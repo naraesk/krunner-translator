@@ -58,7 +58,7 @@ Baidu::Baidu(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, con
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
     m_manager->get(request);
-    connect(m_manager, SIGNAL(finished(QNetworkReply * )), this, SLOT(parseResult(QNetworkReply * )));
+    connect(m_manager, &QNetworkAccessManager::finished, this, &Baidu::parseResult);
 }
 
 void Baidu::parseResult(QNetworkReply *reply) {

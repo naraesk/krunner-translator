@@ -87,13 +87,13 @@ void Translator::match(Plasma::RunnerContext &context) {
     if (m_baiduEnable) {
         QEventLoop baiduLoop;
         Baidu baidu(this, context, text, language, m_baiduAPPID, m_baiduAPIKey);
-        connect(&baidu, SIGNAL(finished()), &baiduLoop, SLOT(quit()));
+        connect(&baidu, &Baidu::finished, &baiduLoop, &QEventLoop::quit);
         baiduLoop.exec();
     }
     if (m_youdaoEnable) {
         QEventLoop youdaoLoop;
         Youdao youdao(this, context, text, language, m_youdaoAPPID, m_youdaoAppSec);
-        connect(&youdao, SIGNAL(finished()), &youdaoLoop, SLOT(quit()));
+        connect(&youdao, &Youdao::finished, &youdaoLoop, &QEventLoop::quit);
         youdaoLoop.exec();
     }
     for (auto engine : engines) {
