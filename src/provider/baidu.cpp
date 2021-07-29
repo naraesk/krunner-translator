@@ -35,12 +35,12 @@ Baidu::Baidu(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, con
 
     quint32 salt = randomGenerator.generate();
 
-    QByteArray sign;
+    QString sign;
     sign.append(appid);
     sign.append(text);
     sign.append(QString::number(salt));
     sign.append(key);
-    QByteArray hash = QCryptographicHash::hash(sign, QCryptographicHash::Md5);
+    QByteArray hash = QCryptographicHash::hash(sign.toUtf8(), QCryptographicHash::Md5);
     QString signMD5 = hash.toHex();
 
     QUrlQuery query;
