@@ -14,5 +14,6 @@
         "Name": "Translator",
         "Version": "1.5.0"
     },
+    "X-Plasma-Runner-Match-Regex": " ",
     "X-Plasma-AdvertiseSingleRunnerQueryMode": true
 }
