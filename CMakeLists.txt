@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 2.8.12)
 project(RunnerTranslator)
 
-find_package(ECM 5.12.0 REQUIRED NO_MODULE)
+set(KF5_MIN_VERSION 5.72.0)
+find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 set (CMAKE_MODULE_PATH
      ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_MODULE_PATH}
 )
@@ -49,5 +50,6 @@ target_link_libraries(krunner_translator KF5::Runner Qt5::Widgets Qt5::Network
                       
 add_dependencies(krunner_translator kcm_krunner_translator)
                       
-install(TARGETS krunner_translator kcm_krunner_translator DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES plasma-runner-translator.desktop src/config/plasma-runner-translator_config.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(TARGETS krunner_translator DESTINATION ${PLUGIN_INSTALL_DIR}/kf5/krunner)
+install(TARGETS kcm_krunner_translator DESTINATION ${PLUGIN_INSTALL_DIR})
+install(FILES src/config/plasma-runner-translator_config.desktop DESTINATION ${SERVICES_INSTALL_DIR})

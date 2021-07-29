@@ -49,6 +49,4 @@ private:
     LanguageRepository languages;
 };
 
-K_EXPORT_PLASMA_RUNNER(translator, Translator)
-
 #endif

@@ -148,4 +148,6 @@ void Translator::reloadConfiguration() {
     }
 }
 
-#include "moc_translator.cpp"
+K_EXPORT_PLASMA_RUNNER_WITH_JSON(Translator, "translator.json")
+
+#include "translator.moc"
