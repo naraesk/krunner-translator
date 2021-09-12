@@ -68,7 +68,7 @@ Youdao::Youdao(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, c
     //request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
 
     m_manager->post(request, postData.toString(QUrl::FullyEncoded).toUtf8());
-    connect(m_manager, SIGNAL(finished(QNetworkReply * )), this, SLOT(parseResult(QNetworkReply * )));
+    connect(m_manager, &QNetworkAccessManager::finished, this, &Youdao::parseResult);
 }
 
 void Youdao::parseResult(QNetworkReply *reply) {

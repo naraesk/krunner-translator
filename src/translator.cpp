@@ -32,10 +32,6 @@
 Translator::Translator(QObject *parent, const QVariantList &args)
         : Plasma::AbstractRunner(parent, args) {
     setObjectName(QStringLiteral("Translator"));
-    setIgnoredTypes(Plasma::RunnerContext::Directory |
-                    Plasma::RunnerContext::File |
-                    Plasma::RunnerContext::NetworkLocation);
-    setSpeed(AbstractRunner::SlowSpeed);
     setPriority(HighestPriority);
     QAction *copy = new QAction();
     copy->setIcon(QIcon::fromTheme(QStringLiteral("editcopy")));
@@ -47,11 +43,10 @@ Translator::Translator(QObject *parent, const QVariantList &args)
                            QStringLiteral("Play audio"));
     play->setData(QStringLiteral("play"));
     actions = {copy, play};
-    setDefaultSyntax(Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<language code>")),
-                                          i18n("Translates the word(s) :q: into target language")));
-    setDefaultSyntax(
-            Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<source languagce>-<target languagce>")),
-                                 i18n("Translates the word(s) :q: from the source into target language")));
+    addSyntax(Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<language code>")),
+                                   i18n("Translates the word(s) :q: into target language")));
+    addSyntax(Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<source languagce>-<target languagce>")),
+                                   i18n("Translates the word(s) :q: from the source into target language")));
     languages.initialize();
 }
 
@@ -92,13 +87,13 @@ void Translator::match(Plasma::RunnerContext &context) {
     if (m_baiduEnable) {
         QEventLoop baiduLoop;
         Baidu baidu(this, context, text, language, m_baiduAPPID, m_baiduAPIKey);
-        connect(&baidu, SIGNAL(finished()), &baiduLoop, SLOT(quit()));
+        connect(&baidu, &Baidu::finished, &baiduLoop, &QEventLoop::quit);
         baiduLoop.exec();
     }
     if (m_youdaoEnable) {
         QEventLoop youdaoLoop;
         Youdao youdao(this, context, text, language, m_youdaoAPPID, m_youdaoAppSec);
-        connect(&youdao, SIGNAL(finished()), &youdaoLoop, SLOT(quit()));
+        connect(&youdao, &Youdao::finished, &youdaoLoop, &QEventLoop::quit);
         youdaoLoop.exec();
     }
     for (auto engine : engines) {
@@ -128,10 +123,10 @@ void Translator::reloadConfiguration() {
     auto grp = config();
     m_primary = grp.readEntry(CONFIG_PRIMARY, QStringLiteral("en"));
     m_secondary = grp.readEntry(CONFIG_SECONDARY, QStringLiteral("es"));
-    m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID, QStringLiteral(""));
-    m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY, QStringLiteral(""));
-    m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID, QStringLiteral(""));
-    m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC, QStringLiteral(""));
+    m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID, QString());
+    m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY, QString());
+    m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID, QString());
+    m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC, QString());
     m_baiduEnable = grp.readEntry(CONFIG_BAIDU_ENABLE, false);
     m_youdaoEnable = grp.readEntry(CONFIG_YOUDAO_ENABLE, false);
 
@@ -148,4 +143,6 @@ void Translator::reloadConfiguration() {
     }
 }
 
-#include "moc_translator.cpp"
+K_EXPORT_PLASMA_RUNNER_WITH_JSON(Translator, "translator.json")
+
+#include "translator.moc"

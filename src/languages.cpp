@@ -19,7 +19,8 @@
 #include "languages.h"
 
 Language::Language(SupportedLanguage language, QString name, QString abbreviation)
-        : name(name), abbreviation(abbreviation), language(language) {
+        : name(name), abbreviation(abbreviation){
+    Q_UNUSED(language)
 }
 
 QString Language::getCombinedName() {

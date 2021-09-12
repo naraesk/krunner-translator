@@ -1,0 +1,18 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "david.baum@naraesk.eu",
+                "Name": "David Baum"
+            }
+        ],
+        "Description": "Translates into any language",
+        "EnabledByDefault": true,
+        "Icon": "applications-education-language",
+        "Id": "Translator",
+        "License": "GPL",
+        "Name": "Translator",
+        "Version": "1.5.0"
+    },
+    "X-Plasma-AdvertiseSingleRunnerQueryMode": true
+}

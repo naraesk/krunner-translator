@@ -39,28 +39,28 @@ TranslatorConfig::TranslatorConfig(QWidget *parent, const QVariantList &args) :
     warningHandler();
     languages.initialize();
 
-    QList<Language> supportedLanguages = languages.getSupportedLanguages();
+    const QList<Language> supportedLanguages = languages.getSupportedLanguages();
     for (auto language: supportedLanguages) {
         QVariant variant = QVariant::fromValue<Language>(language);
         m_ui->primaryLanguage->addItem(language.getCombinedName(), variant);
         m_ui->secondaryLanguage->addItem(language.getCombinedName(), variant);
     }
 
-    connect(m_ui->primaryLanguage, SIGNAL(currentTextChanged(QString)), this, SLOT(changed()));
-    connect(m_ui->secondaryLanguage, SIGNAL(currentTextChanged(QString)), this, SLOT(changed()));
-    connect(m_ui->baiduAPPID, SIGNAL(textChanged(QString)), this, SLOT(changed()));
-    connect(m_ui->baiduApiKey, SIGNAL(textChanged(QString)), this, SLOT(changed()));
-    connect(m_ui->youdaoAPPID, SIGNAL(textChanged(QString)), this, SLOT(changed()));
-    connect(m_ui->youdaoAppSec, SIGNAL(textChanged(QString)), this, SLOT(changed()));
-    connect(m_ui->baiduEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
-    connect(m_ui->youdaoEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
-    connect(m_ui->googleEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
-    connect(m_ui->bingEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
+    connect(m_ui->primaryLanguage, &QComboBox::currentTextChanged, this, &TranslatorConfig::markAsChanged);
+    connect(m_ui->secondaryLanguage, &QComboBox::currentTextChanged, this, &TranslatorConfig::markAsChanged);
+    connect(m_ui->baiduAPPID, &QLineEdit::textChanged, this, &TranslatorConfig::markAsChanged);
+    connect(m_ui->baiduApiKey, &QLineEdit::textChanged, this, &TranslatorConfig::markAsChanged);
+    connect(m_ui->youdaoAPPID, &QLineEdit::textChanged, this, &TranslatorConfig::markAsChanged);
+    connect(m_ui->youdaoAppSec, &QLineEdit::textChanged, this, &TranslatorConfig::markAsChanged);
+    connect(m_ui->baiduEnable, &QCheckBox::stateChanged, this, &TranslatorConfig::markAsChanged);
+    connect(m_ui->youdaoEnable, &QCheckBox::stateChanged, this, &TranslatorConfig::markAsChanged);
+    connect(m_ui->googleEnable, &QCheckBox::stateChanged, this, &TranslatorConfig::markAsChanged);
+    connect(m_ui->bingEnable, &QCheckBox::stateChanged, this, &TranslatorConfig::markAsChanged);
 
-    connect(m_ui->bingEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
-    connect(m_ui->googleEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
-    connect(m_ui->baiduEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
-    connect(m_ui->youdaoEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
+    connect(m_ui->bingEnable, &QCheckBox::stateChanged, this, &TranslatorConfig::warningHandler);
+    connect(m_ui->googleEnable, &QCheckBox::stateChanged, this, &TranslatorConfig::warningHandler);
+    connect(m_ui->baiduEnable, &QCheckBox::stateChanged, this, &TranslatorConfig::warningHandler);
+    connect(m_ui->youdaoEnable, &QCheckBox::stateChanged, this, &TranslatorConfig::warningHandler);
 }
 
 void TranslatorConfig::load() {

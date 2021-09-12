@@ -35,12 +35,12 @@ Baidu::Baidu(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, con
 
     quint32 salt = randomGenerator.generate();
 
-    QByteArray sign;
+    QString sign;
     sign.append(appid);
     sign.append(text);
     sign.append(QString::number(salt));
     sign.append(key);
-    QByteArray hash = QCryptographicHash::hash(sign, QCryptographicHash::Md5);
+    QByteArray hash = QCryptographicHash::hash(sign.toUtf8(), QCryptographicHash::Md5);
     QString signMD5 = hash.toHex();
 
     QUrlQuery query;
@@ -58,7 +58,7 @@ Baidu::Baidu(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, con
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
 
     m_manager->get(request);
-    connect(m_manager, SIGNAL(finished(QNetworkReply * )), this, SLOT(parseResult(QNetworkReply * )));
+    connect(m_manager, &QNetworkAccessManager::finished, this, &Baidu::parseResult);
 }
 
 void Baidu::parseResult(QNetworkReply *reply) {

@@ -149,7 +149,7 @@ QString LanguageRepository::getCombinedName(QString abbreviation) {
 }
 
 bool LanguageRepository::containsAbbreviation(QString abbreviation) {
-    for (auto language: supportedLanguages->values()) {
+    for (auto language: *supportedLanguages) {
         if (language.getAbbreviation() == abbreviation)
             return true;
     }
