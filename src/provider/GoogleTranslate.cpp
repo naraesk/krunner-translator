@@ -30,6 +30,7 @@ Plasma::QueryMatch GoogleTranslate::translate(const QString &text, const QPair<Q
     match.setType(Plasma::QueryMatch::ExactMatch);
     match.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
     match.setText(result);
+    match.setMultiLine(true);
     match.setSubtext(QStringLiteral("Google Translate"));
     match.setRelevance(1);
     return match;

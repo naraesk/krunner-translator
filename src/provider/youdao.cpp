@@ -91,6 +91,7 @@ void Youdao::parseResult(QNetworkReply *reply) {
             match.setType(Plasma::QueryMatch::InformationalMatch);
             match.setIcon(QIcon::fromTheme("applications-education-language"));
             match.setText(result.toString());
+            match.setMultiLine(true);
             match.setRelevance(relevance);
             matches.append(match);
             relevance -= 0.01;
@@ -104,6 +105,7 @@ void Youdao::parseResult(QNetworkReply *reply) {
                 match.setType(Plasma::QueryMatch::InformationalMatch);
                 match.setIcon(QIcon::fromTheme("applications-education-language"));
                 match.setText(explain.toString());
+                match.setMultiLine(true);
                 match.setRelevance(relevance);
                 matches.append(match);
                 relevance -= 0.01;
