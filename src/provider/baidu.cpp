@@ -52,7 +52,7 @@ Baidu::Baidu(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, con
     query.addQueryItem("sign", signMD5);
 
 
-    QNetworkRequest request(QUrl("http://fanyi-provider.baidu.com/provider/trans/vip/translate?" +
+    QNetworkRequest request(QUrl("https://fanyi-api.baidu.com/api/trans/vip/translate?" +
                                  QUrl(query.query(QUrl::FullyEncoded).toUtf8()).toEncoded()));
     //request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
