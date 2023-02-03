@@ -63,7 +63,7 @@ Youdao::Youdao(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, c
     postData.addQueryItem(QStringLiteral("curtime"), QString::number(timestamp));
 
     QNetworkRequest request;
-    request.setUrl(QUrl("http://openapi.youdao.com/provider"));
+    request.setUrl(QUrl("https://openapi.youdao.com/api"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
     //request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
 
