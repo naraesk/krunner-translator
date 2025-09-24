@@ -19,24 +19,25 @@
 #ifndef TRANSLATOR_H
 #define TRANSLATOR_H
 
-#include <KRunner/AbstractRunner>
 #include "provider/GoogleTranslate.h"
 #include "LanguageRepository.h"
 
-class Translator : public Plasma::AbstractRunner
+#include <KRunner/AbstractRunner>
+#include <KRunner/Action>
+
+class Translator : public KRunner::AbstractRunner
 {
     Q_OBJECT
 
 public:
-    Translator(QObject *parent, const QVariantList &args);
-    void match(Plasma::RunnerContext &) override;
-    void run(const Plasma::RunnerContext &, const Plasma::QueryMatch &) override;
-    QList<QAction *> actionsForMatch(const Plasma::QueryMatch &match) override;
+    Translator(QObject *parent, const KPluginMetaData &args);
+    void match(KRunner::RunnerContext &) override;
+    void run(const KRunner::RunnerContext &, const KRunner::QueryMatch &) override;
     void reloadConfiguration() override;
 
 private:
     bool parseTerm(const QString &, QString &, QPair<QString, QString> &);
-    QList<QAction *> actions;
+    QList<KRunner::Action> actions;
     QString m_primary;
     QString m_secondary;
     QString m_baiduAPPID;
@@ -45,7 +46,7 @@ private:
     QString m_youdaoAppSec;
     bool m_baiduEnable;
     bool m_youdaoEnable;
-    QList<CommandLineEngine*> engines;
+    QList<CommandLineEngine *> engines;
     LanguageRepository languages;
 };
 

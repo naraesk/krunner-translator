@@ -20,8 +20,10 @@
 #define TRANSLATORCONFIG_H
 
 #include "ui_translator_config.h"
+#include "src/LanguageRepository.h"
+
+#include <KConfigGroup>
 #include <KCModule>
-#include <src/LanguageRepository.h>
 
 static const char CONFIG_PRIMARY[] = "primaryLanguage";
 static const char CONFIG_SECONDARY[] = "secondaryLanguage";
@@ -45,7 +47,7 @@ class TranslatorConfig : public KCModule {
 Q_OBJECT
 
 public:
-    explicit TranslatorConfig(QWidget *parent = nullptr, const QVariantList &args = QVariantList());
+    explicit TranslatorConfig(QObject *parent = nullptr, const KPluginMetaData &args = KPluginMetaData());
 
 public Q_SLOTS:
 
@@ -56,6 +58,7 @@ public Q_SLOTS:
     void warningHandler();
 
 private:
+    KConfigGroup config;
     TranslatorConfigForm *m_ui;
     LanguageRepository languages;
 };

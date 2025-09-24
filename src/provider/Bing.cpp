@@ -19,24 +19,24 @@
 #include "Bing.h"
 #include "src/translateShellProcess.h"
 
-Bing::Bing(Plasma::AbstractRunner *runner)
+Bing::Bing(KRunner::AbstractRunner *runner)
         : match(runner) {
 }
 
-Plasma::QueryMatch Bing::translate(const QString &text, const QPair<QString, QString> &language) {
-    TranslateShellProcess process("bing");
+KRunner::QueryMatch Bing::translate(const QString &text, const QPair<QString, QString> &language) {
+    TranslateShellProcess process(QStringLiteral("bing"));
     QString result = process.translate(language, text);
-    if (result == "\n") { // empty result
-        match.setType(Plasma::QueryMatch::NoMatch);
-    } else {
-        match.setData(QStringLiteral("audio"));
-        match.setType(Plasma::QueryMatch::ExactMatch);
-        match.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
-        match.setText(result);
-        match.setMultiLine(true);
-        match.setSubtext(QStringLiteral("Bing"));
-        match.setRelevance(1);
+
+    if (result == QStringLiteral("\n")) { // empty result
+        match.setRelevance(0);
+        return match;
     }
+    match.setData(QStringLiteral("audio"));
+    match.setIconName(QStringLiteral("applications-education-language"));
+    match.setText(result);
+    match.setMultiLine(true);
+    match.setSubtext(QStringLiteral("Bing"));
+    match.setRelevance(1);
     return match;
 }
 

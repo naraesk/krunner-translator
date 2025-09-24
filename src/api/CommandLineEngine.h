@@ -19,11 +19,11 @@
 #ifndef RUNNERTRANSLATOR_COMMANDLINEENGINE_H
 #define RUNNERTRANSLATOR_COMMANDLINEENGINE_H
 
-#include <KRunner/krunner/querymatch.h>
+#include <KRunner/QueryMatch>
 
 class CommandLineEngine {
 public:
-    virtual Plasma::QueryMatch translate(const QString &text, const QPair<QString, QString> &language) = 0;
+    virtual KRunner::QueryMatch translate(const QString &text, const QPair<QString, QString> &language) = 0;
 
     virtual ~CommandLineEngine() {};
 };

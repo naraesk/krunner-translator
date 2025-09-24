@@ -26,15 +26,15 @@ class TranslateShellProcess : public QProcess
 {
 Q_OBJECT
 public:
-    explicit TranslateShellProcess( QObject *parent = 0);
-    explicit TranslateShellProcess(const QString &engine, QObject *parent = 0);
+    explicit TranslateShellProcess(QObject *parent = nullptr);
+    explicit TranslateShellProcess(const QString &engine, QObject *parent = nullptr);
     ~TranslateShellProcess() override;
 
 public Q_SLOTS:
     QString translate(const QPair<QString, QString> &language, const QString &text);
     void play(const QString &text);
 private:
-    QString engine = "google";
+    QString engine = QStringLiteral("google");
 };
 
 #endif //RUNNERTRANSLATOR_TRANSLATESHELLPROCESS_H

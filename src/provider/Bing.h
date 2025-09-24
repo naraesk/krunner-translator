@@ -19,17 +19,17 @@
 #ifndef RUNNERTRANSLATOR_BING_H
 #define RUNNERTRANSLATOR_BING_H
 
+#include "src/api/CommandLineEngine.h"
 #include <KRunner/AbstractRunner>
-#include <src/api/CommandLineEngine.h>
 
 class Bing : public CommandLineEngine {
 public:
-    explicit Bing(Plasma::AbstractRunner*);
+    explicit Bing(KRunner::AbstractRunner*);
     ~Bing() override;
-    Plasma::QueryMatch translate(const QString &text, const QPair<QString, QString> &language) override;
+    KRunner::QueryMatch translate(const QString &text, const QPair<QString, QString> &language) override;
 
 private:
-    Plasma::QueryMatch match;
+    KRunner::QueryMatch match;
 };
 
 #endif //RUNNERTRANSLATOR_BING_H
