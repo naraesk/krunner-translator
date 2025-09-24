@@ -34,10 +34,9 @@ QString TranslateShellProcess::translate(const QPair<QString, QString> &language
               << QStringLiteral("--brief")
               << QStringLiteral("-e")
               << engine;
-    start("trans", arguments);
+    start(QStringLiteral("trans"), arguments);
     waitForFinished();
-    QString composeOutput(readLine());
-    return composeOutput;
+    return QString::fromUtf8(readLine());
 }
 
 void TranslateShellProcess::play(const QString &text) {
@@ -45,6 +44,6 @@ void TranslateShellProcess::play(const QString &text) {
     arguments << text
               << QStringLiteral("-speak")
               << QStringLiteral("-no-translate");
-    start("trans", arguments);
+    start(QStringLiteral("trans"), arguments);
     waitForFinished();
 }

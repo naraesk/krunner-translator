@@ -19,18 +19,18 @@
 #ifndef RUNNERTRANSLATOR_GOOGLETRANSLATE_H
 #define RUNNERTRANSLATOR_GOOGLETRANSLATE_H
 
+#include "src/api/CommandLineEngine.h"
 #include <KRunner/AbstractRunner>
-#include <src/api/CommandLineEngine.h>
 
 class GoogleTranslate : public CommandLineEngine {
 
 public:
-    explicit GoogleTranslate(Plasma::AbstractRunner*);
+    explicit GoogleTranslate(KRunner::AbstractRunner*);
     ~GoogleTranslate() override;
-    Plasma::QueryMatch translate(const QString &text, const QPair<QString, QString> &language) override;
+    KRunner::QueryMatch translate(const QString &text, const QPair<QString, QString> &language) override;
 
 private:
-    Plasma::QueryMatch match;
+    KRunner::QueryMatch match;
 };
 
 #endif //RUNNERTRANSLATOR_GOOGLETRANSLATE_H

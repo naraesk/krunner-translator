@@ -18,23 +18,27 @@
 
 #include "translator_config.h"
 #include "src/languages.h"
-#include <KSharedConfig>
-#include <KPluginFactory>
-#include <krunner/abstractrunner.h>
-#include <QtDebug>
-#include <QtWidgets/QGridLayout>
 
-K_PLUGIN_FACTORY(TranslatorConfigFactory, registerPlugin<TranslatorConfig>("kcm_krunner_translator");)
+#include <KRunner/AbstractRunner>
+#include <KSharedConfig>
+
+#include <QGridLayout>
+
+K_PLUGIN_CLASS(TranslatorConfig)
 
 TranslatorConfigForm::TranslatorConfigForm(QWidget *parent) : QWidget(parent) {
     setupUi(this);
 }
 
-TranslatorConfig::TranslatorConfig(QWidget *parent, const QVariantList &args) :
+TranslatorConfig::TranslatorConfig(QObject *parent, const KPluginMetaData &args) :
         KCModule(parent, args) {
-    m_ui = new TranslatorConfigForm(this);
-    QGridLayout *layout = new QGridLayout(this);
+    m_ui = new TranslatorConfigForm(this->widget());
+    QGridLayout *layout = new QGridLayout(this->widget());
     layout->addWidget(m_ui, 0, 0);
+
+    KSharedConfigPtr shared_config = KSharedConfig::openConfig(QStringLiteral("krunnerrc"));
+    config = shared_config->group(QStringLiteral("Runners")).group(QStringLiteral("krunner_translator"));
+    config.config()->reparseConfiguration();
 
     warningHandler();
     languages.initialize();
@@ -46,6 +50,7 @@ TranslatorConfig::TranslatorConfig(QWidget *parent, const QVariantList &args) :
         m_ui->secondaryLanguage->addItem(language.getCombinedName(), variant);
     }
 
+    // TODO: QCheckBox::stateChanged() is deprecated in newer versions of Qt, but Ubuntu is behind.
     connect(m_ui->primaryLanguage, &QComboBox::currentTextChanged, this, &TranslatorConfig::markAsChanged);
     connect(m_ui->secondaryLanguage, &QComboBox::currentTextChanged, this, &TranslatorConfig::markAsChanged);
     connect(m_ui->baiduAPPID, &QLineEdit::textChanged, this, &TranslatorConfig::markAsChanged);
@@ -64,49 +69,42 @@ TranslatorConfig::TranslatorConfig(QWidget *parent, const QVariantList &args) :
 }
 
 void TranslatorConfig::load() {
-    KCModule::load();
+    config.config()->reparseConfiguration();
 
-    KSharedConfig::Ptr cfg = KSharedConfig::openConfig(QStringLiteral("krunnerrc"));
-    KConfigGroup grp = cfg->group("Runners");
-    grp = KConfigGroup(&grp, "Translator");
-
-    QString abbrPrimaryLanguage = grp.readEntry(CONFIG_PRIMARY, "en");
-    QString abbrSecondaryLanguage = grp.readEntry(CONFIG_SECONDARY, "es");
+    QString abbrPrimaryLanguage = config.readEntry(CONFIG_PRIMARY, "en");
+    QString abbrSecondaryLanguage = config.readEntry(CONFIG_SECONDARY, "es");
     QString textPrimaryLanguage = languages.getCombinedName(abbrPrimaryLanguage);
     QString textSecondaryLanguage = languages.getCombinedName(abbrSecondaryLanguage);
     m_ui->primaryLanguage->setCurrentText(textPrimaryLanguage);
     m_ui->secondaryLanguage->setCurrentText(textSecondaryLanguage);
-    m_ui->baiduAPPID->setText(grp.readEntry(CONFIG_BAIDU_APPID, ""));
-    m_ui->baiduApiKey->setText(grp.readEntry(CONFIG_BAIDU_APIKEY, ""));
-    m_ui->youdaoAPPID->setText(grp.readEntry(CONFIG_YOUDAO_APPID, ""));
-    m_ui->youdaoAppSec->setText(grp.readEntry(CONFIG_YOUDAO_APPSEC, ""));
-    m_ui->baiduEnable->setChecked(grp.readEntry(CONFIG_BAIDU_ENABLE, false));
-    m_ui->youdaoEnable->setChecked(grp.readEntry(CONFIG_YOUDAO_ENABLE, false));
-    m_ui->googleEnable->setChecked(grp.readEntry(CONFIG_GOOGLE_ENABLE, true));
-    m_ui->bingEnable->setChecked(grp.readEntry(CONFIG_BING_ENABLE, false));
+    m_ui->baiduAPPID->setText(config.readEntry(CONFIG_BAIDU_APPID, ""));
+    m_ui->baiduApiKey->setText(config.readEntry(CONFIG_BAIDU_APIKEY, ""));
+    m_ui->youdaoAPPID->setText(config.readEntry(CONFIG_YOUDAO_APPID, ""));
+    m_ui->youdaoAppSec->setText(config.readEntry(CONFIG_YOUDAO_APPSEC, ""));
+    m_ui->baiduEnable->setChecked(config.readEntry(CONFIG_BAIDU_ENABLE, false));
+    m_ui->youdaoEnable->setChecked(config.readEntry(CONFIG_YOUDAO_ENABLE, false));
+    m_ui->googleEnable->setChecked(config.readEntry(CONFIG_GOOGLE_ENABLE, true));
+    m_ui->bingEnable->setChecked(config.readEntry(CONFIG_BING_ENABLE, false));
+
+    markAsChanged();
 }
 
 void TranslatorConfig::save() {
-    KCModule::save();
-
-    KSharedConfig::Ptr cfg = KSharedConfig::openConfig(QStringLiteral("krunnerrc"));
-    KConfigGroup grp = cfg->group("Runners");
-    grp = KConfigGroup(&grp, "Translator");
-
     Language primaryLanguage = m_ui->primaryLanguage->currentData().value<Language>();
     Language secondaryLanguage = m_ui->secondaryLanguage->currentData().value<Language>();
 
-    grp.writeEntry(CONFIG_PRIMARY, primaryLanguage.getAbbreviation());
-    grp.writeEntry(CONFIG_SECONDARY, secondaryLanguage.getAbbreviation());
-    grp.writeEntry(CONFIG_BAIDU_APPID, m_ui->baiduAPPID->text());
-    grp.writeEntry(CONFIG_BAIDU_APIKEY, m_ui->baiduApiKey->text());
-    grp.writeEntry(CONFIG_YOUDAO_APPID, m_ui->youdaoAPPID->text());
-    grp.writeEntry(CONFIG_YOUDAO_APPSEC, m_ui->youdaoAppSec->text());
-    grp.writeEntry(CONFIG_BAIDU_ENABLE, m_ui->baiduEnable->isChecked());
-    grp.writeEntry(CONFIG_YOUDAO_ENABLE, m_ui->youdaoEnable->isChecked());
-    grp.writeEntry(CONFIG_GOOGLE_ENABLE, m_ui->googleEnable->isChecked());
-    grp.writeEntry(CONFIG_BING_ENABLE, m_ui->bingEnable->isChecked());
-    emit changed(true);
+    config.writeEntry(CONFIG_PRIMARY, primaryLanguage.getAbbreviation());
+    config.writeEntry(CONFIG_SECONDARY, secondaryLanguage.getAbbreviation());
+    config.writeEntry(CONFIG_BAIDU_APPID, m_ui->baiduAPPID->text());
+    config.writeEntry(CONFIG_BAIDU_APIKEY, m_ui->baiduApiKey->text());
+    config.writeEntry(CONFIG_YOUDAO_APPID, m_ui->youdaoAPPID->text());
+    config.writeEntry(CONFIG_YOUDAO_APPSEC, m_ui->youdaoAppSec->text());
+    config.writeEntry(CONFIG_BAIDU_ENABLE, m_ui->baiduEnable->isChecked());
+    config.writeEntry(CONFIG_YOUDAO_ENABLE, m_ui->youdaoEnable->isChecked());
+    config.writeEntry(CONFIG_GOOGLE_ENABLE, m_ui->googleEnable->isChecked());
+    config.writeEntry(CONFIG_BING_ENABLE, m_ui->bingEnable->isChecked());
+
+    config.config()->sync();
 }
 
 void TranslatorConfig::warningHandler() {

@@ -145,7 +145,7 @@ QString LanguageRepository::getCombinedName(QString abbreviation) {
             return language.getCombinedName();
         }
     }
-    return "";
+    return QString();
 }
 
 bool LanguageRepository::containsAbbreviation(QString abbreviation) {

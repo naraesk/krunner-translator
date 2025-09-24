@@ -20,7 +20,7 @@
 #define BAIDU_H
 
 #include <KRunner/AbstractRunner>
-#include <QtNetwork/QNetworkReply>
+#include <QNetworkReply>
 
 /**
  * API Implementation for Baidu http://provider.fanyi.baidu.com/doc/21/)
@@ -32,18 +32,18 @@ class Baidu : public QObject
     Q_OBJECT
 
 public:
-    Baidu(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<QString, QString> &, const QString &, const QString &);
+    Baidu(KRunner::AbstractRunner*, KRunner::RunnerContext&, const QString &, const QPair<QString, QString> &, const QString &, const QString &);
 
 private Q_SLOTS:
    void parseResult(QNetworkReply*);
 
 Q_SIGNALS:
 	void finished();
-   
+
 private:
-   Plasma::AbstractRunner * m_runner;
-   QNetworkAccessManager * m_manager;
-   Plasma::RunnerContext m_context;
+   KRunner::AbstractRunner *m_runner;
+   QNetworkAccessManager *m_manager;
+   KRunner::RunnerContext m_context;
    QString langMapper(QString);
 };
 
