@@ -95,18 +95,18 @@ A list of all language codes you can find [here](https://en.wikipedia.org/wiki/L
 
 ### Specify source and target language
 
-Syntax: `<sourcelang>-<targetlang> <searchterm>`
+Syntax: `<sourcelang>-<targetlang> <searchterm>` \
 *en-de house* → will translate *house* into german (*de*)
 
 ### Use default source language
 
 Syntax: `<targetlang> <searchterm>`
 
-Default source language: *English (en)*
+Default source language: *English (en)* \
 Alternative source language: *Spanish (es)*
 
-*de soccer* → *en-de soccer*
-*en hola* → *es-en hola*
+*de soccer* → *en-de soccer* \
+*en hola* → *es-en hola* \
 *fr house* → *en-fr house*
 
 Thanks for your feedback and kudos! If you like the runner, please vote for it [here](http://kde-apps.org/content/show.php?content=156498).
