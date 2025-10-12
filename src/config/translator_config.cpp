@@ -50,22 +50,21 @@ TranslatorConfig::TranslatorConfig(QObject *parent, const KPluginMetaData &args)
         m_ui->secondaryLanguage->addItem(language.getCombinedName(), variant);
     }
 
-    // TODO: QCheckBox::stateChanged() is deprecated in newer versions of Qt, but Ubuntu is behind.
     connect(m_ui->primaryLanguage, &QComboBox::currentTextChanged, this, &TranslatorConfig::markAsChanged);
     connect(m_ui->secondaryLanguage, &QComboBox::currentTextChanged, this, &TranslatorConfig::markAsChanged);
     connect(m_ui->baiduAPPID, &QLineEdit::textChanged, this, &TranslatorConfig::markAsChanged);
     connect(m_ui->baiduApiKey, &QLineEdit::textChanged, this, &TranslatorConfig::markAsChanged);
     connect(m_ui->youdaoAPPID, &QLineEdit::textChanged, this, &TranslatorConfig::markAsChanged);
     connect(m_ui->youdaoAppSec, &QLineEdit::textChanged, this, &TranslatorConfig::markAsChanged);
-    connect(m_ui->baiduEnable, &QCheckBox::stateChanged, this, &TranslatorConfig::markAsChanged);
-    connect(m_ui->youdaoEnable, &QCheckBox::stateChanged, this, &TranslatorConfig::markAsChanged);
-    connect(m_ui->googleEnable, &QCheckBox::stateChanged, this, &TranslatorConfig::markAsChanged);
-    connect(m_ui->bingEnable, &QCheckBox::stateChanged, this, &TranslatorConfig::markAsChanged);
+    connect(m_ui->baiduEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::markAsChanged);
+    connect(m_ui->youdaoEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::markAsChanged);
+    connect(m_ui->googleEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::markAsChanged);
+    connect(m_ui->bingEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::markAsChanged);
 
-    connect(m_ui->bingEnable, &QCheckBox::stateChanged, this, &TranslatorConfig::warningHandler);
-    connect(m_ui->googleEnable, &QCheckBox::stateChanged, this, &TranslatorConfig::warningHandler);
-    connect(m_ui->baiduEnable, &QCheckBox::stateChanged, this, &TranslatorConfig::warningHandler);
-    connect(m_ui->youdaoEnable, &QCheckBox::stateChanged, this, &TranslatorConfig::warningHandler);
+    connect(m_ui->bingEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
+    connect(m_ui->googleEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
+    connect(m_ui->baiduEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
+    connect(m_ui->youdaoEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
 }
 
 void TranslatorConfig::load() {
