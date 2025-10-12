@@ -17,7 +17,7 @@ This is a plugin for Plasma 6 KRunner. It's a translator and it translates text.
 
 OR, if you prefer to build manually,
 
-1. Install the distro-specific dependencies
+1. Install the dependencies listed below
 2. Clone this repo, `cd` into it, and run
 ```sh
 cmake -B build
@@ -31,47 +31,19 @@ sudo cmake --build build --target uninstall
 systemctl --user restart plasma-krunner  # or killall krunner
 ```
 
-<details>
-<summary><strong>Ubuntu Dependencies</strong></summary>
+### Ubuntu Dependencies
 
-Note: Requires Ubuntu 24.10 (Oracular) or newer.
+Note: Requires Ubuntu 25.04 (Plucky) or newer.
 
-```sh
-sudo apt install \
-	translate-shell \
-	build-essential \
-	cmake \
-	extra-cmake-modules \
-	qt6-base-dev \
-	libkf6runner-dev \
-	libkf6i18n-dev \
-	libkf6coreaddons-dev \
-	libkf6config-dev \
-	libkf6configwidgets-dev \
-	libkf6kcmutils-dev
+```
+translate-shell build-essential cmake extra-cmake-modules qt6-base-dev libkf6runner-dev libkf6i18n-dev libkf6coreaddons-dev libkf6config-dev libkf6configwidgets-dev libkf6kcmutils-dev
 ```
 
-</details>
+### Fedora/openSUSE Dependencies
 
-<details>
-<summary><strong>Fedora Dependencies</strong></summary>
-
-```sh
-sudo dnf install \
-	translate-shell \
-	make \
-	cmake \
-	extra-cmake-modules \
-	qt6-qtbase-devel \
-	kf6-krunner-devel \
-	kf6-ki18n-devel \
-	kf6-kcoreaddons-devel \
-	kf6-kconfig-devel \
-	kf6-kconfigwidgets-devel \
-	kf6-kcmutils-devel
 ```
-
-</details>
+translate-shell cmake extra-cmake-modules cmake(Qt6Core) cmake(Qt6Gui) cmake(Qt6Widgets) cmake(Qt6Network) cmake(KF6Runner) cmake(KF6I18n) cmake(KF6CoreAddons) cmake(KF6Config) cmake(KF6ConfigWidgets) cmake(KF6KCMUtils)
+```
 
 
 ## Configuration
