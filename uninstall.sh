@@ -3,4 +3,4 @@
 set -e
 
 sudo cmake --build build --target uninstall
-killall krunner || true
+killall -q krunner || true

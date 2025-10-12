@@ -23,12 +23,12 @@ OR, if you prefer to build manually,
 cmake -B build
 cmake --build build --parallel --config Release
 sudo cmake --install build --config Release
-systemctl --user restart plasma-krunner  # or killall krunner
+killall -q krunner  # or systemctl --user restart plasma-krunner
 ```
 3. To uninstall, run
 ```sh
 sudo cmake --build build --target uninstall
-systemctl --user restart plasma-krunner  # or killall krunner
+killall -q krunner  # or systemctl --user restart plasma-krunner
 ```
 
 ### Ubuntu Dependencies

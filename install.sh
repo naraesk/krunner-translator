@@ -48,4 +48,4 @@ fi
 cmake -B build
 cmake --build build --parallel --config Release
 sudo cmake --install build --config Release
-killall krunner || true
+killall -q krunner || true
