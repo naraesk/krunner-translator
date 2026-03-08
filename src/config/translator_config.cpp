@@ -53,8 +53,10 @@ TranslatorConfig::TranslatorConfig(QObject *parent, const KPluginMetaData &metaD
     connect(m_ui->baiduApiKey, &QLineEdit::textChanged, this, [this]() { setNeedsSave(true); });
     connect(m_ui->youdaoAPPID, &QLineEdit::textChanged, this, [this]() { setNeedsSave(true); });
     connect(m_ui->youdaoAppSec, &QLineEdit::textChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->deeplApiKey, &QLineEdit::textChanged, this, [this]() { setNeedsSave(true); });
     connect(m_ui->baiduEnable, &QCheckBox::checkStateChanged, this, [this]() { setNeedsSave(true); });
     connect(m_ui->youdaoEnable, &QCheckBox::checkStateChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->deeplEnable, &QCheckBox::checkStateChanged, this, [this]() { setNeedsSave(true); });
     connect(m_ui->googleEnable, &QCheckBox::checkStateChanged, this, [this]() { setNeedsSave(true); });
     connect(m_ui->bingEnable, &QCheckBox::checkStateChanged, this, [this]() { setNeedsSave(true); });
 
@@ -62,6 +64,7 @@ TranslatorConfig::TranslatorConfig(QObject *parent, const KPluginMetaData &metaD
     connect(m_ui->googleEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
     connect(m_ui->baiduEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
     connect(m_ui->youdaoEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
+    connect(m_ui->deeplEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
 }
 
 void TranslatorConfig::load() {
@@ -69,7 +72,7 @@ void TranslatorConfig::load() {
 
     KSharedConfig::Ptr cfg = KSharedConfig::openConfig(QStringLiteral("krunnerrc"));
     KConfigGroup grp = cfg->group(QStringLiteral("Runners"));
-    grp = KConfigGroup(&grp, QStringLiteral("Translator"));
+    grp = KConfigGroup(&grp, QStringLiteral("krunner_translator"));
 
     QString abbrPrimaryLanguage = grp.readEntry(CONFIG_PRIMARY, QStringLiteral("en"));
     QString abbrSecondaryLanguage = grp.readEntry(CONFIG_SECONDARY, QStringLiteral("es"));
@@ -81,8 +84,10 @@ void TranslatorConfig::load() {
     m_ui->baiduApiKey->setText(grp.readEntry(CONFIG_BAIDU_APIKEY, QStringLiteral("")));
     m_ui->youdaoAPPID->setText(grp.readEntry(CONFIG_YOUDAO_APPID, QStringLiteral("")));
     m_ui->youdaoAppSec->setText(grp.readEntry(CONFIG_YOUDAO_APPSEC, QStringLiteral("")));
+    m_ui->deeplApiKey->setText(grp.readEntry(CONFIG_DEEPL_APIKEY, QStringLiteral("")));
     m_ui->baiduEnable->setChecked(grp.readEntry(CONFIG_BAIDU_ENABLE, false));
     m_ui->youdaoEnable->setChecked(grp.readEntry(CONFIG_YOUDAO_ENABLE, false));
+    m_ui->deeplEnable->setChecked(grp.readEntry(CONFIG_DEEPL_ENABLE, false));
     m_ui->googleEnable->setChecked(grp.readEntry(CONFIG_GOOGLE_ENABLE, true));
     m_ui->bingEnable->setChecked(grp.readEntry(CONFIG_BING_ENABLE, false));
 }
@@ -92,7 +97,7 @@ void TranslatorConfig::save() {
 
     KSharedConfig::Ptr cfg = KSharedConfig::openConfig(QStringLiteral("krunnerrc"));
     KConfigGroup grp = cfg->group(QStringLiteral("Runners"));
-    grp = KConfigGroup(&grp, QStringLiteral("Translator"));
+    grp = KConfigGroup(&grp, QStringLiteral("krunner_translator"));
 
     Language primaryLanguage = m_ui->primaryLanguage->currentData().value<Language>();
     Language secondaryLanguage = m_ui->secondaryLanguage->currentData().value<Language>();
@@ -103,8 +108,10 @@ void TranslatorConfig::save() {
     grp.writeEntry(CONFIG_BAIDU_APIKEY, m_ui->baiduApiKey->text());
     grp.writeEntry(CONFIG_YOUDAO_APPID, m_ui->youdaoAPPID->text());
     grp.writeEntry(CONFIG_YOUDAO_APPSEC, m_ui->youdaoAppSec->text());
+    grp.writeEntry(CONFIG_DEEPL_APIKEY, m_ui->deeplApiKey->text());
     grp.writeEntry(CONFIG_BAIDU_ENABLE, m_ui->baiduEnable->isChecked());
     grp.writeEntry(CONFIG_YOUDAO_ENABLE, m_ui->youdaoEnable->isChecked());
+    grp.writeEntry(CONFIG_DEEPL_ENABLE, m_ui->deeplEnable->isChecked());
     grp.writeEntry(CONFIG_GOOGLE_ENABLE, m_ui->googleEnable->isChecked());
     grp.writeEntry(CONFIG_BING_ENABLE, m_ui->bingEnable->isChecked());
 }
@@ -116,7 +123,8 @@ void TranslatorConfig::warningHandler() {
     if (m_ui->bingEnable->isChecked() &&
         !m_ui->googleEnable->isChecked() &&
         !m_ui->baiduEnable->isChecked() &&
-        !m_ui->youdaoEnable->isChecked()) {
+        !m_ui->youdaoEnable->isChecked() &&
+        !m_ui->deeplEnable->isChecked()) {
         m_ui->bingWarningOnlyEngine->show();
     } else {
         m_ui->bingWarningOnlyEngine->hide();
@@ -135,7 +143,8 @@ void TranslatorConfig::warningHandler() {
     if (!m_ui->bingEnable->isChecked() &&
         !m_ui->googleEnable->isChecked() &&
         !m_ui->baiduEnable->isChecked() &&
-        !m_ui->youdaoEnable->isChecked()) {
+        !m_ui->youdaoEnable->isChecked() &&
+        !m_ui->deeplEnable->isChecked()) {
         m_ui->noEngineWarning->show();
     } else {
         m_ui->noEngineWarning->hide();

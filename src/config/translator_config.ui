@@ -315,6 +315,74 @@
        </layout>
       </widget>
      </widget>
+     <widget class="QWidget" name="deeplTab">
+      <attribute name="title">
+       <string>DeepL</string>
+      </attribute>
+      <widget class="QGroupBox" name="deepl">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>500</width>
+         <height>172</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string/>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+       <layout class="QFormLayout" name="deepl_layout">
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>6</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
+        <item row="0" column="0" colspan="2">
+         <layout class="QFormLayout" name="formLayout_deepl">
+          <property name="leftMargin">
+           <number>6</number>
+          </property>
+          <property name="topMargin">
+           <number>6</number>
+          </property>
+          <property name="rightMargin">
+           <number>6</number>
+          </property>
+          <property name="bottomMargin">
+           <number>6</number>
+          </property>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="deeplEnable">
+            <property name="text">
+             <string>Enable</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_deepl_apikey">
+            <property name="text">
+             <string>API Key</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="deeplApiKey"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
      <widget class="QWidget" name="tab">
       <attribute name="title">
        <string>Youdao</string>

@@ -22,6 +22,7 @@ set(krunner_translator_SRCS
         src/Translator.cpp
         src/translationEngines/impl/baidu.cpp
         src/translationEngines/impl/youdao.cpp
+        src/translationEngines/impl/deepl.cpp
         src/translationEngines/impl/GoogleTranslate.cpp
         src/translationEngines/impl/Bing.cpp
         src/TranslateShellProcess.cpp

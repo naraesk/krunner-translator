@@ -22,6 +22,7 @@
 #include "translationEngines/impl/baidu.h"
 #include "translationEngines/impl/youdao.h"
 #include "translationEngines/impl/Bing.h"
+#include "translationEngines/impl/deepl.h"
 #include "Parser.h"
 #include <src/TranslateShellProcess.h>
 #include <KLocalizedString>
@@ -68,6 +69,12 @@ void Translator::match(KRunner::RunnerContext &context) {
         connect(&youdao, SIGNAL(finished()), &youdaoLoop, SLOT(quit()));
         youdaoLoop.exec();
     }
+    if (m_deeplEnable) {
+        QEventLoop deeplLoop;
+        Deepl deepl(this, context, query, m_deeplAPIKey);
+        connect(&deepl, SIGNAL(finished()), &deeplLoop, SLOT(quit()));
+        deeplLoop.exec();
+    }
     for (auto engine : engines) {
         KRunner::QueryMatch match = engine->translate(query);
         match.setActions(actions);
@@ -86,6 +93,8 @@ void Translator::run(const KRunner::RunnerContext &context, const KRunner::Query
 }
 
 void Translator::reloadConfiguration() {
+    qDeleteAll(engines);
+    engines.clear();
     auto grp = config();
     QString defaultLanguageAbbreviation = grp.readEntry(CONFIG_PRIMARY, QStringLiteral("en"));
     QString alternativeDefaultLanguageAbbreviation = grp.readEntry(CONFIG_SECONDARY, QStringLiteral("es"));
@@ -95,8 +104,10 @@ void Translator::reloadConfiguration() {
     m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY, QStringLiteral(""));
     m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID, QStringLiteral(""));
     m_youdaoAppSec = grp.readEntry(CONFIG_YOUDAO_APPSEC, QStringLiteral(""));
+    m_deeplAPIKey = grp.readEntry(CONFIG_DEEPL_APIKEY, QStringLiteral(""));
     m_baiduEnable = grp.readEntry(CONFIG_BAIDU_ENABLE, false);
     m_youdaoEnable = grp.readEntry(CONFIG_YOUDAO_ENABLE, false);
+    m_deeplEnable = grp.readEntry(CONFIG_DEEPL_ENABLE, false);
 
     const bool googleEnable = grp.readEntry(CONFIG_GOOGLE_ENABLE, true);
     if (googleEnable) {

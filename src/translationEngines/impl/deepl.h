@@ -1,5 +1,5 @@
 /******************************************************************************
- *  Copyright (C) 2013 – 2018 by David Baum <david.baum@naraesk.eu>           *
+ *  Copyright (C) 2024 by Sheng Huang <shenghuang147@gmail.com>               *
  *                                                                            *
  *  This library is free software; you can redistribute it and/or modify      *
  *  it under the terms of the GNU Lesser General Public License as published  *
@@ -16,41 +16,37 @@
  *  If not, see <http://www.gnu.org/licenses/>.                               *
  *****************************************************************************/
 
-#ifndef TRANSLATOR_H
-#define TRANSLATOR_H
+#ifndef DEEPL_H
+#define DEEPL_H
 
 #include <KRunner/AbstractRunner>
-#include <KRunner/Action>
-#include "src/translationEngines/api/CommandLineEngine.h"
-#include "src/language/LanguageRepository.h"
-#include "Parser.h"
+#include <QtNetwork/QNetworkReply>
+#include <src/language/Language.h>
+#include <src/TranslationQuery.h>
 
-class Translator : public KRunner::AbstractRunner
+/**
+ * API Implementation for DeepL https://developers.deepl.com/docs/api-reference/translate
+ */
+
+class Deepl : public QObject
 {
+
     Q_OBJECT
 
 public:
-    Translator(QObject *parent, const KPluginMetaData &metaData);
-    ~Translator() override;
-    void match(KRunner::RunnerContext &) override;
-    void run(const KRunner::RunnerContext &, const KRunner::QueryMatch &) override;
-    void reloadConfiguration() override;
+    Deepl(KRunner::AbstractRunner*, KRunner::RunnerContext&, const TranslationQuery*, const QString &);
+
+private Q_SLOTS:
+   void parseResult(QNetworkReply*);
+
+Q_SIGNALS:
+	void finished();
 
 private:
-    QList<KRunner::Action> actions;
-    SupportedLanguage defaultLanguage;
-    SupportedLanguage alternativeDefaultLanguage;
-    QString m_baiduAPPID;
-    QString m_baiduAPIKey;
-    QString m_youdaoAPPID;
-    QString m_youdaoAppSec;
-    QString m_deeplAPIKey;
-    bool m_baiduEnable;
-    bool m_youdaoEnable;
-    bool m_deeplEnable;
-    QList<CommandLineEngine*> engines;
-    LanguageRepository languages;
-    Parser parser;
+   KRunner::AbstractRunner * m_runner;
+   QNetworkAccessManager * m_manager;
+   KRunner::RunnerContext m_context;
+   QString langMapper(QString);
 };
 
 #endif
