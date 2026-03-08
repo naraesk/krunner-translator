@@ -31,6 +31,7 @@ KRunner::QueryMatch GoogleTranslate::translate(const TranslationQuery* query) {
     match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Highest);
     match.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
     match.setText(result);
+    match.setMultiLine(true);
     match.setSubtext(QStringLiteral("Google Translate"));
     match.setRelevance(1);
     return match;

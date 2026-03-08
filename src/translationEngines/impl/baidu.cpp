@@ -54,13 +54,13 @@ Baidu::Baidu(KRunner::AbstractRunner *runner, KRunner::RunnerContext &context, c
     urlQuery.addQueryItem(QStringLiteral("sign"), signMD5);
 
 
-    QNetworkRequest request(QUrl(QStringLiteral("http://fanyi-translationEngines.baidu.com/translationEngines/trans/vip/translate?") +
+    QNetworkRequest request(QUrl(QStringLiteral("https://fanyi-api.baidu.com/api/trans/vip/translate?") +
                                  urlQuery.query(QUrl::FullyEncoded)));
     //request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
     request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/x-www-form-urlencoded"));
 
     m_manager->get(request);
-    connect(m_manager, SIGNAL(finished(QNetworkReply * )), this, SLOT(parseResult(QNetworkReply * )));
+    connect(m_manager, &QNetworkAccessManager::finished, this, &Baidu::parseResult);
 }
 
 void Baidu::parseResult(QNetworkReply *reply) {
@@ -88,6 +88,7 @@ void Baidu::parseResult(QNetworkReply *reply) {
             match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Moderate);
             match.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
             match.setText(result.toObject().find(QStringLiteral("dst")).value().toString());
+            match.setMultiLine(true);
             match.setRelevance(relevance);
             matches.append(match);
             relevance -= 0.01;

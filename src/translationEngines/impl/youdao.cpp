@@ -64,11 +64,11 @@ Youdao::Youdao(KRunner::AbstractRunner *runner, KRunner::RunnerContext &context,
     postData.addQueryItem(QStringLiteral("curtime"), QString::number(timestamp));
 
     QNetworkRequest request;
-    request.setUrl(QUrl(QStringLiteral("http://openapi.youdao.com/translationEngines")));
+    request.setUrl(QUrl(QStringLiteral("https://openapi.youdao.com/api")));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/x-www-form-urlencoded"));
 
     m_manager->post(request, postData.toString(QUrl::FullyEncoded).toUtf8());
-    connect(m_manager, SIGNAL(finished(QNetworkReply * )), this, SLOT(parseResult(QNetworkReply * )));
+    connect(m_manager, &QNetworkAccessManager::finished, this, &Youdao::parseResult);
 }
 
 void Youdao::parseResult(QNetworkReply *reply) {
@@ -91,6 +91,7 @@ void Youdao::parseResult(QNetworkReply *reply) {
             match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Moderate);
             match.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
             match.setText(result.toString());
+            match.setMultiLine(true);
             match.setRelevance(relevance);
             matches.append(match);
             relevance -= 0.01;
@@ -104,6 +105,7 @@ void Youdao::parseResult(QNetworkReply *reply) {
                 match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Moderate);
                 match.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
                 match.setText(explain.toString());
+                match.setMultiLine(true);
                 match.setRelevance(relevance);
                 matches.append(match);
                 relevance -= 0.01;

@@ -40,7 +40,7 @@ TranslatorConfig::TranslatorConfig(QObject *parent, const KPluginMetaData &metaD
     warningHandler();
     languages.initialize();
 
-    QList<Language> supportedLanguages = languages.getSupportedLanguages();
+    const QList<Language> supportedLanguages = languages.getSupportedLanguages();
     for (auto language: supportedLanguages) {
         QVariant variant = QVariant::fromValue<Language>(language);
         m_ui->primaryLanguage->addItem(language.getCombinedName(), variant);

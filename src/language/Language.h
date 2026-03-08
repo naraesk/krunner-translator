@@ -43,7 +43,6 @@ public:
 private:
     QString name;
     QString abbreviation;
-    SupportedLanguage language;
 };
 
 Q_DECLARE_METATYPE(Language)

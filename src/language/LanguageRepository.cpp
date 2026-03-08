@@ -158,3 +158,11 @@ SupportedLanguage LanguageRepository::getSupportedLanguage(QString abbr) {
 QString LanguageRepository::getAbbreviation(SupportedLanguage language) const {
     return supportedLanguages->find(language).value().getAbbreviation();
 }
+
+bool LanguageRepository::containsAbbreviation(QString abbreviation) {
+    for (auto language: *supportedLanguages) {
+        if (language.getAbbreviation() == abbreviation)
+            return true;
+    }
+    return false;
+}
