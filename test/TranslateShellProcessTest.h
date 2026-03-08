@@ -31,7 +31,7 @@ Q_OBJECT;
     TranslateShellProcess process;
     LanguageRepository repository;
 
-private slots:
+private Q_SLOTS:
 
     void initTestCase();
 

@@ -23,9 +23,9 @@ void TranslateShellProcessTest::initTestCase() {
 }
 
 void TranslateShellProcessTest::germanToEnglishTest() {
-    QPair<Language, Language> languages;
-    languages = qMakePair(repository.getLanguage(QStringLiteral("de")), repository.getLanguage(QStringLiteral("en")));
-    QString result = process.translate(languages, QStringLiteral("Haus"));
+    QString text = QStringLiteral("Haus");
+    const TranslationQuery *query = new TranslationQuery(&repository, SupportedLanguage::German, SupportedLanguage::English, text);
+    QString result = process.translate(query);
     QCOMPARE(result, QStringLiteral("House"));
 }
 

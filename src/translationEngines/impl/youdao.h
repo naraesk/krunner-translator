@@ -22,6 +22,7 @@
 #include <KRunner/AbstractRunner>
 #include <QtNetwork/QNetworkReply>
 #include <src/language/Language.h>
+#include <src/TranslationQuery.h>
 
 /**
  * API Implementation for Youdao https://ai.youdao.com/DOCSIRMA/html/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E7%BF%BB%E8%AF%91/API%E6%96%87%E6%A1%A3/%E6%96%87%E6%9C%AC%E7%BF%BB%E8%AF%91%E6%9C%8D%E5%8A%A1/%E6%96%87%E6%9C%AC%E7%BF%BB%E8%AF%91%E6%9C%8D%E5%8A%A1-API%E6%96%87%E6%A1%A3.html)
@@ -33,18 +34,18 @@ class Youdao : public QObject
     Q_OBJECT
 
 public:
-    Youdao(Plasma::AbstractRunner*, Plasma::RunnerContext&, const QString &, const QPair<Language, Language> &, const QString &, const QString &);
+    Youdao(KRunner::AbstractRunner*, KRunner::RunnerContext&, const TranslationQuery* query, const QString &, const QString &);
 
 private Q_SLOTS:
    void parseResult(QNetworkReply*);
 
 Q_SIGNALS:
 	void finished();
-   
+
 private:
-   Plasma::AbstractRunner * m_runner;
+   KRunner::AbstractRunner * m_runner;
    QNetworkAccessManager * m_manager;
-   Plasma::RunnerContext m_context;
+   KRunner::RunnerContext m_context;
    QString langMapper(QString);
 };
 

@@ -20,6 +20,7 @@
 #define RUNNERTRANSLATOR_SUPPORTEDLANGUAGES_H
 
 enum SupportedLanguage {
+    INVALID,
     Afrikaans,
     Albanian,
     Amharic,

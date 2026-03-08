@@ -22,20 +22,21 @@
 #include <QProcess>
 #include <QString>
 #include "src/language/Language.h"
+#include "TranslationQuery.h"
 
 class TranslateShellProcess : public QProcess
 {
 Q_OBJECT
 public:
-    explicit TranslateShellProcess( QObject *parent = 0);
-    explicit TranslateShellProcess(const QString &engine, QObject *parent = 0);
+    explicit TranslateShellProcess( QObject *parent = nullptr);
+    explicit TranslateShellProcess(const QString &engine, QObject *parent = nullptr);
     ~TranslateShellProcess() override;
 
 public Q_SLOTS:
-    QString translate(const QPair<Language, Language> &language, const QString &text);
+    QString translate(const TranslationQuery* query);
     void play(const QString &text);
 private:
-    QString engine = "google";
+    QString engine = QStringLiteral("google");
 };
 
 #endif //RUNNERTRANSLATOR_TRANSLATESHELLPROCESS_H

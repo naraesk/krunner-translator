@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include "LanguageRepository.h"
+#include <QDebug>
 
 void LanguageRepository::initialize() {
     addSupportedLanguage(Afrikaans, QStringLiteral("Afrikaans"), QStringLiteral("af"));
@@ -147,18 +148,13 @@ QString LanguageRepository::getCombinedName(QString abbreviation) {
             return language.getCombinedName();
         }
     }
-    return "";
+    return QString();
 }
 
-bool LanguageRepository::containsAbbreviation(QString abbreviation) {
-    for (auto language: supportedLanguages->values()) {
-        if (language.getAbbreviation() == abbreviation)
-            return true;
-    }
-    return false;
+SupportedLanguage LanguageRepository::getSupportedLanguage(QString abbr) {
+    return abbrMap->find(abbr).value();
 }
 
-Language LanguageRepository::getLanguage(QString abbr) {
-    SupportedLanguage sl = abbrMap->find(abbr).value();
-    return supportedLanguages->find(sl).value();
+QString LanguageRepository::getAbbreviation(SupportedLanguage language) const {
+    return supportedLanguages->find(language).value().getAbbreviation();
 }

@@ -5,5 +5,4 @@ set -e
 
 cd build
 sudo make uninstall
-kquitapp5 krunner 2> /dev/null; kstart5 --windowclass krunner krunner > /dev/null 2>&1 &
-
+kquitapp6 krunner 2> /dev/null; kstart krunner > /dev/null 2>&1 &

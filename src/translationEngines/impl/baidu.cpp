@@ -25,9 +25,10 @@
 #include <QDebug>
 #include <QCryptographicHash>
 #include <QRandomGenerator>
+#include <QIcon>
+#include <src/TranslationQuery.h>
 
-Baidu::Baidu(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, const QString &text,
-             const QPair<Language, Language> &language, const QString &appid, const QString &key)
+Baidu::Baidu(KRunner::AbstractRunner *runner, KRunner::RunnerContext &context, const TranslationQuery* query, const QString &appid, const QString &key)
         : m_runner(runner), m_context(context) {
     m_manager = new QNetworkAccessManager(this);
 
@@ -36,26 +37,27 @@ Baidu::Baidu(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, con
     quint32 salt = randomGenerator.generate();
 
     QByteArray sign;
-    sign.append(appid);
-    sign.append(text);
-    sign.append(QString::number(salt));
-    sign.append(key);
+    sign.append(appid.toUtf8());
+    sign.append(query->getText().toUtf8());
+    sign.append(QString::number(salt).toUtf8());
+    sign.append(key.toUtf8());
     QByteArray hash = QCryptographicHash::hash(sign, QCryptographicHash::Md5);
-    QString signMD5 = hash.toHex();
+    QString signMD5 = QString::fromLatin1(hash.toHex());
 
-    QUrlQuery query;
-    query.addQueryItem("appid", appid);
-    query.addQueryItem("q", text);
-    query.addQueryItem("from", langMapper(language.first.getAbbreviation()));
-    query.addQueryItem("to", langMapper(language.second.getAbbreviation()));
-    query.addQueryItem("salt", QString::number(salt));
-    query.addQueryItem("sign", signMD5);
+    QUrlQuery urlQuery;
+    urlQuery.addQueryItem(QStringLiteral("appid"), appid);
+    urlQuery.addQueryItem(QStringLiteral("q"), query->getText());
+    // TODO fix
+    //urlQuery.addQueryItem(QStringLiteral("from"), langMapper(language.first.getAbbreviation()));
+    //urlQuery.addQueryItem(QStringLiteral("to"), langMapper(language.second.getAbbreviation()));
+    urlQuery.addQueryItem(QStringLiteral("salt"), QString::number(salt));
+    urlQuery.addQueryItem(QStringLiteral("sign"), signMD5);
 
 
-    QNetworkRequest request(QUrl("http://fanyi-translationEngines.baidu.com/translationEngines/trans/vip/translate?" +
-                                 QUrl(query.query(QUrl::FullyEncoded).toUtf8()).toEncoded()));
+    QNetworkRequest request(QUrl(QStringLiteral("http://fanyi-translationEngines.baidu.com/translationEngines/trans/vip/translate?") +
+                                 urlQuery.query(QUrl::FullyEncoded)));
     //request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/x-www-form-urlencoded"));
 
     m_manager->get(request);
     connect(m_manager, SIGNAL(finished(QNetworkReply * )), this, SLOT(parseResult(QNetworkReply * )));
@@ -63,52 +65,52 @@ Baidu::Baidu(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, con
 
 void Baidu::parseResult(QNetworkReply *reply) {
     if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute) != 200) {
-        emit finished();
+        Q_EMIT finished();
         return;
     }
 
     const QString s = QString::fromUtf8(reply->readAll());
     const QJsonObject jsonObject = QJsonDocument::fromJson(s.toUtf8()).object();
     if (jsonObject.contains(QStringLiteral("error_code"))) {
-        Plasma::QueryMatch match(m_runner);
-        match.setType(Plasma::QueryMatch::HelperMatch);
+        KRunner::QueryMatch match(m_runner);
+        match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Low);
         match.setIcon(QIcon::fromTheme(QStringLiteral("dialog-error")));
         match.setText(
-                QString::fromUtf8("(Baidu) Error code: %1").arg(jsonObject.find("error_code").value().toString()));
+                QStringLiteral("(Baidu) Error code: %1").arg(jsonObject.find(QStringLiteral("error_code")).value().toString()));
         match.setRelevance(1);
         m_context.addMatch(match);
     } else {
-        QList<Plasma::QueryMatch> matches;
-        const QJsonArray results = jsonObject.find("trans_result").value().toArray();
+        QList<KRunner::QueryMatch> matches;
+        const QJsonArray results = jsonObject.find(QStringLiteral("trans_result")).value().toArray();
         float relevance = 1;
         for (const QJsonValue result: results) {
-            Plasma::QueryMatch match(m_runner);
-            match.setType(Plasma::QueryMatch::InformationalMatch);
-            match.setIcon(QIcon::fromTheme("applications-education-language"));
-            match.setText(result.toObject().find("dst").value().toString());
+            KRunner::QueryMatch match(m_runner);
+            match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Moderate);
+            match.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
+            match.setText(result.toObject().find(QStringLiteral("dst")).value().toString());
             match.setRelevance(relevance);
             matches.append(match);
             relevance -= 0.01;
         }
         m_context.addMatches(matches);
     }
-    emit finished();
+    Q_EMIT finished();
 }
 
 QString Baidu::langMapper(QString lang) {
     QString lang2 = lang;
-    if (lang == "ko") return "kor";
-    else if (lang == "bg") return "bul";
-    else if (lang == "fi") return "fin";
-    else if (lang == "sk") return "slo";
-    else if (lang == "fr") return "fra";
-    else if (lang == "ar") return "ara";
-    else if (lang == "et") return "est";
-    else if (lang == "sv") return "swe";
-    else if (lang == "ja") return "jp";
-    else if (lang == "es") return "spa";
-    else if (lang == "da") return "dan";
-    else if (lang == "ro") return "rom";
+    if (lang == QLatin1String("ko")) return QStringLiteral("kor");
+    else if (lang == QLatin1String("bg")) return QStringLiteral("bul");
+    else if (lang == QLatin1String("fi")) return QStringLiteral("fin");
+    else if (lang == QLatin1String("sk")) return QStringLiteral("slo");
+    else if (lang == QLatin1String("fr")) return QStringLiteral("fra");
+    else if (lang == QLatin1String("ar")) return QStringLiteral("ara");
+    else if (lang == QLatin1String("et")) return QStringLiteral("est");
+    else if (lang == QLatin1String("sv")) return QStringLiteral("swe");
+    else if (lang == QLatin1String("ja")) return QStringLiteral("jp");
+    else if (lang == QLatin1String("es")) return QStringLiteral("spa");
+    else if (lang == QLatin1String("da")) return QStringLiteral("dan");
+    else if (lang == QLatin1String("ro")) return QStringLiteral("rom");
     else { return lang2; }
 }
 

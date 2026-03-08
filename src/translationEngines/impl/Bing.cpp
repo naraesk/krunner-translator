@@ -18,19 +18,21 @@
 
 #include "Bing.h"
 #include "src/TranslateShellProcess.h"
+#include <QIcon>
 
-Bing::Bing(Plasma::AbstractRunner *runner)
+Bing::Bing(KRunner::AbstractRunner *runner)
         : match(runner) {
 }
 
-Plasma::QueryMatch Bing::translate(const QString &text, const QPair<Language, Language> &language) {
-    TranslateShellProcess process("bing");
-    QString result = process.translate(language, text);
-    if (result == "") { // empty result
-        match.setType(Plasma::QueryMatch::NoMatch);
+KRunner::QueryMatch Bing::translate(const TranslationQuery* query) {
+    TranslateShellProcess process(QStringLiteral("bing"));
+    qDebug() << "this is bing";
+    QString result = process.translate(query);
+    if (result.isEmpty()) {
+        match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Lowest);
     } else {
         match.setData(QStringLiteral("audio"));
-        match.setType(Plasma::QueryMatch::ExactMatch);
+        match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Highest);
         match.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
         match.setText(result);
         match.setSubtext(QStringLiteral("Bing"));

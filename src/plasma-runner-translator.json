@@ -1,0 +1,18 @@
+{
+    "KPlugin": {
+        "Name": "Translator",
+        "Description": "Translates into any language",
+        "Icon": "applications-education-language",
+        "Authors": [
+            {
+                "Name": "David Baum",
+                "Email": "david.baum@naraesk.eu"
+            }
+        ],
+        "License": "GPL",
+        "Version": "2.0.0",
+        "EnabledByDefault": true
+    },
+    "X-Plasma-AdvertiseSingleRunnerQueryMode": true,
+    "X-KDE-ConfigModule": "kf6/krunner/kcms/kcm_krunner_translator"
+}

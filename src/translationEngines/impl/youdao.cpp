@@ -26,14 +26,16 @@
 #include <QCryptographicHash>
 #include <QDateTime>
 #include <QUuid>
+#include <QIcon>
+#include <src/TranslationQuery.h>
 
-Youdao::Youdao(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, const QString &text,
-               const QPair<Language, Language> &language, const QString &appid, const QString &appSec)
+Youdao::Youdao(KRunner::AbstractRunner *runner, KRunner::RunnerContext &context, const TranslationQuery* query, const QString &appid, const QString &appSec)
         : m_runner(runner), m_context(context) {
     m_manager = new QNetworkAccessManager(this);
 
     QString salt = QUuid::createUuid().toString().mid(1, 36);
     qint64 timestamp = QDateTime::currentDateTime().toSecsSinceEpoch();
+    QString text = query->getText();
 
     QString input;
     if (text.length() > 20) {
@@ -43,29 +45,27 @@ Youdao::Youdao(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, c
     }
 
     QString sign;
-    // sha256(应用ID+input+salt+curtime+应用密钥)
     sign.append(appid);
     sign.append(input);
     sign.append(salt);
     sign.append(QString::number(timestamp));
     sign.append(appSec);
     QByteArray hash = QCryptographicHash::hash(sign.toUtf8(), QCryptographicHash::Sha256);
-    //QString signSha256 = QString::fromUtf8(hash);
 
     QUrlQuery postData;
     postData.addQueryItem(QStringLiteral("q"), text);
-    postData.addQueryItem(QStringLiteral("from"), langMapper(language.first.getAbbreviation()));
-    postData.addQueryItem(QStringLiteral("to"), langMapper(language.second.getAbbreviation()));
+    // TODO fix
+    //postData.addQueryItem(QStringLiteral("from"), langMapper(language.first.getAbbreviation()));
+    //postData.addQueryItem(QStringLiteral("to"), langMapper(language.second.getAbbreviation()));
     postData.addQueryItem(QStringLiteral("appKey"), appid);
     postData.addQueryItem(QStringLiteral("salt"), salt);
-    postData.addQueryItem(QStringLiteral("sign"), hash.toHex());
-    postData.addQueryItem(QStringLiteral("signType"), "v3");
+    postData.addQueryItem(QStringLiteral("sign"), QString::fromLatin1(hash.toHex()));
+    postData.addQueryItem(QStringLiteral("signType"), QStringLiteral("v3"));
     postData.addQueryItem(QStringLiteral("curtime"), QString::number(timestamp));
 
     QNetworkRequest request;
-    request.setUrl(QUrl("http://openapi.youdao.com/translationEngines"));
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-    //request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
+    request.setUrl(QUrl(QStringLiteral("http://openapi.youdao.com/translationEngines")));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/x-www-form-urlencoded"));
 
     m_manager->post(request, postData.toString(QUrl::FullyEncoded).toUtf8());
     connect(m_manager, SIGNAL(finished(QNetworkReply * )), this, SLOT(parseResult(QNetworkReply * )));
@@ -73,36 +73,36 @@ Youdao::Youdao(Plasma::AbstractRunner *runner, Plasma::RunnerContext &context, c
 
 void Youdao::parseResult(QNetworkReply *reply) {
     if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute) != 200) {
-        emit finished();
+        Q_EMIT finished();
         return;
     }
 
     const QString s = QString::fromUtf8(reply->readAll());
     const QJsonObject jsonObject = QJsonDocument::fromJson(s.toUtf8()).object();
-    const int errorCode = jsonObject.find("errorCode").value().toInt();
+    const int errorCode = jsonObject.find(QStringLiteral("errorCode")).value().toInt();
     if (errorCode == 0) {
 
-        QList<Plasma::QueryMatch> matches;
+        QList<KRunner::QueryMatch> matches;
 
-        const QJsonArray results = jsonObject.find("translation").value().toArray();
+        const QJsonArray results = jsonObject.find(QStringLiteral("translation")).value().toArray();
         float relevance = 1;
         for (const QJsonValue result: results) {
-            Plasma::QueryMatch match(m_runner);
-            match.setType(Plasma::QueryMatch::InformationalMatch);
-            match.setIcon(QIcon::fromTheme("applications-education-language"));
+            KRunner::QueryMatch match(m_runner);
+            match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Moderate);
+            match.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
             match.setText(result.toString());
             match.setRelevance(relevance);
             matches.append(match);
             relevance -= 0.01;
         }
         // for youdao basic dict
-        if (jsonObject.contains("basic")) {
-            const QJsonArray baseExplains = jsonObject.find("basic").value().toObject().find(
-                    "explains").value().toArray();
+        if (jsonObject.contains(QStringLiteral("basic"))) {
+            const QJsonArray baseExplains = jsonObject.find(QStringLiteral("basic")).value().toObject().find(
+                    QStringLiteral("explains")).value().toArray();
             for (const QJsonValue explain: baseExplains) {
-                Plasma::QueryMatch match(m_runner);
-                match.setType(Plasma::QueryMatch::InformationalMatch);
-                match.setIcon(QIcon::fromTheme("applications-education-language"));
+                KRunner::QueryMatch match(m_runner);
+                match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Moderate);
+                match.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
                 match.setText(explain.toString());
                 match.setRelevance(relevance);
                 matches.append(match);
@@ -111,19 +111,19 @@ void Youdao::parseResult(QNetworkReply *reply) {
         }
         m_context.addMatches(matches);
     } else {
-        Plasma::QueryMatch match(m_runner);
-        match.setType(Plasma::QueryMatch::HelperMatch);
+        KRunner::QueryMatch match(m_runner);
+        match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Low);
         match.setIcon(QIcon::fromTheme(QStringLiteral("dialog-error")));
-        match.setText(QString::fromUtf8("(Youdao) Error code: %1").arg(QString::number(errorCode)));
+        match.setText(QStringLiteral("(Youdao) Error code: %1").arg(QString::number(errorCode)));
         match.setRelevance(1);
         m_context.addMatch(match);
     }
-    emit finished();
+    Q_EMIT finished();
 }
 
 QString Youdao::langMapper(QString lang) {
     QString lang2 = lang;
-    if (lang == "zh") return "zh-CHS";
+    if (lang == QLatin1String("zh")) return QStringLiteral("zh-CHS");
     else { return lang2; }
 }
 

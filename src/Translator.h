@@ -20,25 +20,26 @@
 #define TRANSLATOR_H
 
 #include <KRunner/AbstractRunner>
+#include <KRunner/Action>
 #include "src/translationEngines/api/CommandLineEngine.h"
 #include "src/language/LanguageRepository.h"
+#include "Parser.h"
 
-class Translator : public Plasma::AbstractRunner
+class Translator : public KRunner::AbstractRunner
 {
     Q_OBJECT
 
 public:
-    Translator(QObject *parent, const QVariantList &args);
-    void match(Plasma::RunnerContext &) override;
-    void run(const Plasma::RunnerContext &, const Plasma::QueryMatch &) override;
-    QList<QAction *> actionsForMatch(const Plasma::QueryMatch &match) override;
+    Translator(QObject *parent, const KPluginMetaData &metaData);
+    ~Translator() override;
+    void match(KRunner::RunnerContext &) override;
+    void run(const KRunner::RunnerContext &, const KRunner::QueryMatch &) override;
     void reloadConfiguration() override;
 
 private:
-    bool parseTerm(const QString &, QString &, QPair<Language, Language> &);
-    QList<QAction *> actions;
-    QString m_primary;
-    QString m_secondary;
+    QList<KRunner::Action> actions;
+    SupportedLanguage defaultLanguage;
+    SupportedLanguage alternativeDefaultLanguage;
     QString m_baiduAPPID;
     QString m_baiduAPIKey;
     QString m_youdaoAPPID;
@@ -47,8 +48,7 @@ private:
     bool m_youdaoEnable;
     QList<CommandLineEngine*> engines;
     LanguageRepository languages;
+    Parser parser;
 };
-
-K_EXPORT_PLASMA_RUNNER(translator, Translator)
 
 #endif

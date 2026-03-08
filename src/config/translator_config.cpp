@@ -19,21 +19,22 @@
 #include "translator_config.h"
 #include "src/language/Language.h"
 #include <KSharedConfig>
+#include <KConfigGroup>
 #include <KPluginFactory>
-#include <krunner/abstractrunner.h>
+#include <KRunner/AbstractRunner>
 #include <QtDebug>
 #include <QtWidgets/QGridLayout>
 
-K_PLUGIN_FACTORY(TranslatorConfigFactory, registerPlugin<TranslatorConfig>("kcm_krunner_translator");)
+K_PLUGIN_CLASS_WITH_JSON(TranslatorConfig, "kcm_krunner_translator.json")
 
 TranslatorConfigForm::TranslatorConfigForm(QWidget *parent) : QWidget(parent) {
     setupUi(this);
 }
 
-TranslatorConfig::TranslatorConfig(QWidget *parent, const QVariantList &args) :
-        KCModule(parent, args) {
-    m_ui = new TranslatorConfigForm(this);
-    QGridLayout *layout = new QGridLayout(this);
+TranslatorConfig::TranslatorConfig(QObject *parent, const KPluginMetaData &metaData) :
+        KCModule(parent, metaData) {
+    m_ui = new TranslatorConfigForm(widget());
+    QGridLayout *layout = new QGridLayout(widget());
     layout->addWidget(m_ui, 0, 0);
 
     warningHandler();
@@ -46,40 +47,40 @@ TranslatorConfig::TranslatorConfig(QWidget *parent, const QVariantList &args) :
         m_ui->secondaryLanguage->addItem(language.getCombinedName(), variant);
     }
 
-    connect(m_ui->primaryLanguage, SIGNAL(currentTextChanged(QString)), this, SLOT(changed()));
-    connect(m_ui->secondaryLanguage, SIGNAL(currentTextChanged(QString)), this, SLOT(changed()));
-    connect(m_ui->baiduAPPID, SIGNAL(textChanged(QString)), this, SLOT(changed()));
-    connect(m_ui->baiduApiKey, SIGNAL(textChanged(QString)), this, SLOT(changed()));
-    connect(m_ui->youdaoAPPID, SIGNAL(textChanged(QString)), this, SLOT(changed()));
-    connect(m_ui->youdaoAppSec, SIGNAL(textChanged(QString)), this, SLOT(changed()));
-    connect(m_ui->baiduEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
-    connect(m_ui->youdaoEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
-    connect(m_ui->googleEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
-    connect(m_ui->bingEnable, SIGNAL(stateChanged(int)), this, SLOT(changed()));
+    connect(m_ui->primaryLanguage, &QComboBox::currentTextChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->secondaryLanguage, &QComboBox::currentTextChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->baiduAPPID, &QLineEdit::textChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->baiduApiKey, &QLineEdit::textChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->youdaoAPPID, &QLineEdit::textChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->youdaoAppSec, &QLineEdit::textChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->baiduEnable, &QCheckBox::checkStateChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->youdaoEnable, &QCheckBox::checkStateChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->googleEnable, &QCheckBox::checkStateChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->bingEnable, &QCheckBox::checkStateChanged, this, [this]() { setNeedsSave(true); });
 
-    connect(m_ui->bingEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
-    connect(m_ui->googleEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
-    connect(m_ui->baiduEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
-    connect(m_ui->youdaoEnable, SIGNAL(stateChanged(int)), this, SLOT(warningHandler()));
+    connect(m_ui->bingEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
+    connect(m_ui->googleEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
+    connect(m_ui->baiduEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
+    connect(m_ui->youdaoEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
 }
 
 void TranslatorConfig::load() {
     KCModule::load();
 
     KSharedConfig::Ptr cfg = KSharedConfig::openConfig(QStringLiteral("krunnerrc"));
-    KConfigGroup grp = cfg->group("Runners");
-    grp = KConfigGroup(&grp, "Translator");
+    KConfigGroup grp = cfg->group(QStringLiteral("Runners"));
+    grp = KConfigGroup(&grp, QStringLiteral("Translator"));
 
-    QString abbrPrimaryLanguage = grp.readEntry(CONFIG_PRIMARY, "en");
-    QString abbrSecondaryLanguage = grp.readEntry(CONFIG_SECONDARY, "es");
+    QString abbrPrimaryLanguage = grp.readEntry(CONFIG_PRIMARY, QStringLiteral("en"));
+    QString abbrSecondaryLanguage = grp.readEntry(CONFIG_SECONDARY, QStringLiteral("es"));
     QString textPrimaryLanguage = languages.getCombinedName(abbrPrimaryLanguage);
     QString textSecondaryLanguage = languages.getCombinedName(abbrSecondaryLanguage);
     m_ui->primaryLanguage->setCurrentText(textPrimaryLanguage);
     m_ui->secondaryLanguage->setCurrentText(textSecondaryLanguage);
-    m_ui->baiduAPPID->setText(grp.readEntry(CONFIG_BAIDU_APPID, ""));
-    m_ui->baiduApiKey->setText(grp.readEntry(CONFIG_BAIDU_APIKEY, ""));
-    m_ui->youdaoAPPID->setText(grp.readEntry(CONFIG_YOUDAO_APPID, ""));
-    m_ui->youdaoAppSec->setText(grp.readEntry(CONFIG_YOUDAO_APPSEC, ""));
+    m_ui->baiduAPPID->setText(grp.readEntry(CONFIG_BAIDU_APPID, QStringLiteral("")));
+    m_ui->baiduApiKey->setText(grp.readEntry(CONFIG_BAIDU_APIKEY, QStringLiteral("")));
+    m_ui->youdaoAPPID->setText(grp.readEntry(CONFIG_YOUDAO_APPID, QStringLiteral("")));
+    m_ui->youdaoAppSec->setText(grp.readEntry(CONFIG_YOUDAO_APPSEC, QStringLiteral("")));
     m_ui->baiduEnable->setChecked(grp.readEntry(CONFIG_BAIDU_ENABLE, false));
     m_ui->youdaoEnable->setChecked(grp.readEntry(CONFIG_YOUDAO_ENABLE, false));
     m_ui->googleEnable->setChecked(grp.readEntry(CONFIG_GOOGLE_ENABLE, true));
@@ -90,8 +91,8 @@ void TranslatorConfig::save() {
     KCModule::save();
 
     KSharedConfig::Ptr cfg = KSharedConfig::openConfig(QStringLiteral("krunnerrc"));
-    KConfigGroup grp = cfg->group("Runners");
-    grp = KConfigGroup(&grp, "Translator");
+    KConfigGroup grp = cfg->group(QStringLiteral("Runners"));
+    grp = KConfigGroup(&grp, QStringLiteral("Translator"));
 
     Language primaryLanguage = m_ui->primaryLanguage->currentData().value<Language>();
     Language secondaryLanguage = m_ui->secondaryLanguage->currentData().value<Language>();
@@ -106,7 +107,6 @@ void TranslatorConfig::save() {
     grp.writeEntry(CONFIG_YOUDAO_ENABLE, m_ui->youdaoEnable->isChecked());
     grp.writeEntry(CONFIG_GOOGLE_ENABLE, m_ui->googleEnable->isChecked());
     grp.writeEntry(CONFIG_BING_ENABLE, m_ui->bingEnable->isChecked());
-    emit changed(true);
 }
 
 void TranslatorConfig::warningHandler() {

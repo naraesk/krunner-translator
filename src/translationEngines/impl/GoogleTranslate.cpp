@@ -18,16 +18,17 @@
 
 #include "GoogleTranslate.h"
 #include "src/TranslateShellProcess.h"
+#include <QIcon>
 
-GoogleTranslate::GoogleTranslate(Plasma::AbstractRunner *runner)
+GoogleTranslate::GoogleTranslate(KRunner::AbstractRunner *runner)
         : match(runner) {
 }
 
-Plasma::QueryMatch GoogleTranslate::translate(const QString &text, const QPair<Language, Language> &language) {
+KRunner::QueryMatch GoogleTranslate::translate(const TranslationQuery* query) {
     TranslateShellProcess process;
-    QString result = process.translate(language, text);
+    QString result = process.translate(query);
     match.setData(QStringLiteral("audio"));
-    match.setType(Plasma::QueryMatch::ExactMatch);
+    match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Highest);
     match.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
     match.setText(result);
     match.setSubtext(QStringLiteral("Google Translate"));

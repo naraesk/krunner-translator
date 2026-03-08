@@ -20,19 +20,9 @@
 #define TRANSLATORCONFIG_H
 
 #include "ui_translator_config.h"
+#include "config_keys.h"
 #include <KCModule>
 #include <src/language/LanguageRepository.h>
-
-static const char CONFIG_PRIMARY[] = "primaryLanguage";
-static const char CONFIG_SECONDARY[] = "secondaryLanguage";
-static const char CONFIG_BAIDU_APPID[] = "baiduAPPID";
-static const char CONFIG_BAIDU_APIKEY[] = "baiduAPIKey";
-static const char CONFIG_YOUDAO_APPID[] = "youdaoAPPID";
-static const char CONFIG_YOUDAO_APPSEC[] = "youdaoAPPSec";
-static const char CONFIG_BAIDU_ENABLE[] = "baiduEnable";
-static const char CONFIG_YOUDAO_ENABLE[] = "youdaoEnable";
-static const char CONFIG_GOOGLE_ENABLE[] = "googleEnable";
-static const char CONFIG_BING_ENABLE[] = "bingEnable";
 
 class TranslatorConfigForm : public QWidget, public Ui::TranslatorConfigUi {
 Q_OBJECT
@@ -45,7 +35,7 @@ class TranslatorConfig : public KCModule {
 Q_OBJECT
 
 public:
-    explicit TranslatorConfig(QWidget *parent = nullptr, const QVariantList &args = QVariantList());
+    explicit TranslatorConfig(QObject *parent, const KPluginMetaData &metaData);
 
 public Q_SLOTS:
 

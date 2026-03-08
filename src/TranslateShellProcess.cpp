@@ -18,6 +18,9 @@
 
 #include "TranslateShellProcess.h"
 #include "src/language/Language.h"
+#include "TranslationQuery.h"
+#include <QString>
+#include <QDebug>
 
 TranslateShellProcess::TranslateShellProcess(QObject *parent) : QProcess(parent) {
 }
@@ -28,16 +31,17 @@ TranslateShellProcess::TranslateShellProcess(const QString &engine_, QObject *pa
 
 TranslateShellProcess::~TranslateShellProcess() = default;
 
-QString TranslateShellProcess::translate(const QPair<Language, Language> &language, const QString &text) {
+QString TranslateShellProcess::translate(const TranslationQuery* query) {
     QStringList arguments;
-    arguments << language.first.getAbbreviation() + QStringLiteral(":") + language.second.getAbbreviation()
-              << text
+    qDebug() << query->getSourceAbbreviation();
+    arguments << query->getSourceAbbreviation() + QStringLiteral(":") + query->getTargetAbbreviation()
+              << query->getText()
               << QStringLiteral("--brief")
               << QStringLiteral("-e")
               << engine;
-    start("trans", arguments);
+    start(QStringLiteral("trans"), arguments);
     waitForFinished();
-    QString composeOutput(readLine().trimmed());
+    QString composeOutput(QString::fromUtf8(readLine().trimmed()));
     return composeOutput;
 }
 
@@ -46,6 +50,6 @@ void TranslateShellProcess::play(const QString &text) {
     arguments << text
               << QStringLiteral("-speak")
               << QStringLiteral("-no-translate");
-    start("trans", arguments);
+    start(QStringLiteral("trans"), arguments);
     waitForFinished();
 }

@@ -1,0 +1,8 @@
+{
+    "KPlugin": {
+        "Name": "Translator",
+        "Description": "Configure Translator runner",
+        "Icon": "applications-education-language"
+    },
+    "X-KDE-ParentComponents": ["krunner_translator"]
+}

@@ -17,121 +17,80 @@
  *****************************************************************************/
 
 #include "Translator.h"
-#include "config/translator_config.h"
+#include "config/config_keys.h"
 #include "translationEngines/impl/GoogleTranslate.h"
 #include "translationEngines/impl/baidu.h"
 #include "translationEngines/impl/youdao.h"
 #include "translationEngines/impl/Bing.h"
+#include "Parser.h"
 #include <src/TranslateShellProcess.h>
 #include <KLocalizedString>
-#include <QApplication>
+#include <QGuiApplication>
 #include <QClipboard>
-#include <QAction>
-#include <KConfigCore/KConfig>
+#include <KConfig>
+#include <KConfigGroup>
 
-Translator::Translator(QObject *parent, const QVariantList &args)
-        : Plasma::AbstractRunner(parent, args) {
-    setObjectName(QStringLiteral("Translator"));
-    setIgnoredTypes(Plasma::RunnerContext::Directory |
-                    Plasma::RunnerContext::File |
-                    Plasma::RunnerContext::NetworkLocation);
-    setSpeed(AbstractRunner::SlowSpeed);
-    setPriority(HighestPriority);
-    QAction *copy = new QAction();
-    copy->setIcon(QIcon::fromTheme(QStringLiteral("editcopy")));
-    copy->setText("Copy to Clipboard");
-    copy->setData("copy");
-    addAction("copy", copy);
-    auto *play = addAction(QStringLiteral("play"),
-                           QIcon::fromTheme(QStringLiteral("cs-sound")),
-                           QStringLiteral("Play audio"));
-    play->setData(QStringLiteral("play"));
+K_PLUGIN_CLASS_WITH_JSON(Translator, "plasma-runner-translator.json")
+
+Translator::Translator(QObject *parent, const KPluginMetaData &metaData)
+        : KRunner::AbstractRunner(parent, metaData) {
+    KRunner::Action copy(QStringLiteral("copy"),
+                         QStringLiteral("edit-copy"),
+                         QStringLiteral("Copy to Clipboard"));
+    KRunner::Action play(QStringLiteral("play"),
+                         QStringLiteral("media-playback-start"),
+                         QStringLiteral("Play audio"));
     actions = {copy, play};
-    setDefaultSyntax(Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<language code>")),
-                                          i18n("Translates the word(s) :q: into target language")));
-    setDefaultSyntax(
-            Plasma::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<source languagce>-<target languagce>")),
-                                 i18n("Translates the word(s) :q: from the source into target language")));
+    addSyntax(KRunner::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<language code>")),
+                                     i18n("Translates the word(s) :q: into target language")));
+    addSyntax(KRunner::RunnerSyntax(QString::fromLatin1("%1:q:").arg(i18n("<source language>-<target language>")),
+                                     i18n("Translates the word(s) :q: from the source into target language")));
     languages.initialize();
+    parser.setRepository(&languages);
 }
 
-bool Translator::parseTerm(const QString &term, QString &text, QPair<Language, Language> &language) {
-    const int index = term.indexOf(QStringLiteral(" "));
-    if (index == -1) return false;
-    text = term.mid(index + 1);
-    const QString languageTerm = term.left(index);
-
-    if (languageTerm.contains(QStringLiteral("-"))) {
-        int languageIndex = languageTerm.indexOf("-");
-        QString sourceLanguageAbbreviation = languageTerm.left(languageIndex);
-        QString targetLanguageAbbreviation = languageTerm.mid(languageIndex + 1);
-        Language sourceLanguage = languages.getLanguage(sourceLanguageAbbreviation);
-        Language targetLanguage = languages.getLanguage(targetLanguageAbbreviation);
-        Language test = languages.getLanguage(QStringLiteral("xx"));
-        qDebug() << test.getCombinedName();
-        if(languages.containsAbbreviation( sourceLanguageAbbreviation) && languages.containsAbbreviation( targetLanguageAbbreviation) ) {
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        if (m_primary == languageTerm) {
-            language.first = languages.getLanguage(m_secondary);
-        } else {
-            language.first = languages.getLanguage(m_primary);
-        }
-        language.second = languages.getLanguage(languageTerm);
-    }
-    return true;
-}
-
-void Translator::match(Plasma::RunnerContext &context) {
+void Translator::match(KRunner::RunnerContext &context) {
     const QString term = context.query();
-    QString text;
-    QPair<Language, Language> language;
-
-    if (!parseTerm(term, text, language)) return;
+    TranslationQuery * query = parser.parse(term);
+    query->updateSourceLanguage(defaultLanguage, alternativeDefaultLanguage);
+    if(!query->isValid()) return;
     if (!context.isValid()) return;
 
     if (m_baiduEnable) {
         QEventLoop baiduLoop;
-        Baidu baidu(this, context, text, language, m_baiduAPPID, m_baiduAPIKey);
+        Baidu baidu(this, context, query, m_baiduAPPID, m_baiduAPIKey);
         connect(&baidu, SIGNAL(finished()), &baiduLoop, SLOT(quit()));
         baiduLoop.exec();
     }
     if (m_youdaoEnable) {
         QEventLoop youdaoLoop;
-        Youdao youdao(this, context, text, language, m_youdaoAPPID, m_youdaoAppSec);
+        Youdao youdao(this, context, query, m_youdaoAPPID, m_youdaoAppSec);
         connect(&youdao, SIGNAL(finished()), &youdaoLoop, SLOT(quit()));
         youdaoLoop.exec();
     }
     for (auto engine : engines) {
-        Plasma::QueryMatch match = engine->translate(text, language);
-        match.setSelectedAction(actions.first());
+        KRunner::QueryMatch match = engine->translate(query);
+        match.setActions(actions);
         context.addMatch(match);
     }
+    delete query;
 }
 
-void Translator::run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match) {
+void Translator::run(const KRunner::RunnerContext &context, const KRunner::QueryMatch &match) {
     Q_UNUSED(context);
-    QApplication::clipboard()->setText(match.text());
-    if (match.selectedAction()->data().toString() == QLatin1String("play")) {
+    QGuiApplication::clipboard()->setText(match.text());
+    if (match.selectedAction() && match.selectedAction().id() == QLatin1String("play")) {
         TranslateShellProcess process;
         process.play(match.text());
     }
 }
 
-QList<QAction *> Translator::actionsForMatch(const Plasma::QueryMatch &match) {
-    if (match.data().toString() == QStringLiteral("audio")) {
-        return actions;
-    }
-    return {actions.first()};
-}
-
 void Translator::reloadConfiguration() {
     auto grp = config();
-    m_primary = grp.readEntry(CONFIG_PRIMARY, QStringLiteral("en"));
-    m_secondary = grp.readEntry(CONFIG_SECONDARY, QStringLiteral("es"));
+    QString defaultLanguageAbbreviation = grp.readEntry(CONFIG_PRIMARY, QStringLiteral("en"));
+    QString alternativeDefaultLanguageAbbreviation = grp.readEntry(CONFIG_SECONDARY, QStringLiteral("es"));
+    defaultLanguage = languages.getSupportedLanguage(defaultLanguageAbbreviation);
+    alternativeDefaultLanguage = languages.getSupportedLanguage(alternativeDefaultLanguageAbbreviation);
     m_baiduAPPID = grp.readEntry(CONFIG_BAIDU_APPID, QStringLiteral(""));
     m_baiduAPIKey = grp.readEntry(CONFIG_BAIDU_APIKEY, QStringLiteral(""));
     m_youdaoAPPID = grp.readEntry(CONFIG_YOUDAO_APPID, QStringLiteral(""));
@@ -152,4 +111,10 @@ void Translator::reloadConfiguration() {
     }
 }
 
-#include "moc_Translator.cpp"
+Translator::~Translator() {
+    for(auto engine : engines) {
+        delete engine;
+    }
+}
+
+#include "Translator.moc"

@@ -1,16 +1,16 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.16)
 project(RunnerTranslator)
 
-find_package(ECM 5.12.0 REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH
-        ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_MODULE_PATH}
-        )
+find_package(ECM 6.0.0 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
+set(QT_MIN_VERSION "6.6.0")
+set(KF_MIN_VERSION "6.0.0")
 
-# Find the required Libaries
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED CONFIG COMPONENTS Widgets Core Network Quick QuickWidgets)
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS I18n Service Runner TextWidgets ConfigWidgets PlasmaQuick)
-find_package(Qt5Test REQUIRED)
+# Find the required Libraries
+find_package(Qt6 ${QT_MIN_VERSION} REQUIRED CONFIG COMPONENTS Widgets Core Network)
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n Runner ConfigWidgets KCMUtils)
+find_package(Qt6Test REQUIRED)
 
 include(KDEInstallDirs)
 include(KDECMakeSettings)
@@ -22,47 +22,53 @@ set(krunner_translator_SRCS
         src/Translator.cpp
         src/translationEngines/impl/baidu.cpp
         src/translationEngines/impl/youdao.cpp
-        src/translationEngines/impl/GoogleTranslate.cpp src/translationEngines/impl/GoogleTranslate.h src/TranslateShellProcess.cpp src/TranslateShellProcess.h src/translationEngines/impl/Bing.cpp src/translationEngines/impl/Bing.h
-        src/language/LanguageRepository.cpp src/language/LanguageRepository.h
-        src/language/Language.cpp src/language/Language.h src/language/SupportedLanguages.h)
+        src/translationEngines/impl/GoogleTranslate.cpp
+        src/translationEngines/impl/Bing.cpp
+        src/TranslateShellProcess.cpp
+        src/language/LanguageRepository.cpp
+        src/language/Language.cpp
+        src/Parser.cpp
+        src/TranslationQuery.cpp)
 
 set(kcm_krunner_translator_SRCS
         src/config/translator_config.cpp
-        src/translationEngines/api/CommandLineEngine.h src/language/Language.cpp src/language/Language.h src/language/LanguageRepository.cpp src/language/LanguageRepository.h)
+        src/language/Language.cpp
+        src/language/LanguageRepository.cpp)
 
 ki18n_wrap_ui(kcm_krunner_translator_SRCS src/config/translator_config.ui)
-add_library(kcm_krunner_translator MODULE ${kcm_krunner_translator_SRCS})
+
+kcoreaddons_add_plugin(krunner_translator
+        SOURCES ${krunner_translator_SRCS}
+        INSTALL_NAMESPACE "kf6/krunner")
+target_link_libraries(krunner_translator
+        KF6::Runner
+        KF6::I18n
+        KF6::ConfigWidgets
+        Qt6::Widgets
+        Qt6::Network)
+
+kcoreaddons_add_plugin(kcm_krunner_translator
+        SOURCES ${kcm_krunner_translator_SRCS}
+        INSTALL_NAMESPACE "kf6/krunner/kcms")
 target_link_libraries(kcm_krunner_translator
-        Qt5::Core
-        Qt5::Gui
-        KF5::CoreAddons
-        KF5::ConfigCore
-        KF5::I18n
-        KF5::ConfigWidgets
-        KF5::Runner
-        )
-
-# Now make sure all files get to the right place
-add_library(krunner_translator MODULE ${krunner_translator_SRCS})
-target_link_libraries(krunner_translator KF5::Runner Qt5::Widgets Qt5::Network
-        KF5::I18n
-        KF5::Service
-        KF5::ConfigWidgets
-        KF5::Plasma)
-
-add_dependencies(krunner_translator kcm_krunner_translator)
-
-install(TARGETS krunner_translator kcm_krunner_translator DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES plasma-runner-translator.desktop src/config/plasma-runner-translator_config.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+        Qt6::Core
+        Qt6::Gui
+        KF6::CoreAddons
+        KF6::ConfigCore
+        KF6::I18n
+        KF6::ConfigWidgets
+        KF6::KCMUtils
+        KF6::Runner)
 
 # Testing
 
 set(test_dependencies
         src/TranslateShellProcess.cpp
+        src/TranslationQuery.cpp
         src/language/LanguageRepository.cpp
         src/language/Language.cpp
         )
-add_executable(translator_test test/TranslateShellProcessTest.cpp ${test_dependencies} )
-add_test(NAME translator_test COMMAND translator_test )
+add_executable(translator_test test/TranslateShellProcessTest.cpp ${test_dependencies})
+add_test(NAME translator_test COMMAND translator_test)
 
-target_link_libraries(translator_test PRIVATE Qt5::Test)
+target_link_libraries(translator_test PRIVATE Qt6::Test)

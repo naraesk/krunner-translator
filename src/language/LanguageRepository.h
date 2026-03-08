@@ -29,11 +29,11 @@ public:
 
     QList<struct Language> getSupportedLanguages();
 
-    bool containsAbbreviation(QString abbreviation);
-
     QString getCombinedName(QString abbreviation);
 
-    Language getLanguage(QString abbr);
+    SupportedLanguage getSupportedLanguage(QString abbr);
+
+    QString getAbbreviation(SupportedLanguage language) const;
 
 private:
     QMap<SupportedLanguage, Language> *supportedLanguages = new QMap<SupportedLanguage, Language>;

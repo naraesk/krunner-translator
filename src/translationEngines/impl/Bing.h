@@ -24,12 +24,12 @@
 
 class Bing : public CommandLineEngine {
 public:
-    explicit Bing(Plasma::AbstractRunner*);
+    explicit Bing(KRunner::AbstractRunner*);
     ~Bing() override;
-    Plasma::QueryMatch translate(const QString &text, const QPair<Language, Language> &language) override;
+    KRunner::QueryMatch translate(const TranslationQuery* query) override;
 
 private:
-    Plasma::QueryMatch match;
+    KRunner::QueryMatch match;
 };
 
 #endif //RUNNERTRANSLATOR_BING_H

@@ -25,12 +25,12 @@
 class GoogleTranslate : public CommandLineEngine {
 
 public:
-    explicit GoogleTranslate(Plasma::AbstractRunner*);
+    explicit GoogleTranslate(KRunner::AbstractRunner*);
     ~GoogleTranslate() override;
-    Plasma::QueryMatch translate(const QString &text, const QPair<Language, Language> &language) override;
+    KRunner::QueryMatch translate(const TranslationQuery* query) override;
 
 private:
-    Plasma::QueryMatch match;
+    KRunner::QueryMatch match;
 };
 
 #endif //RUNNERTRANSLATOR_GOOGLETRANSLATE_H
