@@ -7,6 +7,7 @@ This is a plugin for Plasma 6 KRunner. It's a translator and it translates text.
 ## Packages
 
 [![Logo Arch Linux](../../wiki/logos/arch_linux.png)](https://aur.archlinux.org/packages/plasma6-runners-translator)
+
 Pre-built packages for recent distro releases (ubuntu, fedora, opensuse) are available on the [GitHub Releases page](https://github.com/naraesk/krunner-translator/releases).
 
 ## Building from source
