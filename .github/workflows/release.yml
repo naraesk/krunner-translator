@@ -1,0 +1,73 @@
+name: Release Packages
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to attach packages to (e.g. v2.0.0). Leave empty to use current ref.'
+        required: false
+        type: string
+
+jobs:
+  build-ubuntu:
+    uses: ./.github/workflows/build-package.yml
+    with:
+      distro: ubuntu
+      docker_image: ubuntu:25.04
+      pkg_manager: apt
+      cpack_gen: DEB
+      artifact_ext: deb
+
+  build-fedora:
+    uses: ./.github/workflows/build-package.yml
+    with:
+      distro: fedora
+      docker_image: fedora:42
+      pkg_manager: dnf
+      cpack_gen: RPM
+      artifact_ext: rpm
+
+  build-opensuse:
+    uses: ./.github/workflows/build-package.yml
+    with:
+      distro: opensuse
+      docker_image: opensuse/tumbleweed
+      pkg_manager: zypper
+      cpack_gen: RPM
+      artifact_ext: rpm
+
+  release:
+    needs: [build-ubuntu, build-fedora, build-opensuse]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Determine tag name
+        id: tag
+        run: |
+          TAG="${{ github.event.inputs.tag }}"
+          if [ -z "$TAG" ]; then
+            TAG="${{ github.ref_name }}"
+          fi
+          echo "name=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Download all packages
+        uses: actions/download-artifact@v4
+        with:
+          path: packages/
+          merge-multiple: true
+
+      - name: List downloaded packages
+        run: find packages/ -type f
+
+      - name: Create or update GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.name }}
+          draft: ${{ github.event_name == 'workflow_dispatch' }}
+          files: packages/*
+          fail_on_unmatched_files: true

@@ -73,3 +73,26 @@ add_executable(translator_test test/TranslateShellProcessTest.cpp ${test_depende
 add_test(NAME translator_test COMMAND translator_test)
 
 target_link_libraries(translator_test PRIVATE Qt6::Test)
+
+# ── Packaging (CPack) ──────────────────────────────────────────────────────────
+set(CPACK_PACKAGE_NAME "krunner-translator")
+set(CPACK_PACKAGE_VERSION "2.0.0")
+set(CPACK_PACKAGE_CONTACT "David Baum <david.baum@naraesk.eu>")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "KRunner plugin to translate text using multiple engines")
+set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/naraesk/krunner-translator")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
+set(CPACK_STRIP_FILES TRUE)
+
+# DEB (Ubuntu 25.04 package names)
+set(CPACK_DEBIAN_PACKAGE_DEPENDS
+    "libkf6runner6, libkf6i18n6, libkf6configwidgets6t64, libkf6kcmutils6, libqt6widgets6, libqt6network6, translate-shell")
+set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
+set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
+
+# RPM (Fedora package names; openSUSE Tumbleweed uses same names)
+set(CPACK_RPM_PACKAGE_REQUIRES
+    "kf6-krunner, kf6-ki18n, kf6-kconfigwidgets, kf6-kkcmutils, qt6-qtbase, translate-shell")
+set(CPACK_RPM_PACKAGE_LICENSE "GPL-3.0")
+set(CPACK_RPM_PACKAGE_GROUP "Applications/Utilities")
+
+include(CPack)

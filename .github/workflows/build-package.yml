@@ -1,0 +1,84 @@
+name: Build Package
+
+on:
+  workflow_call:
+    inputs:
+      distro:
+        required: true
+        type: string
+      docker_image:
+        required: true
+        type: string
+      pkg_manager:
+        required: true
+        type: string
+      cpack_gen:
+        required: true
+        type: string
+      artifact_ext:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ inputs.docker_image }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build dependencies (apt)
+        if: ${{ inputs.pkg_manager == 'apt' }}
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            build-essential cmake extra-cmake-modules \
+            qt6-base-dev libkf6runner-dev libkf6i18n-dev \
+            libkf6coreaddons-dev libkf6config-dev \
+            libkf6configwidgets-dev libkf6kcmutils-dev \
+            translate-shell dpkg-dev
+
+      - name: Install build dependencies (dnf)
+        if: ${{ inputs.pkg_manager == 'dnf' }}
+        run: |
+          dnf install -y \
+            gcc-c++ cmake extra-cmake-modules \
+            qt6-qtbase-devel kf6-krunner-devel kf6-ki18n-devel \
+            kf6-kcoreaddons-devel kf6-kconfig-devel \
+            kf6-kconfigwidgets-devel kf6-kkcmutils-devel \
+            translate-shell rpm-build
+
+      - name: Install build dependencies (zypper)
+        if: ${{ inputs.pkg_manager == 'zypper' }}
+        run: |
+          zypper --non-interactive refresh
+          zypper --non-interactive install \
+            gcc-c++ cmake extra-cmake-modules \
+            qt6-base-devel kf6-krunner-devel kf6-ki18n-devel \
+            kf6-kcoreaddons-devel kf6-kconfig-devel \
+            kf6-kconfigwidgets-devel kf6-kkcmutils-devel \
+            translate-shell rpm-build
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Package
+        run: cd build && cpack -G ${{ inputs.cpack_gen }}
+
+      - name: Collect package
+        run: |
+          mkdir -p dist
+          find build/ -maxdepth 1 \( -name "*.deb" -o -name "*.rpm" \) -exec cp {} dist/ \;
+          echo "Packages found:"
+          ls -lh dist/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-${{ inputs.distro }}
+          path: dist/
+          if-no-files-found: error
