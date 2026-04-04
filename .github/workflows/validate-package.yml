@@ -48,6 +48,10 @@ jobs:
         run: |
           zypper --non-interactive --no-gpg-checks install ./dist/krunner-translator-${{ inputs.distro }}-${{ inputs.arch }}.rpm
 
+      - name: Install validation tools (zypper)
+        if: ${{ inputs.pkg_manager == 'zypper' }}
+        run: zypper --non-interactive install -y findutils
+
       - name: Verify install paths and shared libs
         run: |
           RUNNER_SO=$(find /usr -name "krunner_translator.so" 2>/dev/null)
