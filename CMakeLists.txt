@@ -85,7 +85,7 @@ set(CPACK_STRIP_FILES TRUE)
 
 # DEB (Ubuntu 25.04 package names)
 set(CPACK_DEBIAN_PACKAGE_DEPENDS
-    "libkf6runner6, libkf6i18n6, libkf6configwidgets6t64, libkf6kcmutils6, libqt6widgets6, libqt6network6, translate-shell")
+    "libkf6runner6, libkf6i18n6, libkf6configwidgets6, libkf6kcmutils6, libqt6widgets6, libqt6network6, translate-shell")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
 
