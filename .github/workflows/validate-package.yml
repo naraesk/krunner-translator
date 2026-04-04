@@ -1,0 +1,77 @@
+name: Validate Package
+
+on:
+  workflow_call:
+    inputs:
+      distro:
+        required: true
+        type: string
+      docker_image:
+        required: true
+        type: string
+      pkg_manager:
+        required: true
+        type: string
+      runner:
+        required: true
+        type: string
+      arch:
+        required: true
+        type: string
+
+jobs:
+  validate:
+    runs-on: ${{ inputs.runner }}
+    container:
+      image: ${{ inputs.docker_image }}
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: package-${{ inputs.distro }}-${{ inputs.arch }}
+          path: dist/
+
+      - name: Install package (apt)
+        if: ${{ inputs.pkg_manager == 'apt' }}
+        run: |
+          apt-get update
+          apt-get install -y ./dist/krunner-translator-${{ inputs.distro }}-${{ inputs.arch }}.deb
+
+      - name: Install package (dnf)
+        if: ${{ inputs.pkg_manager == 'dnf' }}
+        run: |
+          dnf install -y ./dist/krunner-translator-${{ inputs.distro }}-${{ inputs.arch }}.rpm
+
+      - name: Install package (zypper)
+        if: ${{ inputs.pkg_manager == 'zypper' }}
+        run: |
+          zypper --non-interactive --no-gpg-checks install ./dist/krunner-translator-${{ inputs.distro }}-${{ inputs.arch }}.rpm
+
+      - name: Install validation tools (zypper)
+        if: ${{ inputs.pkg_manager == 'zypper' }}
+        run: zypper --non-interactive install -y findutils
+
+      - name: Verify install paths and shared libs
+        run: |
+          RUNNER_SO=$(find /usr -name "krunner_translator.so" 2>/dev/null)
+          KCM_SO=$(find /usr -name "kcm_krunner_translator.so" 2>/dev/null)
+
+          [ -n "$RUNNER_SO" ] || { echo "ERROR: krunner_translator.so not found"; exit 1; }
+          [ -n "$KCM_SO" ]    || { echo "ERROR: kcm_krunner_translator.so not found"; exit 1; }
+
+          echo "krunner_translator.so  -> $RUNNER_SO"
+          echo "kcm_krunner_translator.so -> $KCM_SO"
+
+          echo "$RUNNER_SO" | grep -q "kf6/krunner"      || { echo "ERROR: krunner_translator.so not in kf6/krunner path"; exit 1; }
+          echo "$KCM_SO"    | grep -q "kf6/krunner/kcms" || { echo "ERROR: kcm_krunner_translator.so not in kf6/krunner/kcms path"; exit 1; }
+
+          echo "--- ldd: krunner_translator.so ---"
+          ldd "$RUNNER_SO"
+          echo "--- ldd: kcm_krunner_translator.so ---"
+          ldd "$KCM_SO"
+
+          ldd "$RUNNER_SO" | grep -q "not found" && { echo "ERROR: missing shared libs in krunner_translator.so"; exit 1; } || true
+          ldd "$KCM_SO"    | grep -q "not found" && { echo "ERROR: missing shared libs in kcm_krunner_translator.so"; exit 1; } || true
+
+          echo "All checks passed."
