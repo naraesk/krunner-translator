@@ -85,8 +85,9 @@ set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
 set(CPACK_STRIP_FILES TRUE)
 
 # DEB (Ubuntu 25.04 package names)
+# Qt6 runtime libs are intentionally omitted — they are pulled in transitively by the KF6 packages
 set(CPACK_DEBIAN_PACKAGE_DEPENDS
-    "libkf6runner6, libkf6i18n6, libkf6configwidgets6, libkf6kcmutils6, libqt6widgets6, libqt6network6, translate-shell")
+    "libkf6runner6, libkf6i18n6, libkf6configwidgets6, libkf6kcmutils6, translate-shell")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 
 # RPM (Fedora package names; openSUSE Tumbleweed uses same names)

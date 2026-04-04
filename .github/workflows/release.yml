@@ -72,6 +72,26 @@ jobs:
       runner: ubuntu-24.04-arm
       arch: arm64
 
+  build-debian:
+    uses: ./.github/workflows/build-package.yml
+    with:
+      distro: debian
+      docker_image: debian:trixie
+      pkg_manager: apt
+      cpack_gen: DEB
+      runner: ubuntu-latest
+      arch: amd64
+
+  build-debian-arm64:
+    uses: ./.github/workflows/build-package.yml
+    with:
+      distro: debian
+      docker_image: debian:trixie
+      pkg_manager: apt
+      cpack_gen: DEB
+      runner: ubuntu-24.04-arm
+      arch: arm64
+
   validate-ubuntu:
     needs: build-ubuntu
     uses: ./.github/workflows/validate-package.yml
@@ -132,8 +152,28 @@ jobs:
       runner: ubuntu-24.04-arm
       arch: arm64
 
+  validate-debian:
+    needs: build-debian
+    uses: ./.github/workflows/validate-package.yml
+    with:
+      distro: debian
+      docker_image: debian:trixie
+      pkg_manager: apt
+      runner: ubuntu-latest
+      arch: amd64
+
+  validate-debian-arm64:
+    needs: build-debian-arm64
+    uses: ./.github/workflows/validate-package.yml
+    with:
+      distro: debian
+      docker_image: debian:trixie
+      pkg_manager: apt
+      runner: ubuntu-24.04-arm
+      arch: arm64
+
   release:
-    needs: [validate-ubuntu, validate-fedora, validate-opensuse, validate-ubuntu-arm64, validate-fedora-arm64, validate-opensuse-arm64]
+    needs: [validate-ubuntu, validate-fedora, validate-opensuse, validate-ubuntu-arm64, validate-fedora-arm64, validate-opensuse-arm64, validate-debian, validate-debian-arm64]
     runs-on: ubuntu-latest
     permissions:
       contents: write
