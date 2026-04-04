@@ -91,7 +91,7 @@ set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
 
 # RPM (Fedora package names; openSUSE Tumbleweed uses same names)
 set(CPACK_RPM_PACKAGE_REQUIRES
-    "kf6-krunner, kf6-ki18n, kf6-kconfigwidgets, kf6-kcmutils, qt6-qtbase, translate-shell")
+    "kf6-krunner, kf6-ki18n, kf6-kconfigwidgets, kf6-kcmutils, translate-shell")
 set(CPACK_RPM_PACKAGE_LICENSE "GPL-3.0")
 set(CPACK_RPM_PACKAGE_GROUP "Applications/Utilities")
 
