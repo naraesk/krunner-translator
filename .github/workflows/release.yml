@@ -46,12 +46,24 @@ jobs:
       contents: write
 
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Determine tag name
         id: tag
         run: |
           TAG="${{ github.event.inputs.tag }}"
           if [ -z "$TAG" ]; then
             TAG="${{ github.ref_name }}"
+          fi
+          # If still not a version tag (e.g. triggered manually on a branch), use latest git tag
+          if [[ "$TAG" != v*.*.* ]]; then
+            TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          fi
+          if [ -z "$TAG" ]; then
+            echo "ERROR: No version tag found. Pass a tag input (e.g. v2.0.0) when using workflow_dispatch." >&2
+            exit 1
           fi
           echo "name=$TAG" >> "$GITHUB_OUTPUT"
 

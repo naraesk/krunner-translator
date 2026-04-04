@@ -72,7 +72,10 @@ jobs:
       - name: Collect package
         run: |
           mkdir -p dist
-          find build/ -maxdepth 1 \( -name "*.deb" -o -name "*.rpm" \) -exec cp {} dist/ \;
+          find build/ -maxdepth 1 \( -name "*.deb" -o -name "*.rpm" \) | while read f; do
+            ext="${f##*.}"
+            cp "$f" "dist/krunner-translator-${{ inputs.distro }}.$ext"
+          done
           echo "Packages found:"
           ls -lh dist/
 
