@@ -76,6 +76,7 @@ target_link_libraries(translator_test PRIVATE Qt6::Test)
 
 # ── Packaging (CPack) ──────────────────────────────────────────────────────────
 set(CPACK_PACKAGE_NAME "krunner-translator")
+# NOTE: When bumping the version, also update "Version" in src/plasma-runner-translator.json
 set(CPACK_PACKAGE_VERSION "2.0.0")
 set(CPACK_PACKAGE_CONTACT "David Baum <david.baum@naraesk.eu>")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "KRunner plugin to translate text using multiple engines")
@@ -87,7 +88,6 @@ set(CPACK_STRIP_FILES TRUE)
 set(CPACK_DEBIAN_PACKAGE_DEPENDS
     "libkf6runner6, libkf6i18n6, libkf6configwidgets6, libkf6kcmutils6, libqt6widgets6, libqt6network6, translate-shell")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
-set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
 
 # RPM (Fedora package names; openSUSE Tumbleweed uses same names)
 set(CPACK_RPM_PACKAGE_REQUIRES

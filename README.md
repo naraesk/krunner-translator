@@ -43,6 +43,25 @@ translate-shell build-essential cmake extra-cmake-modules qt6-base-dev libkf6run
 translate-shell cmake extra-cmake-modules cmake(Qt6Core) cmake(Qt6Gui) cmake(Qt6Widgets) cmake(Qt6Network) cmake(KF6Runner) cmake(KF6I18n) cmake(KF6CoreAddons) cmake(KF6Config) cmake(KF6ConfigWidgets) cmake(KF6KCMUtils)
 ```
 
+## Pre-built packages
+
+Pre-built packages for recent distro releases are available on the [GitHub Releases page](https://github.com/naraesk/krunner-translator/releases).
+
+**Ubuntu 25.04:**
+```sh
+sudo dpkg -i krunner-translator-ubuntu.deb
+```
+
+**Fedora 42:**
+```sh
+sudo dnf install ./krunner-translator-fedora.rpm
+```
+
+**openSUSE Tumbleweed** (package is unsigned):
+```sh
+sudo zypper --no-gpg-checks install ./krunner-translator-opensuse.rpm
+```
+
 ## Configuration
 
 For being able to use Youdao and Baidu, an API key is required. You have to obtain a key yourself by following these steps:

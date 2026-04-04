@@ -15,9 +15,6 @@ on:
       cpack_gen:
         required: true
         type: string
-      artifact_ext:
-        required: true
-        type: string
 
 jobs:
   build:

@@ -19,7 +19,6 @@ jobs:
       docker_image: ubuntu:25.04
       pkg_manager: apt
       cpack_gen: DEB
-      artifact_ext: deb
 
   build-fedora:
     uses: ./.github/workflows/build-package.yml
@@ -28,7 +27,6 @@ jobs:
       docker_image: fedora:42
       pkg_manager: dnf
       cpack_gen: RPM
-      artifact_ext: rpm
 
   build-opensuse:
     uses: ./.github/workflows/build-package.yml
@@ -37,7 +35,6 @@ jobs:
       docker_image: opensuse/tumbleweed
       pkg_manager: zypper
       cpack_gen: RPM
-      artifact_ext: rpm
 
   release:
     needs: [build-ubuntu, build-fedora, build-opensuse]
