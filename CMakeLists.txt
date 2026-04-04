@@ -84,10 +84,13 @@ set(CPACK_PACKAGE_HOMEPAGE_URL "https://github.com/naraesk/krunner-translator")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
 set(CPACK_STRIP_FILES TRUE)
 
-# DEB (Ubuntu 25.04 package names)
+# DEB (Ubuntu 25.04 / Debian Trixie package names)
 # Qt6 runtime libs are intentionally omitted — they are pulled in transitively by the KF6 packages
+# translate-shell is in Recommends (not Depends): only needed for Google/Bing engines,
+# and is absent from Debian Trixie repos (install manually via https://github.com/soimort/translate-shell)
 set(CPACK_DEBIAN_PACKAGE_DEPENDS
-    "libkf6runner6, libkf6i18n6, libkf6configwidgets6, libkf6kcmutils6, translate-shell")
+    "libkf6runner6, libkf6i18n6, libkf6configwidgets6, libkf6kcmutils6")
+set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "translate-shell")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 
 # RPM (Fedora package names; openSUSE Tumbleweed uses same names)

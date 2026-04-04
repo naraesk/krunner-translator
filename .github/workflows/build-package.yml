@@ -40,7 +40,7 @@ jobs:
             qt6-base-dev libkf6runner-dev libkf6i18n-dev \
             libkf6coreaddons-dev libkf6config-dev \
             libkf6configwidgets-dev libkf6kcmutils-dev \
-            translate-shell dpkg-dev
+            dpkg-dev
 
       - name: Install build dependencies (dnf)
         if: ${{ inputs.pkg_manager == 'dnf' }}
