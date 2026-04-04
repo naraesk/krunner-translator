@@ -19,6 +19,8 @@ jobs:
       docker_image: ubuntu:25.04
       pkg_manager: apt
       cpack_gen: DEB
+      runner: ubuntu-latest
+      arch: amd64
 
   build-fedora:
     uses: ./.github/workflows/build-package.yml
@@ -27,6 +29,8 @@ jobs:
       docker_image: fedora:42
       pkg_manager: dnf
       cpack_gen: RPM
+      runner: ubuntu-latest
+      arch: amd64
 
   build-opensuse:
     uses: ./.github/workflows/build-package.yml
@@ -35,9 +39,41 @@ jobs:
       docker_image: opensuse/tumbleweed
       pkg_manager: zypper
       cpack_gen: RPM
+      runner: ubuntu-latest
+      arch: amd64
+
+  build-ubuntu-arm64:
+    uses: ./.github/workflows/build-package.yml
+    with:
+      distro: ubuntu
+      docker_image: ubuntu:25.04
+      pkg_manager: apt
+      cpack_gen: DEB
+      runner: ubuntu-24.04-arm
+      arch: arm64
+
+  build-fedora-arm64:
+    uses: ./.github/workflows/build-package.yml
+    with:
+      distro: fedora
+      docker_image: fedora:42
+      pkg_manager: dnf
+      cpack_gen: RPM
+      runner: ubuntu-24.04-arm
+      arch: arm64
+
+  build-opensuse-arm64:
+    uses: ./.github/workflows/build-package.yml
+    with:
+      distro: opensuse
+      docker_image: opensuse/tumbleweed
+      pkg_manager: zypper
+      cpack_gen: RPM
+      runner: ubuntu-24.04-arm
+      arch: arm64
 
   release:
-    needs: [build-ubuntu, build-fedora, build-opensuse]
+    needs: [build-ubuntu, build-fedora, build-opensuse, build-ubuntu-arm64, build-fedora-arm64, build-opensuse-arm64]
     runs-on: ubuntu-latest
     permissions:
       contents: write
