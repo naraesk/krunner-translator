@@ -22,7 +22,7 @@ TranslationQuery* Parser::parse(const QString &term) {
         query->setSourceLanguage(sourceLanguage);
         query->setTargetLanguage(targetLanguage);
     } else {
-        // TODO: Set source Language;
+        query->setSourceLanguage(SupportedLanguage::INVALID);
         SupportedLanguage targetLanguage = repository->getSupportedLanguage(languageTerm);
         query->setTargetLanguage(targetLanguage);
     }

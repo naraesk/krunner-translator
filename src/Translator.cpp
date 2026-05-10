@@ -54,8 +54,14 @@ void Translator::match(KRunner::RunnerContext &context) {
     const QString term = context.query();
     TranslationQuery * query = parser.parse(term);
     query->updateSourceLanguage(defaultLanguage, alternativeDefaultLanguage);
-    if(!query->isValid()) return;
-    if (!context.isValid()) return;
+    if(!query->isValid()) {
+        delete query;
+        return;
+    }
+    if (!context.isValid()) {
+        delete query;
+        return;
+    }
 
     if (m_baiduEnable) {
         QEventLoop baiduLoop;

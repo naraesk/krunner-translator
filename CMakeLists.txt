@@ -69,10 +69,25 @@ set(test_dependencies
         src/language/LanguageRepository.cpp
         src/language/Language.cpp
         )
+
+set(parser_test_dependencies
+        src/Parser.cpp
+        src/TranslationQuery.cpp
+        src/language/LanguageRepository.cpp
+        src/language/Language.cpp
+        )
+
 add_executable(translator_test test/TranslateShellProcessTest.cpp ${test_dependencies})
 add_test(NAME translator_test COMMAND translator_test)
-
 target_link_libraries(translator_test PRIVATE Qt6::Test)
+
+add_executable(parser_test test/ParserTest.cpp ${parser_test_dependencies})
+add_test(NAME parser_test COMMAND parser_test)
+target_link_libraries(parser_test PRIVATE Qt6::Test)
+
+add_executable(language_repository_test test/LanguageRepositoryTest.cpp src/language/LanguageRepository.cpp src/language/Language.cpp)
+add_test(NAME language_repository_test COMMAND language_repository_test)
+target_link_libraries(language_repository_test PRIVATE Qt6::Test)
 
 # ── Packaging (CPack) ──────────────────────────────────────────────────────────
 set(CPACK_PACKAGE_NAME "krunner-translator")

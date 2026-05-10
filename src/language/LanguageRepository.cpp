@@ -152,11 +152,19 @@ QString LanguageRepository::getCombinedName(QString abbreviation) {
 }
 
 SupportedLanguage LanguageRepository::getSupportedLanguage(QString abbr) {
-    return abbrMap->find(abbr).value();
+    auto it = abbrMap->find(abbr);
+    if (it == abbrMap->end()) {
+        return SupportedLanguage::INVALID;
+    }
+    return it.value();
 }
 
 QString LanguageRepository::getAbbreviation(SupportedLanguage language) const {
-    return supportedLanguages->find(language).value().getAbbreviation();
+    auto it = supportedLanguages->find(language);
+    if (it == supportedLanguages->end()) {
+        return QString();
+    }
+    return it.value().getAbbreviation();
 }
 
 bool LanguageRepository::containsAbbreviation(QString abbreviation) {
