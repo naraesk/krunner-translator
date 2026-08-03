@@ -33,6 +33,11 @@ libkf6configwidgets-dev
 libkf6kcmutils-dev
 "
 
+void_deps="
+kf6-kcmutils-devel
+kf6-krunner-devel
+"
+
 if command -v dnf >/dev/null 2>/dev/null; then
 	sudo dnf install -y $shared_deps $fedora_opensuse_deps
 elif command -v zypper >/dev/null 2>/dev/null; then
@@ -41,6 +46,8 @@ elif command -v apt >/dev/null 2>/dev/null; then
 	export DEBIAN_FRONTEND=noninteractive
 	sudo apt update -y
 	sudo apt install -y $shared_deps $ubuntu_deps
+elif commad -v xbps-install >/dev/null 2>/dev/null; then
+	sudo xbps-install -Su $shared_deps $void_deps
 else
 	echo 'WARNING: Could not find known package manager; dependencies may not be satisfied.'
 fi
