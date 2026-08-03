@@ -7,14 +7,14 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 set(QT_MIN_VERSION "6.6.0")
 set(KF_MIN_VERSION "6.0.0")
 
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings NO_POLICY_SCOPE)
+
 # Find the required Libraries
 find_package(Qt6 ${QT_MIN_VERSION} REQUIRED CONFIG COMPONENTS Widgets Core Network)
 find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n Runner ConfigWidgets KCMUtils)
 find_package(Qt6Test REQUIRED)
-
-include(KDEInstallDirs)
-include(KDECMakeSettings)
-include(KDECompilerSettings NO_POLICY_SCOPE)
 
 enable_testing(true)
 
