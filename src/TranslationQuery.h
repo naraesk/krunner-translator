@@ -28,12 +28,14 @@ public:
 
     QString getSourceAbbreviation() const;
     QString getTargetAbbreviation() const;
+    bool isSourceExplicit() const;
     bool isValid() const;
 
 private:
     LanguageRepository * repository;
     SupportedLanguage sourceLanguage;
     SupportedLanguage targetLanguage;
+    bool sourceExplicit = false;
     QString text;
 public:
     void updateSourceLanguage(SupportedLanguage defaultLanguage, SupportedLanguage alternativeDefaultLanguage);

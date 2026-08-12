@@ -72,7 +72,7 @@ set(test_dependencies
 add_executable(translator_test test/TranslateShellProcessTest.cpp ${test_dependencies})
 add_test(NAME translator_test COMMAND translator_test)
 
-target_link_libraries(translator_test PRIVATE Qt6::Test)
+target_link_libraries(translator_test PRIVATE Qt6::Test Qt6::Network)
 
 # ── Packaging (CPack) ──────────────────────────────────────────────────────────
 set(CPACK_PACKAGE_NAME "krunner-translator")

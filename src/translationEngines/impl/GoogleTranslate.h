@@ -20,6 +20,8 @@
 #define RUNNERTRANSLATOR_GOOGLETRANSLATE_H
 
 #include <KRunner/AbstractRunner>
+#include <QByteArray>
+#include <QUrl>
 #include <src/translationEngines/api/CommandLineEngine.h>
 
 class GoogleTranslate : public CommandLineEngine {
@@ -30,6 +32,8 @@ public:
     KRunner::QueryMatch translate(const TranslationQuery* query) override;
 
 private:
+    QByteArray httpGet(const QUrl &url) const;
+    QString parseResponse(const QByteArray &data) const;
     KRunner::QueryMatch match;
 };
 
