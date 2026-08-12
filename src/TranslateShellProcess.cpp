@@ -19,8 +19,15 @@
 #include "TranslateShellProcess.h"
 #include "src/language/Language.h"
 #include "TranslationQuery.h"
-#include <QString>
 #include <QDebug>
+#include <QEventLoop>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QStandardPaths>
+#include <QString>
+#include <QUrl>
+#include <QUrlQuery>
 
 TranslateShellProcess::TranslateShellProcess(QObject *parent) : QProcess(parent) {
 }
@@ -45,11 +52,56 @@ QString TranslateShellProcess::translate(const TranslationQuery* query) {
     return composeOutput;
 }
 
-void TranslateShellProcess::play(const QString &text) {
-    QStringList arguments;
-    arguments << text
-              << QStringLiteral("-speak")
-              << QStringLiteral("-no-translate");
-    start(QStringLiteral("trans"), arguments);
-    waitForFinished();
+void TranslateShellProcess::play(const QString &text, const QString &lang) {
+    // Download TTS audio over HTTPS (no translate-shell, no plain HTTP),
+    // then play it with ffplay which is bundled with ffmpeg.
+    const QString ffplayPath = QStandardPaths::findExecutable(QStringLiteral("ffplay"));
+    if (ffplayPath.isEmpty()) {
+        qWarning() << "krunner-translator: ffplay not found, cannot play TTS audio";
+        return;
+    }
+
+    const QString ttsLang = lang.isEmpty() ? QStringLiteral("en") : lang;
+    // translate_tts caps q at 200 characters; fetch and play in chunks
+    for (int i = 0; i < text.size(); i += 200) {
+        const QString chunk = text.mid(i, 200);
+        QUrl url(QStringLiteral("https://translate.google.com/translate_tts"));
+        QUrlQuery q;
+        q.addQueryItem(QStringLiteral("ie"), QStringLiteral("UTF-8"));
+        q.addQueryItem(QStringLiteral("client"), QStringLiteral("tw-ob"));
+        // QUrlQuery does not encode '+', which Google would decode as a space
+        q.addQueryItem(QStringLiteral("q"),
+                       QString::fromUtf8(QUrl::toPercentEncoding(chunk)));
+        q.addQueryItem(QStringLiteral("tl"), ttsLang);
+        url.setQuery(q);
+
+        QNetworkAccessManager manager;
+        QNetworkRequest request(url);
+        request.setTransferTimeout(10000);
+        QEventLoop loop;
+        QNetworkReply *reply = manager.get(request);
+        QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        loop.exec();
+        const QByteArray audio = reply->readAll();
+        const bool ok = reply->error() == QNetworkReply::NoError;
+        const QString errorString = reply->errorString();
+        reply->deleteLater();
+        if (!ok || audio.isEmpty()) {
+            qWarning() << "krunner-translator: TTS download failed:" << errorString;
+            return;
+        }
+
+        QProcess ffplay;
+        ffplay.start(ffplayPath,
+                     {QStringLiteral("-nodisp"), QStringLiteral("-autoexit"),
+                      QStringLiteral("-loglevel"), QStringLiteral("quiet"),
+                      QStringLiteral("-i"), QStringLiteral("pipe:")});
+        ffplay.write(audio);
+        ffplay.closeWriteChannel();
+        // generous cap so long clips finish; kill only guards a hung ffplay
+        if (!ffplay.waitForFinished(60000)) {
+            ffplay.kill();
+            ffplay.waitForFinished();
+        }
+    }
 }

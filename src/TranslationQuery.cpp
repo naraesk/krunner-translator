@@ -8,6 +8,7 @@
 
 void TranslationQuery::setSourceLanguage(SupportedLanguage sourceLanguage) {
     TranslationQuery::sourceLanguage = sourceLanguage;
+    sourceExplicit = true;
 }
 
 void TranslationQuery::setTargetLanguage(SupportedLanguage targetLanguage) {
@@ -23,7 +24,7 @@ void TranslationQuery::setText(const QString &text) {
 }
 
 TranslationQuery::TranslationQuery(LanguageRepository * repository, SupportedLanguage sourceLanguage, SupportedLanguage targetLanguage, QString& text)
-: repository(repository), sourceLanguage(sourceLanguage), targetLanguage(targetLanguage), text(text){
+: repository(repository), sourceLanguage(sourceLanguage), targetLanguage(targetLanguage), sourceExplicit(true), text(text){
 
 }
 
@@ -38,6 +39,10 @@ QString TranslationQuery::getTargetAbbreviation() const {
 TranslationQuery::TranslationQuery(LanguageRepository *repository)
 : repository(repository), sourceLanguage(INVALID), targetLanguage(INVALID) {
 
+}
+
+bool TranslationQuery::isSourceExplicit() const {
+    return sourceExplicit;
 }
 
 bool TranslationQuery::isValid() const {

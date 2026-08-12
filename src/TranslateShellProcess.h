@@ -34,7 +34,7 @@ public:
 
 public Q_SLOTS:
     QString translate(const TranslationQuery* query);
-    void play(const QString &text);
+    void play(const QString &text, const QString &lang);
 private:
     QString engine = QStringLiteral("google");
 };
