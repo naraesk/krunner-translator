@@ -88,7 +88,7 @@ void Translator::run(const KRunner::RunnerContext &context, const KRunner::Query
     QGuiApplication::clipboard()->setText(match.text());
     if (match.selectedAction() && match.selectedAction().id() == QLatin1String("play")) {
         TranslateShellProcess process;
-        process.play(match.text());
+        process.play(match.text(), match.data().toString());
     }
 }
 

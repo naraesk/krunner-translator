@@ -31,7 +31,7 @@ KRunner::QueryMatch Bing::translate(const TranslationQuery* query) {
     if (result.isEmpty()) {
         match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Lowest);
     } else {
-        match.setData(QStringLiteral("audio"));
+        match.setData(query->getTargetAbbreviation());
         match.setCategoryRelevance(KRunner::QueryMatch::CategoryRelevance::Highest);
         match.setIcon(QIcon::fromTheme(QStringLiteral("applications-education-language")));
         match.setText(result);
