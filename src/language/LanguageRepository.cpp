@@ -127,7 +127,7 @@ void LanguageRepository::initialize() {
     addSupportedLanguage(Welsh, QStringLiteral("Welsh"), QStringLiteral("cy"));
     addSupportedLanguage(WestFrisian, QStringLiteral("West Frisian"), QStringLiteral("fy"));
     addSupportedLanguage(Xhosa, QStringLiteral("Xhosa"), QStringLiteral("xh"));
-    addSupportedLanguage(Yiddish, QStringLiteral("Yiddish"), QStringLiteral("he"));
+    addSupportedLanguage(Yiddish, QStringLiteral("Yiddish"), QStringLiteral("yi"));
     addSupportedLanguage(Yoruba, QStringLiteral("Yoruba"), QStringLiteral("yo"));
     addSupportedLanguage(Zulu, QStringLiteral("Zulu"), QStringLiteral("zu"));
 }

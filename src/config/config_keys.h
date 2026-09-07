@@ -13,5 +13,10 @@ static const char CONFIG_DEEPL_APIKEY[] = "deeplAPIKey";
 static const char CONFIG_DEEPL_ENABLE[] = "deeplEnable";
 static const char CONFIG_GOOGLE_ENABLE[] = "googleEnable";
 static const char CONFIG_BING_ENABLE[] = "bingEnable";
+static const char CONFIG_LLAMACPP_ENABLE[] = "llamacppEnable";
+static const char CONFIG_LLAMACPP_MODEL[] = "llamacppModel";
+static const char CONFIG_LLAMACPP_DIR[] = "llamacppDir";
+static const char CONFIG_LLAMACPP_PORT[] = "llamacppPort";
+static const char CONFIG_LLAMACPP_NGL[] = "llamacppNgl";
 
 #endif

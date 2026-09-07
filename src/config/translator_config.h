@@ -45,6 +45,12 @@ public Q_SLOTS:
 
     void warningHandler();
 
+    void browseLlamaModel();
+
+    void browseLlamaDir();
+
+    void testLlamaServer();
+
 private:
     TranslatorConfigForm *m_ui;
     LanguageRepository languages;
