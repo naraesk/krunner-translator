@@ -18,12 +18,20 @@
 
 #include "translator_config.h"
 #include "src/language/Language.h"
+#include "src/llama_server.h"
 #include <KSharedConfig>
 #include <KConfigGroup>
 #include <KPluginFactory>
 #include <KRunner/AbstractRunner>
+#include <KLocalizedString>
 #include <QtDebug>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QFileDialog>
+#include <QFutureWatcher>
+#include <QtConcurrent>
+#include <QLabel>
+#include <QDir>
+#include <QFileInfo>
 
 K_PLUGIN_CLASS_WITH_JSON(TranslatorConfig, "kcm_krunner_translator.json")
 
@@ -59,12 +67,21 @@ TranslatorConfig::TranslatorConfig(QObject *parent, const KPluginMetaData &metaD
     connect(m_ui->deeplEnable, &QCheckBox::checkStateChanged, this, [this]() { setNeedsSave(true); });
     connect(m_ui->googleEnable, &QCheckBox::checkStateChanged, this, [this]() { setNeedsSave(true); });
     connect(m_ui->bingEnable, &QCheckBox::checkStateChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->llamacppEnable, &QCheckBox::checkStateChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->llamacppModel, &QLineEdit::textChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->llamacppDir, &QLineEdit::textChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->llamacppPort, &QSpinBox::valueChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->llamacppNgl, &QSpinBox::valueChanged, this, [this]() { setNeedsSave(true); });
+    connect(m_ui->llamacppModelBrowse, &QPushButton::clicked, this, &TranslatorConfig::browseLlamaModel);
+    connect(m_ui->llamacppDirBrowse, &QPushButton::clicked, this, &TranslatorConfig::browseLlamaDir);
+    connect(m_ui->llamacppTestButton, &QPushButton::clicked, this, &TranslatorConfig::testLlamaServer);
 
     connect(m_ui->bingEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
     connect(m_ui->googleEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
     connect(m_ui->baiduEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
     connect(m_ui->youdaoEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
     connect(m_ui->deeplEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
+    connect(m_ui->llamacppEnable, &QCheckBox::checkStateChanged, this, &TranslatorConfig::warningHandler);
 }
 
 void TranslatorConfig::load() {
@@ -88,8 +105,13 @@ void TranslatorConfig::load() {
     m_ui->baiduEnable->setChecked(grp.readEntry(CONFIG_BAIDU_ENABLE, false));
     m_ui->youdaoEnable->setChecked(grp.readEntry(CONFIG_YOUDAO_ENABLE, false));
     m_ui->deeplEnable->setChecked(grp.readEntry(CONFIG_DEEPL_ENABLE, false));
-    m_ui->googleEnable->setChecked(grp.readEntry(CONFIG_GOOGLE_ENABLE, true));
+    m_ui->googleEnable->setChecked(grp.readEntry(CONFIG_GOOGLE_ENABLE, false));
     m_ui->bingEnable->setChecked(grp.readEntry(CONFIG_BING_ENABLE, false));
+    m_ui->llamacppEnable->setChecked(grp.readEntry(CONFIG_LLAMACPP_ENABLE, true));
+    m_ui->llamacppModel->setText(grp.readEntry(CONFIG_LLAMACPP_MODEL, QStringLiteral("")));
+    m_ui->llamacppDir->setText(grp.readEntry(CONFIG_LLAMACPP_DIR, QStringLiteral("")));
+    m_ui->llamacppPort->setValue(grp.readEntry(CONFIG_LLAMACPP_PORT, 8080));
+    m_ui->llamacppNgl->setValue(grp.readEntry(CONFIG_LLAMACPP_NGL, 99));
 }
 
 void TranslatorConfig::save() {
@@ -114,6 +136,67 @@ void TranslatorConfig::save() {
     grp.writeEntry(CONFIG_DEEPL_ENABLE, m_ui->deeplEnable->isChecked());
     grp.writeEntry(CONFIG_GOOGLE_ENABLE, m_ui->googleEnable->isChecked());
     grp.writeEntry(CONFIG_BING_ENABLE, m_ui->bingEnable->isChecked());
+    grp.writeEntry(CONFIG_LLAMACPP_ENABLE, m_ui->llamacppEnable->isChecked());
+    grp.writeEntry(CONFIG_LLAMACPP_MODEL, m_ui->llamacppModel->text().trimmed());
+    grp.writeEntry(CONFIG_LLAMACPP_DIR, m_ui->llamacppDir->text().trimmed());
+    grp.writeEntry(CONFIG_LLAMACPP_PORT, m_ui->llamacppPort->value());
+    grp.writeEntry(CONFIG_LLAMACPP_NGL, m_ui->llamacppNgl->value());
+}
+
+void TranslatorConfig::browseLlamaModel() {
+    QString startDir;
+    const QString model = m_ui->llamacppModel->text().trimmed();
+    const QString dir = m_ui->llamacppDir->text().trimmed();
+    if (!model.isEmpty()) {
+        startDir = QFileInfo(model).absolutePath();
+    } else if (!dir.isEmpty()) {
+        startDir = dir + QStringLiteral("/models");
+    } else {
+        startDir = QDir::homePath();
+    }
+    const QString file = QFileDialog::getOpenFileName(widget(),
+            i18n("Select model file"),
+            startDir,
+            i18n("GGUF models") + QStringLiteral(" (*.gguf);;") + i18n("All files") + QStringLiteral(" (*)"));
+    if (!file.isEmpty()) {
+        m_ui->llamacppModel->setText(file);
+    }
+}
+
+void TranslatorConfig::browseLlamaDir() {
+    const QString dir = QFileDialog::getExistingDirectory(widget(),
+            i18n("Select llama.cpp directory"),
+            m_ui->llamacppDir->text().isEmpty() ? QDir::homePath() : m_ui->llamacppDir->text());
+    if (!dir.isEmpty()) {
+        m_ui->llamacppDir->setText(dir);
+    }
+}
+
+void TranslatorConfig::testLlamaServer() {
+    // Run the probe/start off the GUI thread: a cold start loads the model
+    // and polls up to 30 s, which must not freeze the settings dialog.
+    m_ui->llamacppTestButton->setEnabled(false);
+    m_ui->llamacppTestResult->setText(i18n("Checking… (first start loads the model, this can take a while)"));
+    const int port = m_ui->llamacppPort->value();
+    const QString model = m_ui->llamacppModel->text().trimmed();
+    const QString dir = m_ui->llamacppDir->text().trimmed();
+    const int ngl = m_ui->llamacppNgl->value();
+
+    auto *watcher = new QFutureWatcher<bool>(this);
+    connect(watcher, &QFutureWatcher<bool>::finished, this, [this, watcher, port]() {
+        watcher->deleteLater();
+        m_ui->llamacppTestButton->setEnabled(true);
+        if (watcher->result()) {
+            m_ui->llamacppTestResult->setText(i18n("Server is up on 127.0.0.1:%1.").arg(port));
+        } else {
+            m_ui->llamacppTestResult->setText(i18n(
+                "Server did not start on 127.0.0.1:%1. Check the model path, the llama.cpp directory, and the log /tmp/krunner-translator-llama.log.")
+                    .arg(port));
+        }
+    });
+    watcher->setFuture(QtConcurrent::run([port, model, dir, ngl]() -> bool {
+        return LlamaServer::ensureServer(port, model, dir, ngl);
+    }));
 }
 
 void TranslatorConfig::warningHandler() {
@@ -124,7 +207,8 @@ void TranslatorConfig::warningHandler() {
         !m_ui->googleEnable->isChecked() &&
         !m_ui->baiduEnable->isChecked() &&
         !m_ui->youdaoEnable->isChecked() &&
-        !m_ui->deeplEnable->isChecked()) {
+        !m_ui->deeplEnable->isChecked() &&
+        !m_ui->llamacppEnable->isChecked()) {
         m_ui->bingWarningOnlyEngine->show();
     } else {
         m_ui->bingWarningOnlyEngine->hide();
@@ -144,7 +228,8 @@ void TranslatorConfig::warningHandler() {
         !m_ui->googleEnable->isChecked() &&
         !m_ui->baiduEnable->isChecked() &&
         !m_ui->youdaoEnable->isChecked() &&
-        !m_ui->deeplEnable->isChecked()) {
+        !m_ui->deeplEnable->isChecked() &&
+        !m_ui->llamacppEnable->isChecked()) {
         m_ui->noEngineWarning->show();
     } else {
         m_ui->noEngineWarning->hide();

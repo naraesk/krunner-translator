@@ -14,5 +14,7 @@
         "EnabledByDefault": true
     },
     "X-Plasma-AdvertiseSingleRunnerQueryMode": true,
+    "X-Plasma-Runner-Unique-Results": true,
+    "X-Plasma-Runner-Weak-Results": true,
     "X-KDE-ConfigModule": "kf6/krunner/kcms/kcm_krunner_translator"
 }

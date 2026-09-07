@@ -383,6 +383,164 @@
        </layout>
       </widget>
      </widget>
+     <widget class="QWidget" name="llamacppTab">
+      <attribute name="title">
+       <string>llama.cpp (local)</string>
+      </attribute>
+      <widget class="QGroupBox" name="llamacpp">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>500</width>
+         <height>320</height>
+        </rect>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="title">
+        <string/>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+       <layout class="QFormLayout" name="formLayout_llamacpp">
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="llamacppEnable">
+          <property name="text">
+           <string>Enable</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_llamacpp_model">
+          <property name="text">
+           <string>Model (.gguf)</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <layout class="QHBoxLayout" name="hbox_llamacpp_model">
+          <item>
+           <widget class="QLineEdit" name="llamacppModel">
+            <property name="toolTip">
+             <string>Path to the GGUF model file. Leave empty to use &lt;llama.cpp dir&gt;/models/Hy-MT2-1.8B-Q4_K_M.gguf.</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="llamacppModelBrowse">
+            <property name="text">
+             <string>Browse…</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_llamacpp_dir">
+          <property name="text">
+           <string>llama.cpp dir</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <layout class="QHBoxLayout" name="hbox_llamacpp_dir">
+          <item>
+           <widget class="QLineEdit" name="llamacppDir">
+            <property name="toolTip">
+             <string>Directory containing the llama-server binary: looked up without recursion, first directly in that directory, then in its build/bin/ subdirectory. Leave empty to use a llama-server from PATH.</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="llamacppDirBrowse">
+            <property name="text">
+             <string>Browse…</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_llamacpp_port">
+          <property name="text">
+           <string>Port</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QSpinBox" name="llamacppPort">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>65535</number>
+          </property>
+          <property name="value">
+           <number>8080</number>
+          </property>
+          <property name="toolTip">
+           <string>Port the local llama.cpp server listens on (can be shared with other tools).</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_llamacpp_ngl">
+          <property name="text">
+           <string>GPU layers</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QSpinBox" name="llamacppNgl">
+          <property name="minimum">
+           <number>0</number>
+          </property>
+          <property name="maximum">
+           <number>99</number>
+          </property>
+          <property name="value">
+           <number>99</number>
+          </property>
+          <property name="toolTip">
+           <string>Layers offloaded to the GPU. 99 (the default) offloads everything.</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QPushButton" name="llamacppTestButton">
+          <property name="text">
+           <string>Test server…</string>
+          </property>
+          <property name="toolTip">
+           <string>Checks the local server with the current settings and, if needed, starts it. First run may take a minute (model download/load).</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLabel" name="llamacppTestResult">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
      <widget class="QWidget" name="tab">
       <attribute name="title">
        <string>Youdao</string>

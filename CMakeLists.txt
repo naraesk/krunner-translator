@@ -8,7 +8,7 @@ set(QT_MIN_VERSION "6.6.0")
 set(KF_MIN_VERSION "6.0.0")
 
 # Find the required Libraries
-find_package(Qt6 ${QT_MIN_VERSION} REQUIRED CONFIG COMPONENTS Widgets Core Network)
+find_package(Qt6 ${QT_MIN_VERSION} REQUIRED CONFIG COMPONENTS Widgets Core Network Concurrent)
 find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS I18n Runner ConfigWidgets KCMUtils)
 find_package(Qt6Test REQUIRED)
 
@@ -25,6 +25,8 @@ set(krunner_translator_SRCS
         src/translationEngines/impl/deepl.cpp
         src/translationEngines/impl/GoogleTranslate.cpp
         src/translationEngines/impl/Bing.cpp
+        src/translationEngines/impl/LlamaCpp.cpp
+        src/llama_server.cpp
         src/TranslateShellProcess.cpp
         src/language/LanguageRepository.cpp
         src/language/Language.cpp
@@ -34,7 +36,8 @@ set(krunner_translator_SRCS
 set(kcm_krunner_translator_SRCS
         src/config/translator_config.cpp
         src/language/Language.cpp
-        src/language/LanguageRepository.cpp)
+        src/language/LanguageRepository.cpp
+        src/llama_server.cpp)
 
 ki18n_wrap_ui(kcm_krunner_translator_SRCS src/config/translator_config.ui)
 
@@ -47,6 +50,8 @@ target_link_libraries(krunner_translator
         KF6::ConfigWidgets
         Qt6::Widgets
         Qt6::Network)
+target_compile_definitions(krunner_translator PRIVATE
+        HY_MT2_SERVER_SCRIPT="${CMAKE_SOURCE_DIR}/llama-server.sh")
 
 kcoreaddons_add_plugin(kcm_krunner_translator
         SOURCES ${kcm_krunner_translator_SRCS}
@@ -54,12 +59,23 @@ kcoreaddons_add_plugin(kcm_krunner_translator
 target_link_libraries(kcm_krunner_translator
         Qt6::Core
         Qt6::Gui
+        Qt6::Concurrent
         KF6::CoreAddons
         KF6::ConfigCore
         KF6::I18n
         KF6::ConfigWidgets
         KF6::KCMUtils
-        KF6::Runner)
+        KF6::Runner
+        Qt6::Widgets
+        Qt6::Network)
+target_compile_definitions(kcm_krunner_translator PRIVATE
+        HY_MT2_SERVER_SCRIPT="${CMAKE_SOURCE_DIR}/llama-server.sh")
+
+# The local engine's server management script, installed so packaged users
+# get it too (see LlamaServer).
+install(FILES llama-server.sh
+        DESTINATION ${KDE_INSTALL_DATADIR}/krunner-translator
+        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 # Testing
 
@@ -90,17 +106,16 @@ set(CPACK_STRIP_FILES TRUE)
 # Qt6 runtime libs are intentionally omitted — they are pulled in transitively by the KF6 packages
 set(CPACK_DEBIAN_PACKAGE_DEPENDS
     "libkf6runner6, libkf6i18n6, libkf6configwidgets6, libkf6kcmutils6")
-if(PACKAGE_DISTRO STREQUAL "ubuntu")
-    string(APPEND CPACK_DEBIAN_PACKAGE_DEPENDS ", translate-shell")
-elseif(PACKAGE_DISTRO STREQUAL "debian")
-    # Debian Trixie ships translate-shell in contrib, which is not enabled in stock sources.
-    set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "translate-shell")
-endif()
+# translate-shell is optional: it is only needed by the online engines
+# (Google/Bing) and audio playback. The local llama.cpp engine has no such
+# dependency, so it is recommended, not required.
+set(CPACK_DEBIAN_PACKAGE_RECOMMENDS "translate-shell")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 
 # RPM (Fedora package names; openSUSE Tumbleweed uses same names)
 set(CPACK_RPM_PACKAGE_REQUIRES
-    "kf6-krunner, kf6-ki18n, kf6-kconfigwidgets, kf6-kcmutils, translate-shell")
+    "kf6-krunner, kf6-ki18n, kf6-kconfigwidgets, kf6-kcmutils")
+set(CPACK_RPM_PACKAGE_RECOMMENDS "translate-shell")
 set(CPACK_RPM_PACKAGE_LICENSE "GPL-3.0")
 set(CPACK_RPM_PACKAGE_GROUP "Applications/Utilities")
 

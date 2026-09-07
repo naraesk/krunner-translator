@@ -23,6 +23,7 @@
 #include "translationEngines/impl/youdao.h"
 #include "translationEngines/impl/Bing.h"
 #include "translationEngines/impl/deepl.h"
+#include "translationEngines/impl/LlamaCpp.h"
 #include "Parser.h"
 #include <src/TranslateShellProcess.h>
 #include <KLocalizedString>
@@ -76,6 +77,14 @@ void Translator::match(KRunner::RunnerContext &context) {
         deeplLoop.exec();
     }
     for (auto engine : engines) {
+        if (auto *llama = dynamic_cast<LlamaCpp *>(engine)) {
+            if (llama->canTranslate(query)) {
+                // translate() adds the single placeholder ("翻译中..." or
+                // "唤起中...") and the result replaces it (one replacement per
+                // id is all KRunner supports).
+                llama->setContext(&context);
+            }
+        }
         KRunner::QueryMatch match = engine->translate(query);
         match.setActions(actions);
         context.addMatch(match);
@@ -108,8 +117,9 @@ void Translator::reloadConfiguration() {
     m_baiduEnable = grp.readEntry(CONFIG_BAIDU_ENABLE, false);
     m_youdaoEnable = grp.readEntry(CONFIG_YOUDAO_ENABLE, false);
     m_deeplEnable = grp.readEntry(CONFIG_DEEPL_ENABLE, false);
+    const bool llamacppEnable = grp.readEntry(CONFIG_LLAMACPP_ENABLE, true);
 
-    const bool googleEnable = grp.readEntry(CONFIG_GOOGLE_ENABLE, true);
+    const bool googleEnable = grp.readEntry(CONFIG_GOOGLE_ENABLE, false);
     if (googleEnable) {
         CommandLineEngine *googleTranslate = new GoogleTranslate(this);
         engines.push_front(googleTranslate);
@@ -119,6 +129,15 @@ void Translator::reloadConfiguration() {
     if (bingEnable) {
         CommandLineEngine *bingTranslate = new Bing(this);
         engines.push_front(bingTranslate);
+    }
+
+    if (llamacppEnable) {
+        const int llamacppPort = grp.readEntry(CONFIG_LLAMACPP_PORT, 8080);
+        const int llamacppNgl = grp.readEntry(CONFIG_LLAMACPP_NGL, 99);
+        const QString llamacppModel = grp.readEntry(CONFIG_LLAMACPP_MODEL, QString());
+        const QString llamacppDir = grp.readEntry(CONFIG_LLAMACPP_DIR, QString());
+        CommandLineEngine *llamaCpp = new LlamaCpp(this, llamacppPort, llamacppNgl, llamacppModel, llamacppDir);
+        engines.push_front(llamaCpp);
     }
 }
 
